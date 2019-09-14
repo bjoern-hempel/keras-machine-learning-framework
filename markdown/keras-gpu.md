@@ -7,3 +7,7 @@
 * Save cuDNN and add the path to environment
 * Create environment and activate it
 * Test it!
+
+## Install NVIDIA Driver
+
+* https://www.nvidia.com/Download/index.aspx?lang=en-us
