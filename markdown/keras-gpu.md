@@ -15,3 +15,10 @@
 
 * Install for Windows Installer: Python 3.7 version
 * [Download Anaconda](https://www.anaconda.com/distribution/)
+
+Open Anaconda Prompt and type the following commands:
+
+```bash
+user$ conda update conda
+user$ conda update --all
+```
