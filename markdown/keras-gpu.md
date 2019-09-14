@@ -3,7 +3,7 @@
 * [Install NVIDIA Driver](#user-content-install-nvidia-driver)
 * [Install Anaconda](#user-content-install-anaconda) and update Anaconda
 * [Install CUDA Toolkit 10.0](#user-content-install-cuda-toolkit-100)
-* Save cuDNN and add the path to environment
+* [Save cuDNN and add the path to environment](#save-cudnn-and-add-the-path-to-environment)
 * Create environment and activate it
 * Test it!
 
