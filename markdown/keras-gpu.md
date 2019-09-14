@@ -14,5 +14,5 @@
 
 ## Install Anaconda
 
-* Install: Python 3.7 version
+* Install for Windows Installer: Python 3.7 version
 * [Download Anaconda](https://www.anaconda.com/distribution/)
