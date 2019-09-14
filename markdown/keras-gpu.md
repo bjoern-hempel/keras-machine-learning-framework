@@ -35,3 +35,7 @@ user$ conda update --all
 * Architecture: x86_64
 * Version: 10
 * exe (local)
+
+## Save cuDNN and add the path to environment
+
+https://developer.nvidia.com/rdp/cudnn-download
