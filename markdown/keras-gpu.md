@@ -10,4 +10,4 @@
 
 ## Install NVIDIA Driver
 
-* https://www.nvidia.com/Download/index.aspx?lang=en-us
+* [Download NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us)
