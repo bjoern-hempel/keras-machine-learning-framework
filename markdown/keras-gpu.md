@@ -11,3 +11,7 @@
 ## Install NVIDIA Driver
 
 * [Download NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us)
+
+## Install Anaconda
+
+* [Download Anaconda](https://www.anaconda.com/distribution/)
