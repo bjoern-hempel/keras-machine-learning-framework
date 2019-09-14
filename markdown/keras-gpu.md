@@ -16,7 +16,12 @@
 * Install for Windows Installer: Python 3.7 version
 * [Download Anaconda](https://www.anaconda.com/distribution/)
 
-Open Anaconda Prompt and type the following commands to update Anaconda and all other libraries:
+Open Anaconda Prompt:
+
+* [Win] + s
+* Enter: Anaconda
+
+And type the following commands to update Anaconda and all other libraries:
 
 ```bash
 user$ conda update conda
