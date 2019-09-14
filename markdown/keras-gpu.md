@@ -38,4 +38,4 @@ user$ conda update --all
 
 ## Save cuDNN and add the path to environment
 
-* [Download cuDNN](https://developer.nvidia.com/rdp/cudnn-download=
+* [Download cuDNN](https://developer.nvidia.com/rdp/cudnn-download)
