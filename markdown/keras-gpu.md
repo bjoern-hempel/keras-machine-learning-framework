@@ -27,3 +27,7 @@ And type the following commands to update Anaconda and all other libraries:
 user$ conda update conda
 user$ conda update --all
 ```
+
+## Install CUDA Toolkit 10.0
+
+* [Download CUDA Toolkit 10.0](https://developer.nvidia.com/)
