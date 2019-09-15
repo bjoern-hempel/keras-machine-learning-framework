@@ -32,6 +32,7 @@
 
 import click
 from mlks.info.main import Info
+from mlks.prepare.main import Prepare
 
 
 class Config(object):
@@ -81,13 +82,8 @@ def cli(config):
 def prepare(config, string, repeat, out):
     """This subcommand trains a classifier."""
 
-    if config.verbose:
-        click.echo('verbose')
-    else:
-        click.echo('not verbose')
-
-    for x in range(repeat):
-        click.echo('Hello %s!' % string, file=out)
+    prepare_class = Prepare(config, string, repeat, out)
+    prepare_class.do()
 
 
 @cli.command()
