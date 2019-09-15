@@ -1,4 +1,4 @@
-# Keras GPU Installation on Windows
+# Keras GPU Installation on Windows 10
 
 * [Install NVIDIA Driver](#user-content-install-nvidia-driver)
 * [Install Anaconda](#user-content-install-anaconda) and update Anaconda
