@@ -169,11 +169,11 @@ Device mapping: no known devices.
 Attention: You are running this script without GPU support.
 ```
 
-# A. Further Tutorials
+## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
 
-# B. Sources
+## B. Sources
 
 * [Keras Tensorflow Windows Installation](https://github.com/antoniosehk/keras-tensorflow-windows-installation)
 
