@@ -35,8 +35,8 @@ Open Anaconda Prompt:
 And type the following commands to update Anaconda and all other libraries:
 
 ```bash
-user$ conda update conda
-user$ conda update --all
+(base) C:\Users> conda update conda
+(base) C:\Users> conda update --all
 ```
 
 ## Install CUDA Toolkit 10.0
@@ -68,15 +68,17 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 ### With GPU support
 
 ```bash
-user$ conda create -n keras-gpu python=3.6 numpy scipy keras-gpu
-user$ conda activate keras-gpu
+(base) C:\Users> conda create -n keras-gpu python=3.6 numpy scipy keras-gpu
+(base) C:\Users> conda activate keras-gpu
+(keras-gpu) C:\Users>
 ```
 
 ### Without GPU support
 
 ```bash
-user$ conda create -n keras python=3.6 numpy scipy keras
-user$ conda activate keras
+(base) C:\Users> conda create -n keras python=3.6 numpy scipy keras
+(base) C:\Users> conda activate keras
+(keras) C:\Users>
 ```
 
 ## Test it!
