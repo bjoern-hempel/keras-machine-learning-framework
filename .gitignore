@@ -1,0 +1,9 @@
+# IDE
+/.idea
+
+# Python
+/__pycache__
+
+# Project
+/machineLearning.egg-info
+
