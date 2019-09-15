@@ -31,7 +31,7 @@
 # SOFTWARE.
 
 import click
-import mlks.info.main as mlks_info
+from mlks.info.main import Info
 
 
 class Config(object):
@@ -93,4 +93,4 @@ def prepare(config, string, repeat, out):
 @cli.command()
 def info():
     """This subcommand shows some infos."""
-    mlks_info.execute()
+    Info.print()
