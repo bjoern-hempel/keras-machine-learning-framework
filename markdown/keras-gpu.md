@@ -93,13 +93,25 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ### Test the GPU environment
 
+#### Switch to GPU environment
+
 ```bash
 (base) C:\Users> conda activate keras-gpu
+```
+
+#### Build the command line execution script
+
+```bash
 (keras-gpu) C:\Users> cd machine-learning-keras-suite
 (keras-gpu) C:\Users> pip install --editable .
 ...
 (keras-gpu) C:\Users> where ml
 C:\Users\[user]\Anaconda3\envs\keras-gpu\Scripts\ml.exe
+```
+
+#### Check environment
+
+```bash
 (keras-gpu) C:\Users>ml info
 
 Available GPUs: 1
@@ -115,4 +127,43 @@ Default device:
 Device mapping:
 /job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 1060 6GB, ...
 ---------------
+```
+
+### Test the CPU environment (just for comparison)
+
+#### Switch to CPU environment
+
+```bash
+(base) C:\Users> conda activate keras
+```
+
+#### Build the command line execution script
+
+```bash
+(keras) C:\Users> cd machine-learning-keras-suite
+(keras) C:\Users> pip install --editable .
+...
+(keras) C:\Users> where ml
+C:\Users\[user]\Anaconda3\envs\keras-gpu\Scripts\ml.exe
+```
+
+#### Check environment
+
+```bash
+(keras) C:\Users>ml info
+
+Available GPUs: 0
+
+Available devices:
+------------------
+CPU: /device:CPU:0
+------------------
+
+Default device:
+---------------
+Device mapping: no known devices.
+---------------
+
+
+Attention: You are running this script without GPU support.
 ```
