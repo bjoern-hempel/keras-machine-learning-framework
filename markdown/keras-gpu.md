@@ -63,7 +63,21 @@ user$ conda update --all
 
 ## Create environment and activate it
 
-...
+Open Anaconda Prompt and create a GPU environment and if necessary an environment without GPU (only needed for comparison):
+
+### With GPU support
+
+```bash
+user$ conda create -n keras-gpu python=3.6 numpy scipy keras-gpu
+user$ conda activate keras-gpu
+```
+
+### Without GPU support
+
+```bash
+user$ conda create -n keras python=3.6 numpy scipy keras
+user$ conda activate keras
+```
 
 ## Test it!
 
