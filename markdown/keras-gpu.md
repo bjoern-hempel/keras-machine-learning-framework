@@ -29,7 +29,7 @@
 Open Anaconda Prompt:
 
 * [Win] + s
-* Enter: anaconda
+* Enter: `anaconda`
 * Open: Anaconda Prompt (Anaconda3)
 
 And type the following commands to update Anaconda and all other libraries:
@@ -50,10 +50,10 @@ user$ conda update --all
 ## Save cuDNN and add the path to environment
 
 * [Download cuDNN](https://developer.nvidia.com/rdp/cudnn-download)
-* Extract the data at a location of your choice, eg. C:\cuda
+* Extract the data at a location of your choice, eg. `C:\cuda`
 * Add the `bin` path to the environment variable `path`:
   * [Win] + s
-  * env
+  * `env`
   * Edit system environment variables
   * Variable: Path
   * Add `C:\cuda\bin`
