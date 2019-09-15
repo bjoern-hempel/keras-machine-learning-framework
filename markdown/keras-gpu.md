@@ -100,8 +100,6 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 ...
 (keras-gpu) C:\Users> where ml
 C:\Users\[user]\Anaconda3\envs\keras-gpu\Scripts\ml.exe
-(keras-gpu) C:\Users> conda activate keras-gpu
-(keras-gpu) C:\Users>
 (keras-gpu) C:\Users>ml info
 
 Available GPUs: 1
