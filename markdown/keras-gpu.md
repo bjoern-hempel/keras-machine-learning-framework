@@ -91,6 +91,8 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 (base) C:\Users> cd machine-learning-keras-suite
 ```
 
+### Test the GPU environment
+
 ```bash
 (base) C:\Users> conda activate keras-gpu
 (keras-gpu) C:\Users> pip install --editable .
