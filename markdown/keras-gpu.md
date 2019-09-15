@@ -83,7 +83,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ## Test it!
 
-### Preparations
+### Some preparations
 
 ```bash
 (base) C:\Users> conda install -c anaconda git
