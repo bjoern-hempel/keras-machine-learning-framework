@@ -39,7 +39,7 @@ user$ conda update --all
 
 ## Install CUDA Toolkit 10.0
 
-* [Download CUDA Toolkit 10.0](https://developer.nvidia.com/)
+* [Download CUDA Toolkit 10.0](https://developer.nvidia.com/rdp/cudnn-download)
 * Select Target Platform "Windows"
 * Architecture: x86_64
 * Version: 10
