@@ -85,10 +85,27 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ```bash
 (base) C:\Users> conda install -c anaconda git
-(base) C:\Users> git clone https://github.com/bjoern-hempel/machine-learning-keras-suite.git && cd machine-learning-keras-suite
+(base) C:\Users> git clone https://github.com/bjoern-hempel/machine-learning-keras-suite.git &&
+(base) C:\Users> cd machine-learning-keras-suite
 (base) C:\Users> pip install --editable .
 ...
 (base) C:\Users> where ml
 C:\Users\[user]\Anaconda3\envs\keras-gpu\Scripts\ml.exe
+(base) C:\Users> conda activate keras-gpu
+(keras-gpu) C:\Users>
+(keras-gpu) F:\Users>ml info
 
+Available GPUs: 1
+
+Available devices:
+------------------
+CPU: /device:CPU:0
+CPU: /device:GPU:0 [GeForce GTX 1060 6GB]
+------------------
+
+Default device:
+---------------
+Device mapping:
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:01:00.0, compute capability: 6.1
+---------------
 ```
