@@ -106,6 +106,6 @@ CPU: /device:GPU:0 [GeForce GTX 1060 6GB]
 Default device:
 ---------------
 Device mapping:
-/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:01:00.0, compute capability: 6.1
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 1060 6GB, ...
 ---------------
 ```
