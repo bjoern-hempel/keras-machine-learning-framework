@@ -127,6 +127,8 @@ Default device:
 Device mapping:
 /job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GTX 1060 6GB, ...
 ---------------
+
+Information: You are running this script with GPU support.
 ```
 
 ### Test the CPU environment (just for comparison)
@@ -163,7 +165,6 @@ Default device:
 ---------------
 Device mapping: no known devices.
 ---------------
-
 
 Attention: You are running this script without GPU support.
 ```
