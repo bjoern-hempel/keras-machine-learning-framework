@@ -51,12 +51,15 @@ user$ conda update --all
 
 * [Download cuDNN](https://developer.nvidia.com/rdp/cudnn-download)
 * Extract the data at a location of your choice, eg. C:\cuda
-* Add the path to environment path:
+* Add the "bin" path to the environment variable "path":
   * [Win] + s
   * env
   * Edit system environment variables
   * Variable: Path
   * Add "C:\cuda\bin"
+* Open Anaconda Prompt
+  * `user$ echo %PATH%`
+  * Should return: `...;C:\cuda\bin;...`
 
 ## Create environment and activate it
 
