@@ -33,6 +33,7 @@
 import click
 from mlks.info.main import Info
 from mlks.prepare.main import Prepare
+from mlks.train.main import Train
 
 
 class Config(object):
@@ -84,6 +85,16 @@ def prepare(config, string, repeat, out):
 
     prepare_class = Prepare(config, string, repeat, out)
     prepare_class.do()
+
+
+@cli.command()
+@common_options
+@pass_config
+def train(config):
+    """This subcommand trains a classifier."""
+
+    train_class = Train(config)
+    train_class.do()
 
 
 @cli.command()

@@ -2,8 +2,7 @@
 /.idea
 
 # Python
-/__pycache__
-/mlks/__pycache__
+__pycache__
 
 # Project
 /machineLearning.egg-info
