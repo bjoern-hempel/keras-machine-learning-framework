@@ -61,7 +61,7 @@ And type the following commands to update Anaconda and all other libraries:
   * `user$ echo %PATH%`
   * Should return: `...;C:\cuda\bin;...`
 
-## Create environment and activate it
+## Build the required python environment and activate it
 
 Open Anaconda Prompt and create a GPU environment and if necessary an environment without GPU (only needed for comparison):
 
