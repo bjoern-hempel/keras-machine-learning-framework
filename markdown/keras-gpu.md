@@ -10,7 +10,7 @@
 ## Install NVIDIA Driver
 
 * [Download NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us)
-* For example, if you have a GTX 1060:
+* For example, if you have a GTX 1060 6MB:
   * **Product Type:** GeForce
   * **Product Series:** GeForce 10 Series
   * **Product:** GeForce GTX 1060
