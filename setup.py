@@ -5,7 +5,7 @@ setup(
     version='1.0',
     py_modules=['ml'],
     install_requires=[
-        'Click',
+        'Click', 'tensorflow'
     ],
     entry_points='''
         [console_scripts]
