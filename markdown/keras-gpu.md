@@ -11,13 +11,13 @@
 
 * [Download NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us)
 * For example, if you have a GTX 1060:
-  * Product Type: GeForce
-  * Product Series: GeForce 10 Series
-  * Product: GeForce GTX 1060
-  * Operating System: Windows 10 64-bit
-  * Windows Driver Type: Standard
-  * Download Type: Game Ready Driver (GRD)
-  * Language:	English
+  * **Product Type:** GeForce
+  * **Product Series:** GeForce 10 Series
+  * **Product:** GeForce GTX 1060
+  * **Operating System:** Windows 10 64-bit
+  * **Windows Driver Type:** Standard
+  * **Download Type:** Game Ready Driver (GRD)
+  * **Language:**	English
 
 ## Install Anaconda
 
