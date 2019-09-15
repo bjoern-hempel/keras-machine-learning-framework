@@ -85,8 +85,8 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ```bash
 (base) C:\Users> conda install -c anaconda git
-(base) C:\Users> git clone https://github.com/bjoern-hempel/machine-learning-keras-suite.git &&
-(base) C:\Users> cd machine-learning-keras-suite
+(base) C:\Users> git clone https://github.com/bjoern-hempel/machine-learning-keras-suite.git && \
+cd machine-learning-keras-suite
 (base) C:\Users> pip install --editable .
 ...
 (base) C:\Users> where ml
