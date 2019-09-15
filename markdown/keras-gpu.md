@@ -19,7 +19,8 @@
 Open Anaconda Prompt:
 
 * [Win] + s
-* Enter: Anaconda
+* Enter: anaconda
+* Open: Anaconda Prompt (Anaconda3)
 
 And type the following commands to update Anaconda and all other libraries:
 
