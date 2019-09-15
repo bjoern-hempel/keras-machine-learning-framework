@@ -51,3 +51,10 @@ user$ conda update --all
 * Extract the data at a location of your choice, eg. C:\cuda
 * Add the path to environment path
 
+## Create environment and activate it
+
+...
+
+## Test it!
+
+...
