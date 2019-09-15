@@ -31,16 +31,7 @@
 # SOFTWARE.
 
 import click
-import tensorflow as tf
-from tensorflow.python.client import device_lib
-import os
-import re
-
-# disable the standard logging outputs
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
-# disable deprecated warnings
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+import mlks.info.main as mlks_info
 
 
 class Config(object):
@@ -102,41 +93,4 @@ def prepare(config, string, repeat, out):
 @cli.command()
 def info():
     """This subcommand shows some infos."""
-
-    devices = device_lib.list_local_devices()
-    number_of_gpus = 0
-
-    # count the gpus
-    for x in devices:
-        if x.device_type == 'GPU':
-            number_of_gpus += 1
-
-    click.echo('')
-    click.echo("Available GPUs: %d" % number_of_gpus)
-
-    click.echo('')
-    click.echo('Available devices:')
-    click.echo('------------------')
-    for x in devices:
-        device_type = "CPU"
-        device_name = ""
-
-        if x.device_type == 'GPU':
-            # try to extract the gpu name
-            gpu_name = re.findall(r"name:[ ]*([^,]+)", x.physical_device_desc)
-            device_name = gpu_name[0] if len(gpu_name) > 0 else device_name
-
-        click.echo("%s: %s %s" % (device_type, x.name, "" if device_name == "" else "[%s]" % device_name))
-    click.echo('------------------')
-
-    click.echo('')
-    click.echo('Default device:')
-    click.echo('---------------')
-    sess = tf.Session(config=tf.ConfigProto(log_device_placement=True, allow_soft_placement=True))
-    click.echo('---------------')
-
-    click.echo('')
-    if number_of_gpus > 0:
-        click.echo('Information: You are running this script with GPU support.')
-    else:
-        click.echo('Attention: You are running this script without GPU support.')
+    mlks_info.execute()

@@ -3,6 +3,7 @@
 
 # Python
 /__pycache__
+/mlks/__pycache__
 
 # Project
 /machineLearning.egg-info
