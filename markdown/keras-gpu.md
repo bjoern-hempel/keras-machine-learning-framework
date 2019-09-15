@@ -168,3 +168,19 @@ Device mapping: no known devices.
 
 Attention: You are running this script without GPU support.
 ```
+
+# A. Further Tutorials
+
+* [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
+
+# B. Sources
+
+* [Keras Tensorflow Windows Installation](https://github.com/antoniosehk/keras-tensorflow-windows-installation)
+
+## C. Authors
+
+* Björn Hempel <bjoern@hempel.li> - _Initial work_ - [https://github.com/bjoern-hempel](https://github.com/bjoern-hempel)
+
+## D. License
+
+This tutorial is licensed under the MIT License - see the [LICENSE.md](/LICENSE.md) file for details
