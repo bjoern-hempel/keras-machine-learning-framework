@@ -48,4 +48,4 @@ class Prepare:
             click.echo('not verbose')
 
         for x in range(self.repeat):
-            click.echo('Hello %s!' % self.string, file=self.out)
+            click.echo('Hello %s! Prepare it!' % self.string, file=self.out)
