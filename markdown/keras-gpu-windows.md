@@ -119,7 +119,7 @@ Available GPUs: 1
 Available devices:
 ------------------
 CPU: /device:CPU:0
-CPU: /device:GPU:0 [GeForce GTX 1060 6GB]
+GPU: /device:GPU:0 [GeForce GTX 1060 6GB]
 ------------------
 
 Default device:
