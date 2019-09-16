@@ -1,4 +1,4 @@
-# Machine Learning Keras Suite
+# Keras Machine Learning Suite
 
 This suite prepares, trains and validates an image classifier.
 
