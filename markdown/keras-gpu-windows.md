@@ -41,7 +41,7 @@ And type the following commands to update Anaconda and all other libraries:
 
 ## Install CUDA Toolkit 10.0
 
-* [Download CUDA Toolkit 10.0](https://developer.nvidia.com/rdp/cudnn-download)
+* [Download CUDA Toolkit 10.0](https://developer.nvidia.com/cuda-downloads)
 * Select Target Platform "Windows"
 * Architecture: x86_64
 * Version: 10
