@@ -112,7 +112,7 @@ C:\Users\[user]\Anaconda3\envs\keras-gpu\Scripts\ml.exe
 #### Check environment
 
 ```bash
-(keras-gpu) C:\Users>ml info
+(keras-gpu) C:\Users> ml info
 
 Available GPUs: 1
 
