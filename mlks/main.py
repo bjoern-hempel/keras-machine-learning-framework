@@ -71,6 +71,7 @@ def common_options(f):
 @pass_config
 def cli(config):
     """This scripts prepares, trains and validates an image classifier."""
+    
     pass
 
 
@@ -100,4 +101,5 @@ def train(config):
 @cli.command()
 def info():
     """This subcommand shows some infos."""
+    
     Info.print()
