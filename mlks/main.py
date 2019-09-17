@@ -34,6 +34,7 @@ import click
 from mlks.info.main import Info
 from mlks.prepare.main import Prepare
 from mlks.train.main import Train
+from mlks.test.main import Test
 
 
 class Config(object):
@@ -99,7 +100,17 @@ def train(config):
 
 
 @cli.command()
+@common_options
+@pass_config
+def test(config):
+    """This subcommand shows some infos."""
+
+    test_class = Test(config)
+    test_class.do()
+
+
+@cli.command()
 def info():
     """This subcommand shows some infos."""
-    
+
     Info.print()
