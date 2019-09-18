@@ -1,8 +1,8 @@
 # Keras GPU Installation on Mac
 
-* [Install NVIDIA Driver](#user-content-install-nvidia-driver)
+* [Install CUDA Driver](#user-content-install-cuda-driver)
 * [Install Anaconda](#user-content-install-anaconda) and update Anaconda
-* [Install CUDA Toolkit 10.0](#user-content-install-cuda-toolkit-100)
+* [Install CUDA Toolkit 10.1](#user-content-install-cuda-toolkit-101)
 * [Save cuDNN and add the path to environment](#save-cudnn-and-add-the-path-to-environment)
 * [Create environment and activate it](#user-content-create-environment-and-activate-it)
 * [Test it!](#user-content-test-it)
