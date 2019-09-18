@@ -38,7 +38,7 @@ If you intend to implement and optimize Deep Neuronal Networks (DNN), the calcul
 
 ## B. Sources
 
-* <sup><a name="gpumatrixmult">[1]</a></sup>: [Understanding the Efficiency of GPU Algorithms for Matrix-Matrix Multiplication](https://graphics.stanford.edu/papers/gpumatrixmult/gpumatrixmult.pdf)
+* <sup><a name="gpumatrixmult">[1]</a></sup>[Understanding the Efficiency of GPU Algorithms for Matrix-Matrix Multiplication](https://graphics.stanford.edu/papers/gpumatrixmult/gpumatrixmult.pdf)
 
 ## C. Authors
 
