@@ -5,7 +5,7 @@ This suite prepares, trains and validates an image classifier.
 ## Install Keras with GPU Support (Preparation)
 
 * [Keras GPU Installation on Windows](markdown/installation/keras-gpu-windows.md)
-* [Keras GPU Installation on Mac](markdown/installation/keras-gpu-mac.md) _(In progress)_
+* [Keras GPU Installation on Mac](markdown/installation/keras-gpu-mac.md)
 * [Keras GPU Installation on Linux](markdown/installation/keras-gpu-linux.md) _(In progress)_
 
 ## Why is it important to choose a GPU over a CPU?
