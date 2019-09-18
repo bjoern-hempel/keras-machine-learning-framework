@@ -8,6 +8,10 @@ This suite prepares, trains and validates an image classifier.
 * [Keras GPU Installation on Mac](markdown/keras-gpu-mac.md) _(In progress)_
 * [Keras GPU Installation on Linux](markdown/keras-gpu-linux.md) _(In progress)_
 
+## Why is it important to choose a GPU over a CPU?
+
+* [GPU vs CPU](markdown/gpu-vs-cpu.md)
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
