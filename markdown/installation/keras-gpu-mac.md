@@ -30,9 +30,10 @@ Open a terminal and type the following commands to update Anaconda and all other
 
 * [Download CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads)
 * Select Target Platform "Mac OSX"
-* Architecture: x86_64
-* Version: 10.13
-* dmg (local)
+  * Architecture: x86_64
+  * Version: 10.13
+  * dmg (local)
+* Install the dmg package
 
 ## Save cuDNN and add the path to environment
 
