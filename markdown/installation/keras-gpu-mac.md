@@ -163,7 +163,7 @@ Attention: You are running this script without GPU support.
 
 ## B. Sources
 
-* [Keras Tensorflow Windows Installation](https://github.com/antoniosehk/keras-tensorflow-windows-installation)
+* [Installation Guide Mac OS X](https://docs.nvidia.com/cuda/cuda-installation-guide-mac-os-x/index.html)
 
 ## C. Authors
 
