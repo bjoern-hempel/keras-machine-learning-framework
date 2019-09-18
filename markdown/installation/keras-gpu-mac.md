@@ -38,7 +38,8 @@ Open a terminal and type the following commands to update Anaconda and all other
 
 * [Download cuDNN v7.6.3 (August 23, 2019), for CUDA 10.1](https://developer.nvidia.com/rdp/cudnn-download) (cuDNN Library for OSX)
 * Extract the data at a location of your choice, eg. `/cuda`
-* Add the `bin` path to the environment variable `path` (`~/.bash_profile`):```
+* Add the `bin` path to the environment variable `path` (`~/.bash_profile`):
+```
 export PATH=/cuda/bin${PATH:+:${PATH}}
 export DYLD_LIBRARY_PATH=/cuda/lib${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
 ```
