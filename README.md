@@ -18,8 +18,10 @@ This suite prepares, trains and validates an image classifier.
 
 * [Cross-language model exchange (Python → JAVA)](markdown/cross-language/python-java.md)
 
-## Transfer Learning
+## Some background knowledge
 
+* Neuronal network vs Millions of parameters
+* Transfer Learning
 * ...
 
 ## First attempts to train an image classifier
