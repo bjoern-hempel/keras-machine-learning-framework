@@ -14,6 +14,8 @@ This suite prepares, trains and validates an image classifier.
 
 ## Python is not really intended for production environments
 
+..but perfect for machine learning experiments. ;)
+
 * [Cross-language model exchange (Python → JAVA)](markdown/cross-language/python-java.md)
 
 ## A. Further Tutorials
