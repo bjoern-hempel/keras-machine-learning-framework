@@ -43,7 +43,7 @@ Open a terminal and type the following commands to update Anaconda and all other
 export PATH=/cuda/bin${PATH:+:${PATH}}
 export DYLD_LIBRARY_PATH=/cuda/lib${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
 ```
-* Open Terminal
+* Open a terminal
   * `(base) user$ echo $PATH`
   * Should return: `...:/cuda/bin:...`
   * `(base) user$ echo $DYLD_LIBRARY_PATH`
