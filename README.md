@@ -10,6 +10,10 @@ This suite prepares, trains and validates an image classifier.
 
 ## Why is it important to choose a GPU over a CPU?
 
+If you intend to implement and optimize Deep Neuronal Networks (DNN), the calculations must take place on the GPU. It is also possible to run calculations on the CPU. Also the installation of Keras for CPU driven computations is much easier, because the installation of the GPU drivers is not necessary. The disadvantage of this, however, is that it takes much longer to train larger models. Good models for the classification of e.g. pictures are only achieved after several training units. Training units require a lot of computing power in the form of many matrix operations. A GPU is predestined for matrix operations.
+
+Translated with www.DeepL.com/Translator
+
 * [GPU vs CPU](markdown/hardware/gpu-vs-cpu.md)
 
 ## Python is not really intended for production environments
