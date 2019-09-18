@@ -18,6 +18,16 @@ This suite prepares, trains and validates an image classifier.
 
 * [Cross-language model exchange (Python → JAVA)](markdown/cross-language/python-java.md)
 
+## Transfer Learning
+
+* ...
+
+## First attempts to train an image classifier
+
+* Train, build and save the model
+* Preparations to make training more efficient
+* ...
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
