@@ -12,6 +12,10 @@ This suite prepares, trains and validates an image classifier.
 
 * [GPU vs CPU](markdown/hardware/gpu-vs-cpu.md)
 
+## Python is not really intended for production environments
+
+* [Cross-language model exchange (Python → JAVA)](markdown/cross-language/python-java.md)
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
