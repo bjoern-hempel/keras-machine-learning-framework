@@ -63,28 +63,33 @@ pass_general_config = click.make_pass_decorator(GeneralConfig, ensure=True)
 pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, ensure=True)
 
 
-def verbose_option(f):
-    """Customized option (verbose): --verbose and -v"""
+def option_callback(ctx, param, value):
+    def verbose(ctx_inner, value_inner):
+        config = ctx_inner.ensure_object(GeneralConfig)
+        if value_inner:
+            config.verbose = value_inner
+        return value_inner
 
-    def callback(ctx, param, value):
-        config = ctx.ensure_object(GeneralConfig)
-        if value:
-            config.verbose = value
-        return value
-
-    return click.option('-v', '--verbose', expose_value=False, is_flag=True, help='Switch the script to verbose mode.',
-                        callback=callback)(f)
+    print(param.name)
+    return verbose(ctx, value)
 
 
-def common_options(f):
-    """Bundles all options"""
+verbose_option = [
+    click.option('--verbose', '-v', expose_value=False, is_flag=True, help='Switch the script to verbose mode.',
+                 callback=option_callback)
+]
 
-    f = verbose_option(f)
-    return f
+
+def add_options(options):
+    def _add_options(func):
+        for option in reversed(options):
+            func = option(func)
+        return func
+    return _add_options
 
 
 @click.group()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def cli(general_config, machine_learning_config):
@@ -94,7 +99,7 @@ def cli(general_config, machine_learning_config):
 
 
 @cli.command()
-@common_options
+@add_options(verbose_option)
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
@@ -108,7 +113,7 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 
 
 @cli.command()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def train(general_config, machine_learning_config):
@@ -119,7 +124,7 @@ def train(general_config, machine_learning_config):
 
 
 @cli.group()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def test(general_config, machine_learning_config):
@@ -128,7 +133,7 @@ def test(general_config, machine_learning_config):
 
 
 @test.command()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def simple_perceptron(general_config, machine_learning_config):
@@ -139,7 +144,7 @@ def simple_perceptron(general_config, machine_learning_config):
 
 
 @test.command()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def xor_perceptron(general_config, machine_learning_config):
@@ -150,7 +155,7 @@ def xor_perceptron(general_config, machine_learning_config):
 
 
 @test.command()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def nine_points(general_config, machine_learning_config):
@@ -161,7 +166,7 @@ def nine_points(general_config, machine_learning_config):
 
 
 @test.command()
-@common_options
+@add_options(verbose_option)
 @pass_machine_learning_config
 @pass_general_config
 def mnist(general_config, machine_learning_config):
