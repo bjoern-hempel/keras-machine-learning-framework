@@ -34,7 +34,10 @@ import click
 from mlks.info.main import Info
 from mlks.prepare.main import Prepare
 from mlks.train.main import Train
-from mlks.test.main import Test
+from mlks.test.mnist.main import Mnist
+from mlks.test.simple_perceptron.main import SimplePerceptron
+from mlks.test.xor_perceptron.main import XorPerceptron
+from mlks.test.nine_points.main import NinePoints
 
 
 class Config(object):
@@ -99,13 +102,51 @@ def train(config):
     train_class.do()
 
 
-@cli.command()
+@cli.group()
 @common_options
 @pass_config
 def test(config):
-    """This subcommand shows some infos."""
+    """This subcommand contains some test examples."""
+    pass
 
-    test_class = Test(config)
+
+@test.command()
+@common_options
+@pass_config
+def simple_perceptron(config):
+    """This subcommand from test trains a simple perceptron."""
+
+    test_class = SimplePerceptron(config)
+    test_class.do()
+
+
+@test.command()
+@common_options
+@pass_config
+def xor_perceptron(config):
+    """This subcommand from test trains a xor perceptron."""
+
+    test_class = XorPerceptron(config)
+    test_class.do()
+
+
+@test.command()
+@common_options
+@pass_config
+def nine_points(config):
+    """This subcommand from test trains a nine point example."""
+
+    test_class = NinePoints(config)
+    test_class.do()
+
+
+@test.command()
+@common_options
+@pass_config
+def mnist(config):
+    """This subcommand from test trains a mnist database."""
+
+    test_class = Mnist(config)
     test_class.do()
 
 

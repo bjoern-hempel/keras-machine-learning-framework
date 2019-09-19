@@ -40,7 +40,7 @@ from keras.layers import Dense, Dropout
 from keras.optimizers import RMSprop
 
 
-class Test:
+class Mnist:
 
     def __init__(self, config):
         self.config = config
@@ -51,7 +51,7 @@ class Test:
 
         verbose = self.config.verbose
 
-        batch_size = 512
+        batch_size = 1024
         num_classes = 10
         epochs = 20
 
