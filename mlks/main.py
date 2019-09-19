@@ -40,22 +40,34 @@ from mlks.test.xor_perceptron.main import XorPerceptron
 from mlks.test.nine_points.main import NinePoints
 
 
-class Config(object):
-    """Config class"""
+class GeneralConfig(object):
+    """General config class"""
 
     def __init__(self):
         self.verbose = False
 
 
+class MachineLearningConfig(object):
+    """Machine learning config class"""
+
+    def __init__(self):
+        self.activation_function = 'tanh'  # ['tanh', 'sigmoid']
+        self.loss_function = 'mean_squared_error'
+        self.optimizer = 'adam'
+        self.metrics = 'accuracy'
+        self.epochs = 100
+
+
 # Make pass decorator for class Config
-pass_config = click.make_pass_decorator(Config, ensure=True)
+pass_general_config = click.make_pass_decorator(GeneralConfig, ensure=True)
+pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, ensure=True)
 
 
 def verbose_option(f):
     """Customized option (verbose): --verbose and -v"""
 
     def callback(ctx, param, value):
-        config = ctx.ensure_object(Config)
+        config = ctx.ensure_object(GeneralConfig)
         if value:
             config.verbose = value
         return value
@@ -66,16 +78,18 @@ def verbose_option(f):
 
 def common_options(f):
     """Bundles all options"""
+
     f = verbose_option(f)
     return f
 
 
 @click.group()
 @common_options
-@pass_config
-def cli(config):
+@pass_machine_learning_config
+@pass_general_config
+def cli(general_config, machine_learning_config):
     """This scripts prepares, trains and validates an image classifier."""
-    
+
     pass
 
 
@@ -84,69 +98,76 @@ def cli(config):
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
-@pass_config
-def prepare(config, string, repeat, out):
+@pass_machine_learning_config
+@pass_general_config
+def prepare(general_config, machine_learning_config, string, repeat, out):
     """This subcommand trains a classifier."""
 
-    prepare_class = Prepare(config, string, repeat, out)
+    prepare_class = Prepare(general_config, string, repeat, out)
     prepare_class.do()
 
 
 @cli.command()
 @common_options
-@pass_config
-def train(config):
+@pass_machine_learning_config
+@pass_general_config
+def train(general_config, machine_learning_config):
     """This subcommand trains a classifier."""
 
-    train_class = Train(config)
+    train_class = Train(general_config)
     train_class.do()
 
 
 @cli.group()
 @common_options
-@pass_config
-def test(config):
+@pass_machine_learning_config
+@pass_general_config
+def test(general_config, machine_learning_config):
     """This subcommand contains some test examples."""
     pass
 
 
 @test.command()
 @common_options
-@pass_config
-def simple_perceptron(config):
+@pass_machine_learning_config
+@pass_general_config
+def simple_perceptron(general_config, machine_learning_config):
     """This subcommand from test trains a simple perceptron."""
 
-    test_class = SimplePerceptron(config)
+    test_class = SimplePerceptron(general_config)
     test_class.do()
 
 
 @test.command()
 @common_options
-@pass_config
-def xor_perceptron(config):
+@pass_machine_learning_config
+@pass_general_config
+def xor_perceptron(general_config, machine_learning_config):
     """This subcommand from test trains a xor perceptron."""
 
-    test_class = XorPerceptron(config)
+    test_class = XorPerceptron(general_config)
     test_class.do()
 
 
 @test.command()
 @common_options
-@pass_config
-def nine_points(config):
+@pass_machine_learning_config
+@pass_general_config
+def nine_points(general_config, machine_learning_config):
     """This subcommand from test trains a nine point example."""
 
-    test_class = NinePoints(config)
+    test_class = NinePoints(general_config, machine_learning_config)
     test_class.do()
 
 
 @test.command()
 @common_options
-@pass_config
-def mnist(config):
+@pass_machine_learning_config
+@pass_general_config
+def mnist(general_config, machine_learning_config):
     """This subcommand from test trains a mnist database."""
 
-    test_class = Mnist(config)
+    test_class = Mnist(general_config)
     test_class.do()
 
 
