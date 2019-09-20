@@ -159,7 +159,7 @@ def xor_perceptron(general_config, machine_learning_config):
 def nine_points(general_config, machine_learning_config):
     """This subcommand from test trains a nine point example."""
 
-    test_class = NinePoints(general_config)
+    test_class = NinePoints(general_config, machine_learning_config)
     test_class.do()
 
 
