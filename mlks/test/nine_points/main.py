@@ -71,6 +71,9 @@ class NinePoints:
 
     def do(self):
 
+        print(self.machine_learning_config.epochs)
+        return 1
+
         # network settings
         number_input_nodes = 2
         number_inner_nodes = [100]

@@ -70,11 +70,21 @@ def option_callback(ctx, param, value):
             config.verbose = value_inner
         return value_inner
 
-    return verbose(ctx, value)
+    def epochs(ctx_inner, value_inner):
+        config = ctx_inner.ensure_object(MachineLearningConfig)
+        if value_inner:
+            config.epochs = value_inner
+        return value_inner
+
+    return locals()[param.name](ctx, value)
 
 
-verbose_option = [
+option_verbose = [
     click.option('--verbose', '-v', expose_value=False, is_flag=True, help='Switch the script to verbose mode.',
+                 callback=option_callback)
+]
+option_epochs = [
+    click.option('--epochs', '-e', expose_value=False, is_flag=False, help='Set the number of epochs.',
                  callback=option_callback)
 ]
 
@@ -89,7 +99,7 @@ def add_options(options):
 
 
 @click.group()
-@add_options(verbose_option)
+@add_options(option_verbose)
 def cli():
     """This scripts prepares, trains and validates an image classifier."""
 
@@ -97,7 +107,7 @@ def cli():
 
 
 @cli.command()
-@add_options(verbose_option)
+@add_options(option_verbose)
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
@@ -111,7 +121,7 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 
 
 @cli.command()
-@add_options(verbose_option)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def train(general_config, machine_learning_config):
@@ -122,7 +132,7 @@ def train(general_config, machine_learning_config):
 
 
 @cli.group()
-@add_options(verbose_option)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def test(general_config, machine_learning_config):
@@ -131,7 +141,7 @@ def test(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(verbose_option)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def simple_perceptron(general_config, machine_learning_config):
@@ -142,7 +152,7 @@ def simple_perceptron(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(verbose_option)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def xor_perceptron(general_config, machine_learning_config):
@@ -153,7 +163,8 @@ def xor_perceptron(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(verbose_option)
+@add_options(option_verbose)
+@add_options(option_epochs)
 @pass_machine_learning_config
 @pass_general_config
 def nine_points(general_config, machine_learning_config):
@@ -164,7 +175,7 @@ def nine_points(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(verbose_option)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def mnist(general_config, machine_learning_config):
