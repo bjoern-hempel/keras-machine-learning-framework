@@ -31,24 +31,24 @@
 # SOFTWARE.
 
 import click
-import time
+
+from mlks.commands.main import Command
 
 
-class XorPerceptron:
+class XorPerceptron(Command):
 
     def __init__(self, general_config, machine_learning_config):
         self.general_config = general_config
         self.machine_learning_config = machine_learning_config
-        pass
+
+        # initialize the parent class
+        super().__init__()
 
     def do(self):
-        start_time = time.time()
+        self.start_timer()
 
         verbose = self.general_config.verbose
 
         click.echo('XorPerceptron')
 
-        end_time = time.time()
-
-        click.echo('')
-        click.echo("--- %s seconds ---" % (end_time - start_time))
+        self.finish_timer()

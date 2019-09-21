@@ -31,7 +31,8 @@
 # SOFTWARE.
 
 import click
-import time
+
+from mlks.commands.main import Command
 
 from keras.layers import Dense
 from keras.models import Sequential
@@ -43,18 +44,14 @@ import matplotlib.pyplot as plt
 np.random.seed(1337)
 
 
-class NinePoints:
+class NinePoints(Command):
 
     def __init__(self, general_config, machine_learning_config):
         self.general_config = general_config
         self.machine_learning_config = machine_learning_config
-        self.start_time = time.time()
 
-    def __del__(self):
-        self.finish_time = time.time()
-
-        click.echo('')
-        click.echo("--- %s seconds ---" % (self.finish_time - self.start_time))
+        # initialize the parent class
+        super().__init__()
 
     def create_model(self, number_input_nodes, number_inner_nodes, number_output_nodes):
         # create the neuronal network 2 (x, y) -> 100 -> 1 (0 or 1) (tanh, SQE, Adam)
@@ -115,7 +112,9 @@ class NinePoints:
         model = self.create_model(number_input_nodes, number_inner_nodes, number_output_nodes)
 
         # train the model
+        self.start_timer('fit')
         model.fit(x=train_values, y=result_values, epochs=self.machine_learning_config.epochs, verbose=verbose)
+        self.finish_timer('fit')
 
         # create coordinate system from -0.25 to 1.25 for x and y
         x_graphic = np.linspace(range_x[0], range_x[1], range_x_steps)  # 10 means: 10 steps from -0.25 to 1.25

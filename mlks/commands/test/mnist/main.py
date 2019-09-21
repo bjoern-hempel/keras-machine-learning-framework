@@ -31,7 +31,6 @@
 # SOFTWARE.
 
 import click
-import time
 
 import keras
 from keras.datasets import mnist
@@ -39,17 +38,19 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import RMSprop
 
+from mlks.commands.main import Command
 
-class Mnist:
+
+class Mnist(Command):
 
     def __init__(self, general_config, machine_learning_config):
         self.general_config = general_config
         self.machine_learning_config = machine_learning_config
-        pass
+
+        # initialize the parent class
+        super().__init__()
 
     def do(self):
-        start_time = time.time()
-
         verbose = self.general_config.verbose
 
         batch_size = 1024
@@ -85,16 +86,13 @@ class Mnist:
                       optimizer=RMSprop(),
                       metrics=['accuracy'])
 
+        self.start_timer('fit')
         history = model.fit(x_train, y_train,
                             batch_size=batch_size,
                             epochs=epochs,
                             verbose=1,
                             validation_data=(x_test, y_test))
+        self.finish_timer('fit')
         score = model.evaluate(x_test, y_test, verbose=0)
         print('Test loss:', score[0])
         print('Test accuracy:', score[1])
-
-        end_time = time.time()
-
-        click.echo('')
-        click.echo("--- %s seconds ---" % (end_time - start_time))

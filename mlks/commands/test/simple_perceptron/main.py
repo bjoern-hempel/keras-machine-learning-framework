@@ -31,23 +31,27 @@
 # SOFTWARE.
 
 import click
-import time
+
+from mlks.commands.main import Command
 
 
-class SimplePerceptron:
+class SimplePerceptron(Command):
 
     def __init__(self, general_config, machine_learning_config):
         self.general_config = general_config
-        pass
+        self.machine_learning_config = machine_learning_config
+
+        # initialize the parent class
+        super().__init__()
 
     def do(self):
-        start_time = time.time()
+        # start the timer
+        self.start_timer('train')
+        self.start_timer('train2')
 
         verbose = self.general_config.verbose
 
         click.echo('SimplePerceptron')
 
-        end_time = time.time()
-
-        click.echo('')
-        click.echo("--- %s seconds ---" % (end_time - start_time))
+        # finish the timer
+        self.finish_timer('train')
