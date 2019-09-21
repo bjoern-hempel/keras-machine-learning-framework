@@ -57,8 +57,8 @@ class MachineLearningConfig(object):
         self.loss_function = 'mean_squared_error'
         self.optimizer = 'adam'
         self.metrics = 'accuracy'
-        self.epochs = 100
-        self.learning_rate = 0.001
+        self.epochs = 0
+        self.learning_rate = 0
 
 
 class TransferLearningConfig(MachineLearningConfig):
@@ -67,7 +67,7 @@ class TransferLearningConfig(MachineLearningConfig):
     def __init__(self):
         super().__init__()
 
-        self.transfer_learning_model = 'Resnet50'
+        self.transfer_learning_model = None
 
 
 # Make pass decorator for class Config
@@ -76,24 +76,24 @@ pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, 
 pass_transfer_learning_config = click.make_pass_decorator(TransferLearningConfig, ensure=True)
 
 
-def general_config_writer(ctx, value, ensure_object=True):
-    config = ctx.ensure_object(GeneralConfig) if ensure_object else GeneralConfig
+def general_config_writer(ctx, param, value):
+    config = ctx.ensure_object(GeneralConfig)
     if value:
-        config.verbose = value
+        setattr(config, param.name, value)
     return value
 
 
-def machine_learning_config_writer(ctx, value, ensure_object=True):
-    config = ctx.ensure_object(MachineLearningConfig) if ensure_object else MachineLearningConfig
+def machine_learning_config_writer(ctx, param, value):
+    config = ctx.ensure_object(MachineLearningConfig)
     if value:
-        config.epochs = value
+        setattr(config, param.name, value)
     return value
 
 
-def transfer_learning_config_writer(ctx, value, ensure_object=True):
-    config = ctx.ensure_object(TransferLearningConfig) if ensure_object else TransferLearningConfig
+def transfer_learning_config_writer(ctx, param, value):
+    config = ctx.ensure_object(TransferLearningConfig)
     if value:
-        config.epochs = value
+        setattr(config, param.name, value)
     return value
 
 
@@ -119,29 +119,45 @@ def option_callback(ctx, param, value):
         translator = translators_copy.pop(0)
 
         for translator_copy in translators_copy:
-            globals()[translator_copy](ctx, value, False)
+            globals()[translator_copy](ctx, param, value)
     else:
         translator = translators
 
-    return globals()[translator](ctx, value)
+    return globals()[translator](ctx, param, value)
 
 
 # Configure the universal parameters here
-option_verbose = click.option('--verbose', '-v', expose_value=False, is_flag=True,
+option_verbose = click.option('--verbose', '-v',
+                              expose_value=False,
+                              is_flag=True,
                               help='Switch the script to verbose mode.',
                               callback=option_callback)
-option_test = click.option('--test', '-t', expose_value=False, is_flag=True,
+option_test = click.option('--test', '-t',
+                           expose_value=False,
+                           is_flag=True,
                            help='Switch the script to test mode.',
                            callback=option_callback)
-option_epochs = click.option('--epochs', '-e', expose_value=False, is_flag=False,
+option_epochs = click.option('--epochs', '-e',
+                             expose_value=False,
+                             is_flag=False,
                              help='Set the number of epochs.',
-                             callback=option_callback, type=int)
-option_learning_rate = click.option('--learning-rate', '-l', expose_value=False, is_flag=False,
+                             callback=option_callback,
+                             default=10,
+                             type=int)
+option_learning_rate = click.option('--learning-rate', '-l',
+                                    expose_value=False,
+                                    is_flag=False,
                                     help='Set the learning rate.',
-                                    callback=option_callback, type=float)
-option_transfer_learning_model = click.option('--transfer-learning-model', '-m', expose_value=False, is_flag=False,
+                                    callback=option_callback,
+                                    default=0.001,
+                                    type=float)
+option_transfer_learning_model = click.option('--transfer-learning-model', '-m',
+                                              expose_value=False,
+                                              is_flag=False,
                                               help='Sets the transfer learning model.',
-                                              callback=option_callback, type=str)
+                                              callback=option_callback,
+                                              default='Resnet52',
+                                              type=str)
 
 # Configure some option sets (the inherited options should be the last!!! because of the ctx.ensure_object call)
 option_set_general = [option_verbose, option_test]
