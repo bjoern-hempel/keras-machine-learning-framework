@@ -57,8 +57,8 @@ class NinePoints(Command):
         # create the neuronal network 2 (x, y) -> 100 -> 1 (0 or 1) (tanh, SQE, Adam)
         model = Sequential()
         model.add(Dense(number_inner_nodes[0], activation=self.machine_learning_config.activation_function, input_shape=(number_input_nodes,)))
-        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.transfer_learning_model.activationFunction))
-        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.transfer_learning_model.activationFunction))
+        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.machine_learning_config.activationFunction))
+        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.machine_learning_config.activationFunction))
         model.add(Dense(number_output_nodes, input_dim=number_inner_nodes[len(number_inner_nodes) - 1],
                         activation=self.machine_learning_config.activation_function))
         model.compile(loss=self.machine_learning_config.loss_function, optimizer=self.machine_learning_config.optimizer,
