@@ -29,6 +29,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from typing import Dict
 
 import click
 from mlks.info.main import Info
@@ -63,36 +64,52 @@ pass_general_config = click.make_pass_decorator(GeneralConfig, ensure=True)
 pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, ensure=True)
 
 
+def general_config_writer(ctx, value):
+    config = ctx.ensure_object(GeneralConfig)
+    if value:
+        config.verbose = value
+    return value
+
+
+def machine_learning_config_writer(ctx, value):
+    config = ctx.ensure_object(MachineLearningConfig)
+    if value:
+        config.epochs = value
+    return value
+
+
+config_translator: Dict[str, str] = {
+    # general config
+    'verbose': 'general_config_writer',
+
+    # machine learning config
+    'epochs': 'machine_learning_config_writer'
+}
+
+
 def option_callback(ctx, param, value):
-    def verbose(ctx_inner, value_inner):
-        config = ctx_inner.ensure_object(GeneralConfig)
-        if value_inner:
-            config.verbose = value_inner
-        return value_inner
-
-    def epochs(ctx_inner, value_inner):
-        config = ctx_inner.ensure_object(MachineLearningConfig)
-        if value_inner:
-            config.epochs = value_inner
-        return value_inner
-
-    return locals()[param.name](ctx, value)
+    """This function stores the passed values in the configuration classes before returning them."""
+    return globals()[config_translator[param.name]](ctx, value)
 
 
-option_verbose = [
-    click.option('--verbose', '-v', expose_value=False, is_flag=True, help='Switch the script to verbose mode.',
-                 callback=option_callback)
-]
-option_epochs = [
-    click.option('--epochs', '-e', expose_value=False, is_flag=False, help='Set the number of epochs.',
-                 callback=option_callback)
-]
+# Configure the universal parameters here
+option_verbose = click.option('--verbose', '-v', expose_value=False, is_flag=True,
+                               help='Switch the script to verbose mode.',
+                               callback=option_callback)
+option_epochs = click.option('--epochs', '-e', expose_value=False, is_flag=False,
+                              help='Set the number of epochs.',
+                              callback=option_callback, type=int)
+options_machine_learning = [option_epochs]
 
 
 def add_options(options):
+    """The add options function to use as an easy to use decorator: @add_options"""
     def _add_options(func):
-        for option in reversed(options):
-            func = option(func)
+        if type(options) is list:
+            for option in reversed(options):
+                func = option(func)
+        elif callable(options):
+            func = options(func)
         return func
 
     return _add_options
@@ -133,6 +150,7 @@ def train(general_config, machine_learning_config):
 
 @cli.group()
 @add_options(option_verbose)
+@add_options(options_machine_learning)
 @pass_machine_learning_config
 @pass_general_config
 def test(general_config, machine_learning_config):
@@ -164,7 +182,7 @@ def xor_perceptron(general_config, machine_learning_config):
 
 @test.command()
 @add_options(option_verbose)
-@add_options(option_epochs)
+@add_options(options_machine_learning)
 @pass_machine_learning_config
 @pass_general_config
 def nine_points(general_config, machine_learning_config):
