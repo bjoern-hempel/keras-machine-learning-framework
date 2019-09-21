@@ -61,20 +61,45 @@ class MachineLearningConfig(object):
         self.learning_rate = 0.001
 
 
+class TransferLearningConfig(MachineLearningConfig):
+    """Transfer learning config class"""
+
+    def __init__(self):
+        super().__init__()
+
+        self.transfer_learning_model = 'Resnet50'
+
+
 # Make pass decorator for class Config
 pass_general_config = click.make_pass_decorator(GeneralConfig, ensure=True)
 pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, ensure=True)
+pass_transfer_learning_config = click.make_pass_decorator(TransferLearningConfig, ensure=True)
 
 
-def general_config_writer(ctx, value):
+def config_writer_call(translators, ctx, value):
+    for translator in translators:
+        globals()[translator](ctx, value)
+
+
+def general_config_writer(ctx, value, translators=[]):
+    config_writer_call(translators, ctx, value)
     config = ctx.ensure_object(GeneralConfig)
     if value:
         config.verbose = value
     return value
 
 
-def machine_learning_config_writer(ctx, value):
+def machine_learning_config_writer(ctx, value, translators=[]):
+    config_writer_call(translators, ctx, value)
     config = ctx.ensure_object(MachineLearningConfig)
+    if value:
+        config.epochs = value
+    return value
+
+
+def transfer_learning_config_writer(ctx, value, translators=[]):
+    config_writer_call(translators, ctx, value)
+    config = ctx.ensure_object(TransferLearningConfig)
     if value:
         config.epochs = value
     return value
@@ -86,14 +111,21 @@ config_translator: Dict[str, str] = {
     'test': 'general_config_writer',
 
     # machine learning config
-    'epochs': 'machine_learning_config_writer',
-    'learning_rate': 'machine_learning_config_writer'
+    'epochs': ['machine_learning_config_writer', 'transfer_learning_config_writer'],
+    'learning_rate': ['machine_learning_config_writer', 'transfer_learning_config_writer'],
+    'transfer_learning_model': 'transfer_learning_config_writer'
 }
 
 
 def option_callback(ctx, param, value):
     """This function stores the passed values in the configuration classes before returning them."""
-    return globals()[config_translator[param.name]](ctx, value)
+    translators = config_translator[param.name]
+
+    if isinstance(translators, list):
+        translator = translators.pop(0)
+        return globals()[translator](ctx, value, translators)
+
+    return globals()[translators](ctx, value)
 
 
 # Configure the universal parameters here
@@ -109,8 +141,14 @@ option_epochs = click.option('--epochs', '-e', expose_value=False, is_flag=False
 option_learning_rate = click.option('--learning-rate', '-l', expose_value=False, is_flag=False,
                               help='Set the learning rate.',
                               callback=option_callback, type=float)
-options_general = [option_verbose, option_test]
-options_machine_learning = [option_epochs, option_learning_rate]
+option_transfer_learning_model = click.option('--transfer-learning-model', '-m', expose_value=False, is_flag=False,
+                              help='Sets the transfer learning model.',
+                              callback=option_callback, type=str)
+
+# Configure some option sets
+option_set_general = [option_verbose, option_test]
+option_set_machine_learning = [option_epochs, option_learning_rate]
+option_set_transfer_learning = option_set_machine_learning + [option_transfer_learning_model]
 
 
 def add_options(options):
@@ -127,7 +165,7 @@ def add_options(options):
 
 
 @click.group()
-@add_options(options_general)
+@add_options(option_set_general)
 def cli():
     """This scripts prepares, trains and validates an image classifier."""
 
@@ -135,7 +173,7 @@ def cli():
 
 
 @cli.command()
-@add_options(options_general)
+@add_options(option_set_general)
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
@@ -149,20 +187,20 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 
 
 @cli.command()
-@add_options(options_machine_learning)
-@add_options(options_general)
+@add_options(option_set_transfer_learning)
+@add_options(option_set_general)
 @pass_machine_learning_config
 @pass_general_config
-def train(general_config, machine_learning_config):
+def train(general_config, transfer_learning_model):
     """This subcommand trains a classifier."""
 
-    train_class = Train(general_config, machine_learning_config)
+    train_class = Train(general_config, transfer_learning_model)
     train_class.do()
 
 
 @cli.group()
-@add_options(options_machine_learning)
-@add_options(options_general)
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
 @pass_machine_learning_config
 @pass_general_config
 def test(general_config, machine_learning_config):
@@ -171,8 +209,8 @@ def test(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(options_machine_learning)
-@add_options(options_general)
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
 @pass_machine_learning_config
 @pass_general_config
 def simple_perceptron(general_config, machine_learning_config):
@@ -183,8 +221,8 @@ def simple_perceptron(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(options_machine_learning)
-@add_options(options_general)
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
 @pass_machine_learning_config
 @pass_general_config
 def xor_perceptron(general_config, machine_learning_config):
@@ -195,8 +233,8 @@ def xor_perceptron(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(options_machine_learning)
-@add_options(options_general)
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
 @pass_machine_learning_config
 @pass_general_config
 def nine_points(general_config, machine_learning_config):
@@ -207,8 +245,8 @@ def nine_points(general_config, machine_learning_config):
 
 
 @test.command()
-@add_options(options_machine_learning)
-@add_options(options_general)
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
 @pass_machine_learning_config
 @pass_general_config
 def mnist(general_config, machine_learning_config):

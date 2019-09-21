@@ -37,15 +37,15 @@ from mlks.commands.main import Command
 
 class Train(Command):
 
-    def __init__(self, general_config, machine_learning_config):
+    def __init__(self, general_config, transfer_learning_model):
         self.general_config = general_config
-        self.machine_learning_config = machine_learning_config
+        self.transfer_learning_model = transfer_learning_model
 
         # initialize the parent class
         super().__init__()
 
     def do(self):
-        if not self.is_config_correct([self.machine_learning_config, self.general_config]):
+        if not self.is_config_correct([self.transfer_learning_model, self.general_config]):
             return
 
         if self.general_config.verbose:
