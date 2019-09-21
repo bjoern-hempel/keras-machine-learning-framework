@@ -107,6 +107,7 @@ class Command:
 
     @staticmethod
     def show_config(config):
+        """Prints out all configuration settings of given config class."""
         class_name = config.__class__.__name__
 
         click.echo('')
@@ -116,13 +117,15 @@ class Command:
         attributes = vars(config)
 
         for key in attributes:
-            click.echo('{key: <25}: {attribute}'.format(key=key, attribute=attributes[key]))
+            key_name = key + ':'
+            click.echo('{key: <25} {attribute}'.format(key=key_name, attribute=attributes[key]))
 
         click.echo('')
 
     def is_config_correct(self, configs,
                           question='Are these configurations correct? Continue?',
                           negative='Cancelled by user.'):
+        """Shows all configuration classes and asks if this is correct."""
 
         if type(configs) is list:
             for config in configs:
