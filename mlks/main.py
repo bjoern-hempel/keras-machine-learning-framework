@@ -46,6 +46,7 @@ class GeneralConfig(object):
 
     def __init__(self):
         self.verbose = False
+        self.test = False
 
 
 class MachineLearningConfig(object):
@@ -82,6 +83,7 @@ def machine_learning_config_writer(ctx, value):
 config_translator: Dict[str, str] = {
     # general config
     'verbose': 'general_config_writer',
+    'test': 'general_config_writer',
 
     # machine learning config
     'epochs': 'machine_learning_config_writer',
@@ -98,12 +100,16 @@ def option_callback(ctx, param, value):
 option_verbose = click.option('--verbose', '-v', expose_value=False, is_flag=True,
                                help='Switch the script to verbose mode.',
                                callback=option_callback)
+option_test = click.option('--test', '-t', expose_value=False, is_flag=True,
+                               help='Switch the script to test mode.',
+                               callback=option_callback)
 option_epochs = click.option('--epochs', '-e', expose_value=False, is_flag=False,
                               help='Set the number of epochs.',
                               callback=option_callback, type=int)
 option_learning_rate = click.option('--learning-rate', '-l', expose_value=False, is_flag=False,
                               help='Set the learning rate.',
                               callback=option_callback, type=float)
+options_general = [option_verbose, option_test]
 options_machine_learning = [option_epochs, option_learning_rate]
 
 
@@ -121,7 +127,7 @@ def add_options(options):
 
 
 @click.group()
-@add_options(option_verbose)
+@add_options(options_general)
 def cli():
     """This scripts prepares, trains and validates an image classifier."""
 
@@ -129,7 +135,7 @@ def cli():
 
 
 @cli.command()
-@add_options(option_verbose)
+@add_options(options_general)
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
@@ -144,7 +150,7 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 
 @cli.command()
 @add_options(options_machine_learning)
-@add_options(option_verbose)
+@add_options(options_general)
 @pass_machine_learning_config
 @pass_general_config
 def train(general_config, machine_learning_config):
@@ -156,7 +162,7 @@ def train(general_config, machine_learning_config):
 
 @cli.group()
 @add_options(options_machine_learning)
-@add_options(option_verbose)
+@add_options(options_general)
 @pass_machine_learning_config
 @pass_general_config
 def test(general_config, machine_learning_config):
@@ -166,7 +172,7 @@ def test(general_config, machine_learning_config):
 
 @test.command()
 @add_options(options_machine_learning)
-@add_options(option_verbose)
+@add_options(options_general)
 @pass_machine_learning_config
 @pass_general_config
 def simple_perceptron(general_config, machine_learning_config):
@@ -178,7 +184,7 @@ def simple_perceptron(general_config, machine_learning_config):
 
 @test.command()
 @add_options(options_machine_learning)
-@add_options(option_verbose)
+@add_options(options_general)
 @pass_machine_learning_config
 @pass_general_config
 def xor_perceptron(general_config, machine_learning_config):
@@ -190,7 +196,7 @@ def xor_perceptron(general_config, machine_learning_config):
 
 @test.command()
 @add_options(options_machine_learning)
-@add_options(option_verbose)
+@add_options(options_general)
 @pass_machine_learning_config
 @pass_general_config
 def nine_points(general_config, machine_learning_config):
@@ -202,7 +208,7 @@ def nine_points(general_config, machine_learning_config):
 
 @test.command()
 @add_options(options_machine_learning)
-@add_options(option_verbose)
+@add_options(options_general)
 @pass_machine_learning_config
 @pass_general_config
 def mnist(general_config, machine_learning_config):
@@ -213,7 +219,10 @@ def mnist(general_config, machine_learning_config):
 
 
 @cli.command()
-def info():
+@add_options(option_verbose)
+@pass_general_config
+def info(general_config):
     """This subcommand shows some infos."""
 
-    Info.print()
+    info_class = Info(general_config)
+    info_class.print()

@@ -67,7 +67,7 @@ class NinePoints(Command):
         return model
 
     def do(self):
-        if not self.is_config_correct(self.machine_learning_config):
+        if not self.is_config_correct([self.machine_learning_config, self.general_config]):
             return
 
         # network settings

@@ -33,7 +33,6 @@
 import click
 import time
 import sys
-import inspect
 
 
 class Command:
@@ -127,10 +126,10 @@ class Command:
                           negative='Cancelled by user.'):
         """Shows all configuration classes and asks if this is correct."""
 
-        if type(configs) is list:
+        if isinstance(configs, list):
             for config in configs:
                 self.show_config(config)
-        elif inspect.isclass(configs):
+        elif isinstance(configs, object):
             self.show_config(configs)
         else:
             raise AssertionError('Unsupported config parameter.')

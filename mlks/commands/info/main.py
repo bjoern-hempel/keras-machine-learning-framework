@@ -39,8 +39,10 @@ import re
 
 class Info:
 
-    @staticmethod
-    def print():
+    def __init__(self, general_config):
+        self.general_config = general_config
+
+    def print(self):
         """
         This is the main function of mlks.info
 
