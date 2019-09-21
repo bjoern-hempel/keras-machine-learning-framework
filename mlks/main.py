@@ -57,6 +57,7 @@ class MachineLearningConfig(object):
         self.optimizer = 'adam'
         self.metrics = 'accuracy'
         self.epochs = 100
+        self.learning_rate = 0.001
 
 
 # Make pass decorator for class Config
@@ -83,7 +84,8 @@ config_translator: Dict[str, str] = {
     'verbose': 'general_config_writer',
 
     # machine learning config
-    'epochs': 'machine_learning_config_writer'
+    'epochs': 'machine_learning_config_writer',
+    'learning_rate': 'machine_learning_config_writer'
 }
 
 
@@ -99,7 +101,10 @@ option_verbose = click.option('--verbose', '-v', expose_value=False, is_flag=Tru
 option_epochs = click.option('--epochs', '-e', expose_value=False, is_flag=False,
                               help='Set the number of epochs.',
                               callback=option_callback, type=int)
-options_machine_learning = [option_epochs]
+option_learning_rate = click.option('--learning-rate', '-l', expose_value=False, is_flag=False,
+                              help='Set the learning rate.',
+                              callback=option_callback, type=float)
+options_machine_learning = [option_epochs, option_learning_rate]
 
 
 def add_options(options):
@@ -145,7 +150,7 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 def train(general_config, machine_learning_config):
     """This subcommand trains a classifier."""
 
-    train_class = Train(general_config)
+    train_class = Train(general_config, machine_learning_config)
     train_class.do()
 
 

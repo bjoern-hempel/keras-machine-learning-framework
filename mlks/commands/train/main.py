@@ -32,15 +32,23 @@
 
 import click
 
+from mlks.commands.main import Command
 
-class Train:
 
-    def __init__(self, config):
-        self.config = config
-        pass
+class Train(Command):
+
+    def __init__(self, general_config, machine_learning_config):
+        self.general_config = general_config
+        self.machine_learning_config = machine_learning_config
+
+        # initialize the parent class
+        super().__init__()
 
     def do(self):
-        if self.config.verbose:
-            click.echo('prepare mode with verbose mode.. ;)')
+        if not self.is_config_correct([self.machine_learning_config, self.general_config]):
+            return
+
+        if self.general_config.verbose:
+            click.echo('train mode in verbose mode.. ;)')
         else:
-            click.echo('prepare mode without verbose mode.. ;)')
+            click.echo('train mode in silent mode.. ;)')

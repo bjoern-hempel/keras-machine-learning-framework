@@ -51,6 +51,9 @@ class Mnist(Command):
         super().__init__()
 
     def do(self):
+        if not self.is_config_correct(self.machine_learning_config):
+            return
+
         verbose = self.general_config.verbose
 
         batch_size = 1024

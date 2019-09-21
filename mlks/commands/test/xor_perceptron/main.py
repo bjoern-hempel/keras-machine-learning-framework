@@ -45,6 +45,9 @@ class XorPerceptron(Command):
         super().__init__()
 
     def do(self):
+        if not self.is_config_correct(self.machine_learning_config):
+            return
+
         self.start_timer()
 
         verbose = self.general_config.verbose

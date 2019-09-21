@@ -32,6 +32,8 @@
 
 import click
 import time
+import sys
+import inspect
 
 
 class Command:
@@ -65,3 +67,77 @@ class Command:
         click.echo('')
         click.echo('--- time measurement for "{}": {:.4f}s ---'.
                    format(name, self.finish_time[name] - self.start_time[name]))
+
+    @staticmethod
+    def query_yes_no(question, default="yes"):
+        """Ask a yes/no question via raw_input() and return their answer.
+
+        "question" is a string that is presented to the user.
+        "default" is the presumed answer if the user just hits <Enter>.
+            It must be "yes" (the default), "no" or None (meaning
+            an answer is required of the user).
+
+        The "answer" return value is True for "yes" or False for "no".
+        """
+        valid = {"yes": True, "y": True, "ye": True,
+                 "no": False, "n": False}
+        if default is None:
+            prompt = " [y/n] "
+        elif default == "yes":
+            prompt = " [Y/n] "
+        elif default == "no":
+            prompt = " [y/N] "
+        else:
+            raise ValueError("invalid default answer: '%s'" % default)
+
+        while True:
+            sys.stdout.write(question + prompt)
+            choice = input().lower()
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                sys.stdout.write("Please respond with 'yes' or 'no' "
+                                 "(or 'y' or 'n').\n")
+
+    @staticmethod
+    def repeat_to_length(string_to_expand, length):
+        return (string_to_expand * (int(length / len(string_to_expand)) + 1))[:length]
+
+    @staticmethod
+    def show_config(config):
+        class_name = config.__class__.__name__
+
+        click.echo('')
+        click.echo(class_name)
+        click.echo(Command.repeat_to_length('-', len(class_name)))
+
+        attributes = vars(config)
+
+        for key in attributes:
+            click.echo('{key: <25}: {attribute}'.format(key=key, attribute=attributes[key]))
+
+        click.echo('')
+
+    def is_config_correct(self, configs,
+                          question='Are these configurations correct? Continue?',
+                          negative='Cancelled by user.'):
+
+        if type(configs) is list:
+            for config in configs:
+                self.show_config(config)
+        elif inspect.isclass(configs):
+            self.show_config(configs)
+        else:
+            raise AssertionError('Unsupported config parameter.')
+
+        positive = self.query_yes_no(question)
+
+        if not positive:
+            if negative is not None:
+                click.echo(negative)
+            return False
+
+        click.echo('')
+        return True

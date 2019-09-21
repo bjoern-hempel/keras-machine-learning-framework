@@ -67,6 +67,8 @@ class NinePoints(Command):
         return model
 
     def do(self):
+        if not self.is_config_correct(self.machine_learning_config):
+            return
 
         # network settings
         number_input_nodes = 2

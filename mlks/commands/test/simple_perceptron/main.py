@@ -45,6 +45,9 @@ class SimplePerceptron(Command):
         super().__init__()
 
     def do(self):
+        if not self.is_config_correct(self.machine_learning_config):
+            return
+
         # start the timer
         self.start_timer('train')
         self.start_timer('train2')
