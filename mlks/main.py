@@ -76,30 +76,22 @@ pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, 
 pass_transfer_learning_config = click.make_pass_decorator(TransferLearningConfig, ensure=True)
 
 
-def config_writer_call(translators, ctx, value):
-    for translator in translators:
-        globals()[translator](ctx, value)
-
-
-def general_config_writer(ctx, value, translators=[]):
-    config_writer_call(translators, ctx, value)
-    config = ctx.ensure_object(GeneralConfig)
+def general_config_writer(ctx, value, ensure_object=True):
+    config = ctx.ensure_object(GeneralConfig) if ensure_object else GeneralConfig
     if value:
         config.verbose = value
     return value
 
 
-def machine_learning_config_writer(ctx, value, translators=[]):
-    config_writer_call(translators, ctx, value)
-    config = ctx.ensure_object(MachineLearningConfig)
+def machine_learning_config_writer(ctx, value, ensure_object=True):
+    config = ctx.ensure_object(MachineLearningConfig) if ensure_object else MachineLearningConfig
     if value:
         config.epochs = value
     return value
 
 
-def transfer_learning_config_writer(ctx, value, translators=[]):
-    config_writer_call(translators, ctx, value)
-    config = ctx.ensure_object(TransferLearningConfig)
+def transfer_learning_config_writer(ctx, value, ensure_object=True):
+    config = ctx.ensure_object(TransferLearningConfig) if ensure_object else TransferLearningConfig
     if value:
         config.epochs = value
     return value
@@ -110,7 +102,7 @@ config_translator: Dict[str, str] = {
     'verbose': 'general_config_writer',
     'test': 'general_config_writer',
 
-    # machine learning config
+    # machine learning config (then inherit writers must be the last!!! because of the ctx.ensure_object call)
     'epochs': ['machine_learning_config_writer', 'transfer_learning_config_writer'],
     'learning_rate': ['machine_learning_config_writer', 'transfer_learning_config_writer'],
     'transfer_learning_model': 'transfer_learning_config_writer'
@@ -119,33 +111,39 @@ config_translator: Dict[str, str] = {
 
 def option_callback(ctx, param, value):
     """This function stores the passed values in the configuration classes before returning them."""
+
     translators = config_translator[param.name]
 
     if isinstance(translators, list):
-        translator = translators.pop(0)
-        return globals()[translator](ctx, value, translators)
+        translators_copy = translators.copy()
+        translator = translators_copy.pop(0)
 
-    return globals()[translators](ctx, value)
+        for translator_copy in translators_copy:
+            globals()[translator_copy](ctx, value, False)
+    else:
+        translator = translators
+
+    return globals()[translator](ctx, value)
 
 
 # Configure the universal parameters here
 option_verbose = click.option('--verbose', '-v', expose_value=False, is_flag=True,
-                               help='Switch the script to verbose mode.',
-                               callback=option_callback)
+                              help='Switch the script to verbose mode.',
+                              callback=option_callback)
 option_test = click.option('--test', '-t', expose_value=False, is_flag=True,
-                               help='Switch the script to test mode.',
-                               callback=option_callback)
+                           help='Switch the script to test mode.',
+                           callback=option_callback)
 option_epochs = click.option('--epochs', '-e', expose_value=False, is_flag=False,
-                              help='Set the number of epochs.',
-                              callback=option_callback, type=int)
+                             help='Set the number of epochs.',
+                             callback=option_callback, type=int)
 option_learning_rate = click.option('--learning-rate', '-l', expose_value=False, is_flag=False,
-                              help='Set the learning rate.',
-                              callback=option_callback, type=float)
+                                    help='Set the learning rate.',
+                                    callback=option_callback, type=float)
 option_transfer_learning_model = click.option('--transfer-learning-model', '-m', expose_value=False, is_flag=False,
-                              help='Sets the transfer learning model.',
-                              callback=option_callback, type=str)
+                                              help='Sets the transfer learning model.',
+                                              callback=option_callback, type=str)
 
-# Configure some option sets
+# Configure some option sets (the inherited options should be the last!!! because of the ctx.ensure_object call)
 option_set_general = [option_verbose, option_test]
 option_set_machine_learning = [option_epochs, option_learning_rate]
 option_set_transfer_learning = option_set_machine_learning + [option_transfer_learning_model]
@@ -153,6 +151,7 @@ option_set_transfer_learning = option_set_machine_learning + [option_transfer_le
 
 def add_options(options):
     """The add options function to use as an easy to use decorator: @add_options"""
+
     def _add_options(func):
         if type(options) is list:
             for option in reversed(options):
@@ -189,7 +188,7 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 @cli.command()
 @add_options(option_set_transfer_learning)
 @add_options(option_set_general)
-@pass_machine_learning_config
+@pass_transfer_learning_config
 @pass_general_config
 def train(general_config, transfer_learning_model):
     """This subcommand trains a classifier."""
