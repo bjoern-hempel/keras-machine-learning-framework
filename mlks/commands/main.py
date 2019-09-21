@@ -1,6 +1,6 @@
 # Machine Learning Keras Suite
 #
-# A Python class to provide time measurement.
+# This is the basic command class from which all command classes inherit.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
 # Date:   21.09.2019
