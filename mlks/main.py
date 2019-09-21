@@ -29,16 +29,16 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from typing import Dict
 
 import click
-from mlks.info.main import Info
-from mlks.prepare.main import Prepare
-from mlks.train.main import Train
-from mlks.test.mnist.main import Mnist
-from mlks.test.simple_perceptron.main import SimplePerceptron
-from mlks.test.xor_perceptron.main import XorPerceptron
-from mlks.test.nine_points.main import NinePoints
+from typing import Dict
+from mlks.commands.info.main import Info
+from mlks.commands.prepare.main import Prepare
+from mlks.commands.train.main import Train
+from mlks.commands.test.mnist.main import Mnist
+from mlks.commands.test.simple_perceptron.main import SimplePerceptron
+from mlks.commands.test.xor_perceptron.main import XorPerceptron
+from mlks.commands.test.nine_points.main import NinePoints
 
 
 class GeneralConfig(object):
@@ -138,6 +138,7 @@ def prepare(general_config, machine_learning_config, string, repeat, out):
 
 
 @cli.command()
+@add_options(options_machine_learning)
 @add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
@@ -149,8 +150,8 @@ def train(general_config, machine_learning_config):
 
 
 @cli.group()
-@add_options(option_verbose)
 @add_options(options_machine_learning)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def test(general_config, machine_learning_config):
@@ -159,30 +160,32 @@ def test(general_config, machine_learning_config):
 
 
 @test.command()
+@add_options(options_machine_learning)
 @add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def simple_perceptron(general_config, machine_learning_config):
     """This subcommand from test trains a simple perceptron."""
 
-    test_class = SimplePerceptron(general_config)
+    test_class = SimplePerceptron(general_config, machine_learning_config)
     test_class.do()
 
 
 @test.command()
+@add_options(options_machine_learning)
 @add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def xor_perceptron(general_config, machine_learning_config):
     """This subcommand from test trains a xor perceptron."""
 
-    test_class = XorPerceptron(general_config)
+    test_class = XorPerceptron(general_config, machine_learning_config)
     test_class.do()
 
 
 @test.command()
-@add_options(option_verbose)
 @add_options(options_machine_learning)
+@add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def nine_points(general_config, machine_learning_config):
@@ -193,13 +196,14 @@ def nine_points(general_config, machine_learning_config):
 
 
 @test.command()
+@add_options(options_machine_learning)
 @add_options(option_verbose)
 @pass_machine_learning_config
 @pass_general_config
 def mnist(general_config, machine_learning_config):
     """This subcommand from test trains a mnist database."""
 
-    test_class = Mnist(general_config)
+    test_class = Mnist(general_config, machine_learning_config)
     test_class.do()
 
 
