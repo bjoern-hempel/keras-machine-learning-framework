@@ -1,6 +1,6 @@
 # MNIST Demo
 
-In progress..
+MNIST database<sup>[[1]](#mnist_database)</sup>
 
 ## A. Further Tutorials
 
