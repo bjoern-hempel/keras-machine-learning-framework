@@ -1,9 +1,9 @@
 # Demo overview
 
-* [MNIST Demo](markdown/demos/mnist.md)
-* [Nine Points Demo](markdown/demos/nine_points.md)
-* [Simple Perceptron Demo](markdown/demos/simple_perceptron.md)
-* [XOR Perceptron Demo](markdown/demos/xor_perceptron.md)
+* [MNIST Demo](/markdown/demos/mnist.md)
+* [Nine Points Demo](/markdown/demos/nine_points.md)
+* [Simple Perceptron Demo](/markdown/demos/simple_perceptron.md)
+* [XOR Perceptron Demo](/markdown/demos/xor_perceptron.md)
 
 ## A. Further Tutorials
 
