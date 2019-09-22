@@ -1,6 +1,6 @@
 # Nine Points Demo
 
-Imagine the following situation. We have given the following coordinates:
+Imagine the following situation. We have given the following parameters:
 
 Points around the x-values 1 and 0 as well as the y-values also around 1 and 0 should result in 1. Only the point [0.5, 0.5] should give 0:
 
