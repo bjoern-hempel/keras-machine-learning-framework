@@ -12,8 +12,11 @@ This could simply be implemented algorithmically.
 
 The deductive learning approach implements functions as they are. A sum, for example. 1 plus 1 should give 2. Or in other words, if I give 10 and 3 to the system, 13 should come out. For example, for the example above:
 
-```
-#toBeDone
+```python
+if x in [0, 1] or y in [0, 1]:
+    return 1
+else
+    return 0
 ```
 
 This should work. But what happens when there are changes. E.g. that [0, 0] should also result in 0? It needs a programmer who changes the above source code and thinks about the problem! Wouldn't it make more sense if it also worked automatically? This is a simple example! What about more complex ones? E.g. the recognition of images? Implementing an algorithm is difficult, isn't it?
