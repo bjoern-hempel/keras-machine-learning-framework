@@ -13,7 +13,7 @@ This could simply be implemented algorithmically.
 For example:
 
 ```
-...
+#toBeDone
 ```
 
 This should work. But what happens when there are changes. E.g. that [0, 0] should also result in 0? It needs a programmer who changes the above source code and thinks about the problem! Wouldn't it make more sense if it also worked automatically?
