@@ -2,7 +2,7 @@
 
 Imagine the following situation. We have given the following parameters:
 
-Points around the x-values 1 and 0 as well as the y-values also around 1 and 0 should result in 1. Only the point [0.5, 0.5] should give 0:
+Points around the x<sub>1</sub>-values 1 and 0 as well as the x<sub>2</sub>-values also around 1 and 0 should result in 1. Only the point [0.5, 0.5] should give 0:
 
 <img src="/markdown/demos/nine_points.png">
 
@@ -13,7 +13,7 @@ This could simply be implemented algorithmically.
 The deductive learning approach implements functions as they are. A sum, for example. 1 plus 1 should give 2. Or in other words, if I give 10 and 3 to the system, 13 should come out. For example, for the example above:
 
 ```python
-if x in [0, 1] or y in [0, 1]:
+if x1 in [0, 1] or x2 in [0, 1]:
     return 1
 else
     return 0
