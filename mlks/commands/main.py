@@ -108,6 +108,9 @@ class Command:
     def show_config(config):
         """Prints out all configuration settings of given config class."""
 
+        if len(config.configs) > 0:
+            click.echo('')
+
         for namespace in config.configs:
             click.echo(namespace)
             click.echo(Command.repeat_to_length('-', len(namespace)))
