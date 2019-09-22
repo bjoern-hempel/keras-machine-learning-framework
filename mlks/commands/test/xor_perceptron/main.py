@@ -37,20 +37,19 @@ from mlks.commands.main import Command
 
 class XorPerceptron(Command):
 
-    def __init__(self, general_config, machine_learning_config):
-        self.general_config = general_config
-        self.machine_learning_config = machine_learning_config
+    def __init__(self, config):
+        self.config = config
 
         # initialize the parent class
         super().__init__()
 
     def do(self):
-        if not self.is_config_correct([self.machine_learning_config, self.general_config]):
+        if not self.is_config_correct(self.config):
             return
 
         self.start_timer()
 
-        verbose = self.general_config.verbose
+        verbose = self.config.get('verbose')
 
         click.echo('XorPerceptron')
 

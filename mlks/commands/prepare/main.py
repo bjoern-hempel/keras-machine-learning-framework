@@ -42,7 +42,7 @@ class Prepare:
         self.out = out
 
     def do(self):
-        if self.config.verbose:
+        if self.config.get('verbose'):
             click.echo('verbose')
         else:
             click.echo('not verbose')

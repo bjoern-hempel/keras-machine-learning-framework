@@ -39,8 +39,8 @@ import re
 
 class Info:
 
-    def __init__(self, general_config):
-        self.general_config = general_config
+    def __init__(self, config):
+        self.config = config
 
     def print(self):
         """

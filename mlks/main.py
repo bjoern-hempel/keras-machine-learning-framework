@@ -39,118 +39,96 @@ from mlks.commands.test.mnist.main import Mnist
 from mlks.commands.test.simple_perceptron.main import SimplePerceptron
 from mlks.commands.test.xor_perceptron.main import XorPerceptron
 from mlks.commands.test.nine_points.main import NinePoints
-
-
-class GeneralConfig(object):
-    """Config class"""
-
-    def __init__(self):
-        self.verbose = False
-        self.test = False
-
-
-class MachineLearningConfig(object):
-    """Machine learning config class"""
-
-    def __init__(self):
-        self.activation_function = 'tanh'  # ['tanh', 'sigmoid']
-        self.loss_function = 'mean_squared_error'
-        self.optimizer = 'adam'
-        self.metrics = 'accuracy'
-        self.epochs = 0
-        self.learning_rate = 0
-
-
-class TransferLearningConfig(MachineLearningConfig):
-    """Transfer learning config class"""
-
-    def __init__(self):
-        super().__init__()
-
-        self.transfer_learning_model = None
-
+from mlks.helper.config import Config
+from mlks.helper.config import general_config_writer
+from mlks.helper.config import machine_learning_config_writer
+from mlks.helper.config import transfer_learning_config_writer
 
 # Make pass decorator for class Config
-pass_general_config = click.make_pass_decorator(GeneralConfig, ensure=True)
-pass_machine_learning_config = click.make_pass_decorator(MachineLearningConfig, ensure=True)
-pass_transfer_learning_config = click.make_pass_decorator(TransferLearningConfig, ensure=True)
-
-
-def general_config_writer(ctx, param, value):
-    config = ctx.ensure_object(GeneralConfig)
-    if value:
-        setattr(config, param.name, value)
-    return value
-
-
-def machine_learning_config_writer(ctx, param, value):
-    config = ctx.ensure_object(MachineLearningConfig)
-    if value:
-        setattr(config, param.name, value)
-    return value
-
-
-def transfer_learning_config_writer(ctx, param, value):
-    config = ctx.ensure_object(TransferLearningConfig)
-    if value:
-        setattr(config, param.name, value)
-    return value
-
+pass_config = click.make_pass_decorator(Config, ensure=True)
 
 config_translator: Dict[str, str] = {
     # general config
     'verbose': 'general_config_writer',
-    'test': 'general_config_writer',
+    'debug': 'general_config_writer',
 
-    # machine learning config (then inherit writers must be the last!!! because of the ctx.ensure_object call)
-    'epochs': ['machine_learning_config_writer', 'transfer_learning_config_writer'],
-    'learning_rate': ['machine_learning_config_writer', 'transfer_learning_config_writer'],
-    'transfer_learning_model': 'transfer_learning_config_writer'
+    # machine learning config
+    'epochs': 'machine_learning_config_writer',
+    'learning_rate': 'machine_learning_config_writer',
+    'activation_function': 'machine_learning_config_writer',
+    'loss_function': 'machine_learning_config_writer',
+    'optimizer': 'machine_learning_config_writer',
+    'metrics': 'machine_learning_config_writer',
+
+    # transfer learning config
+    'transfer_learning_model': 'transfer_learning_config_writer',
+    'number_trainable_layers': 'transfer_learning_config_writer'
 }
 
 
 def option_callback(ctx, param, value):
     """This function stores the passed values in the configuration classes before returning them."""
 
-    translators = config_translator[param.name]
-
-    if isinstance(translators, list):
-        translators_copy = translators.copy()
-        translator = translators_copy.pop(0)
-
-        for translator_copy in translators_copy:
-            globals()[translator_copy](ctx, param, value)
-    else:
-        translator = translators
-
-    return globals()[translator](ctx, param, value)
+    return globals()[config_translator[param.name]](ctx, param, value)
 
 
 # Configure the universal parameters here
 option_verbose = click.option('--verbose', '-v',
                               expose_value=False,
                               is_flag=True,
-                              help='Switch the script to verbose mode.',
+                              help='Switches the script to verbose mode.',
                               callback=option_callback)
-option_test = click.option('--test', '-t',
-                           expose_value=False,
-                           is_flag=True,
-                           help='Switch the script to test mode.',
-                           callback=option_callback)
+option_debug = click.option('--debug', '-d',
+                            expose_value=False,
+                            is_flag=True,
+                            help='Switches the script to debug mode.',
+                            callback=option_callback)
+
+# Configure the machine learning parameters here
 option_epochs = click.option('--epochs', '-e',
                              expose_value=False,
                              is_flag=False,
-                             help='Set the number of epochs.',
+                             help='Sets the number of epochs.',
                              callback=option_callback,
                              default=10,
                              type=int)
 option_learning_rate = click.option('--learning-rate', '-l',
                                     expose_value=False,
                                     is_flag=False,
-                                    help='Set the learning rate.',
+                                    help='Sets the learning rate.',
                                     callback=option_callback,
                                     default=0.001,
                                     type=float)
+option_activation_function = click.option('--activation-function', '-a',
+                                          expose_value=False,
+                                          is_flag=False,
+                                          help='Sets the activation function.',
+                                          callback=option_callback,
+                                          default='tanh',  # ['tanh', 'sigmoid']
+                                          type=str)
+option_loss_function = click.option('--loss-function',
+                                    expose_value=False,
+                                    is_flag=False,
+                                    help='Sets the loss function.',
+                                    callback=option_callback,
+                                    default='mean_squared_error',
+                                    type=str)
+option_optimizer = click.option('--optimizer', '-o',
+                                expose_value=False,
+                                is_flag=False,
+                                help='Sets the optimizer.',
+                                callback=option_callback,
+                                default='adam',
+                                type=str)
+option_metrics = click.option('--metrics',
+                              expose_value=False,
+                              is_flag=False,
+                              help='Sets the metrics.',
+                              callback=option_callback,
+                              default='accuracy',
+                              type=str)
+
+# Configure the transfer learning parameters here
 option_transfer_learning_model = click.option('--transfer-learning-model', '-m',
                                               expose_value=False,
                                               is_flag=False,
@@ -158,11 +136,19 @@ option_transfer_learning_model = click.option('--transfer-learning-model', '-m',
                                               callback=option_callback,
                                               default='Resnet52',
                                               type=str)
+option_number_trainable_layers = click.option('--number-trainable-layers',
+                                              expose_value=False,
+                                              is_flag=False,
+                                              help='Sets the number trainable layers.',
+                                              callback=option_callback,
+                                              default=3,
+                                              type=int)
 
-# Configure some option sets (the inherited options should be the last!!! because of the ctx.ensure_object call)
-option_set_general = [option_verbose, option_test]
-option_set_machine_learning = [option_epochs, option_learning_rate]
-option_set_transfer_learning = option_set_machine_learning + [option_transfer_learning_model]
+# Configure some option sets
+option_set_general = [option_verbose, option_debug]
+option_set_machine_learning = [option_epochs, option_learning_rate, option_activation_function, option_loss_function,
+                               option_optimizer, option_metrics]
+option_set_transfer_learning = [option_transfer_learning_model, option_number_trainable_layers]
 
 
 def add_options(options):
@@ -192,90 +178,85 @@ def cli():
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
-@pass_machine_learning_config
-@pass_general_config
-def prepare(general_config, machine_learning_config, string, repeat, out):
+@pass_config
+def prepare(config, string, repeat, out):
     """This subcommand trains a classifier."""
 
-    prepare_class = Prepare(general_config, string, repeat, out)
+    prepare_class = Prepare(config, string, repeat, out)
     prepare_class.do()
 
 
 @cli.command()
 @add_options(option_set_transfer_learning)
+@add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@pass_transfer_learning_config
-@pass_general_config
-def train(general_config, transfer_learning_model):
+@pass_config
+def train(config):
     """This subcommand trains a classifier."""
 
-    train_class = Train(general_config, transfer_learning_model)
+    train_class = Train(config)
     train_class.do()
 
 
 @cli.group()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@pass_machine_learning_config
-@pass_general_config
-def test(general_config, machine_learning_config):
+@pass_config
+def test(config):
     """This subcommand contains some test examples."""
+
     pass
 
 
 @test.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@pass_machine_learning_config
-@pass_general_config
-def simple_perceptron(general_config, machine_learning_config):
+@pass_config
+def simple_perceptron(config):
     """This subcommand from test trains a simple perceptron."""
 
-    test_class = SimplePerceptron(general_config, machine_learning_config)
+    test_class = SimplePerceptron(config)
     test_class.do()
 
 
 @test.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@pass_machine_learning_config
-@pass_general_config
-def xor_perceptron(general_config, machine_learning_config):
+@pass_config
+def xor_perceptron(config):
     """This subcommand from test trains a xor perceptron."""
 
-    test_class = XorPerceptron(general_config, machine_learning_config)
+    test_class = XorPerceptron(config)
     test_class.do()
 
 
 @test.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@pass_machine_learning_config
-@pass_general_config
-def nine_points(general_config, machine_learning_config):
+@pass_config
+def nine_points(config):
     """This subcommand from test trains a nine point example."""
 
-    test_class = NinePoints(general_config, machine_learning_config)
+    test_class = NinePoints(config)
     test_class.do()
 
 
 @test.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@pass_machine_learning_config
-@pass_general_config
-def mnist(general_config, machine_learning_config):
+@pass_config
+def mnist(config):
     """This subcommand from test trains a mnist database."""
 
-    test_class = Mnist(general_config, machine_learning_config)
+    test_class = Mnist(config)
     test_class.do()
 
 
 @cli.command()
 @add_options(option_verbose)
-@pass_general_config
-def info(general_config):
+@pass_config
+def info(config):
     """This subcommand shows some infos."""
 
-    info_class = Info(general_config)
+    info_class = Info(config)
     info_class.print()

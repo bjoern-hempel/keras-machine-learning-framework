@@ -37,18 +37,17 @@ from mlks.commands.main import Command
 
 class Train(Command):
 
-    def __init__(self, general_config, transfer_learning_model):
-        self.general_config = general_config
-        self.transfer_learning_model = transfer_learning_model
+    def __init__(self, config):
+        self.config = config
 
         # initialize the parent class
         super().__init__()
 
     def do(self):
-        if not self.is_config_correct([self.transfer_learning_model, self.general_config]):
+        if not self.is_config_correct(self.config):
             return
 
-        if self.general_config.verbose:
+        if self.config.get('verbose'):
             click.echo('train mode in verbose mode.. ;)')
         else:
             click.echo('train mode in silent mode.. ;)')

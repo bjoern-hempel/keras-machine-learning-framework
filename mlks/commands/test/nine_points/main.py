@@ -46,9 +46,8 @@ np.random.seed(1337)
 
 class NinePoints(Command):
 
-    def __init__(self, general_config, machine_learning_config):
-        self.general_config = general_config
-        self.machine_learning_config = machine_learning_config
+    def __init__(self, config):
+        self.config = config
 
         # initialize the parent class
         super().__init__()
@@ -56,18 +55,19 @@ class NinePoints(Command):
     def create_model(self, number_input_nodes, number_inner_nodes, number_output_nodes):
         # create the neuronal network 2 (x, y) -> 100 -> 1 (0 or 1) (tanh, SQE, Adam)
         model = Sequential()
-        model.add(Dense(number_inner_nodes[0], activation=self.machine_learning_config.activation_function, input_shape=(number_input_nodes,)))
-        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.machine_learning_config.activationFunction))
-        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.machine_learning_config.activationFunction))
+        model.add(Dense(number_inner_nodes[0], activation=self.config.getml('activation_function'),
+                        input_shape=(number_input_nodes,)))
+        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.config.getml('activation_function')))
+        # model.add(Dense(numberInnerNodes, input_dim=numberInnerNodes, activation=self.config.getml('activation_function')))
         model.add(Dense(number_output_nodes, input_dim=number_inner_nodes[len(number_inner_nodes) - 1],
-                        activation=self.machine_learning_config.activation_function))
-        model.compile(loss=self.machine_learning_config.loss_function, optimizer=self.machine_learning_config.optimizer,
-                      metrics=[self.machine_learning_config.metrics])
+                        activation=self.config.getml('activation_function')))
+        model.compile(loss=self.config.getml('loss_function'), optimizer=self.config.getml('optimizer'),
+                      metrics=[self.config.getml('metrics')])
 
         return model
 
     def do(self):
-        if not self.is_config_correct([self.machine_learning_config, self.general_config]):
+        if not self.is_config_correct(self.config):
             return
 
         # network settings
@@ -76,7 +76,7 @@ class NinePoints(Command):
         number_output_nodes = 1
 
         # general settings
-        verbose = 1 if self.general_config.verbose else 0
+        verbose = 1 if self.config.get('verbose') else 0
 
         # graphic settings
         range_x = [-0.1, 1.1]
@@ -115,7 +115,7 @@ class NinePoints(Command):
 
         # train the model
         self.start_timer('fit')
-        model.fit(x=train_values, y=result_values, epochs=self.machine_learning_config.epochs, verbose=verbose)
+        model.fit(x=train_values, y=result_values, epochs=self.config.getml('epochs'), verbose=verbose)
         self.finish_timer('fit')
 
         # create coordinate system from -0.25 to 1.25 for x and y

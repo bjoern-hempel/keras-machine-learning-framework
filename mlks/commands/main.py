@@ -107,18 +107,14 @@ class Command:
     @staticmethod
     def show_config(config):
         """Prints out all configuration settings of given config class."""
-        class_name = config.__class__.__name__
 
-        click.echo('')
-        click.echo(class_name)
-        click.echo(Command.repeat_to_length('-', len(class_name)))
+        for namespace in config.configs:
+            click.echo(namespace)
+            click.echo(Command.repeat_to_length('-', len(namespace)))
 
-        attributes = vars(config)
-
-        for key in attributes:
-            key_name = key + ':'
-            click.echo('{key: <25} {attribute}'.format(key=key_name, attribute=attributes[key]))
-
+            for key in config.configs[namespace]:
+                click.echo('{key: <25} {attribute}'.format(key=key+':', attribute=config.configs[namespace][key]))
+            click.echo('')
         click.echo('')
 
     def is_config_correct(self, configs,
@@ -126,13 +122,8 @@ class Command:
                           negative='Cancelled by user.'):
         """Shows all configuration classes and asks if this is correct."""
 
-        if isinstance(configs, list):
-            for config in configs:
-                self.show_config(config)
-        elif isinstance(configs, object):
-            self.show_config(configs)
-        else:
-            raise AssertionError('Unsupported config parameter.')
+        # prints out the given configuration
+        self.show_config(configs)
 
         positive = self.query_yes_no(question)
 
