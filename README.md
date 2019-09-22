@@ -32,7 +32,7 @@ To test this framework immediately without any data, there is a selection of dem
 
 Here is an overview of the demos:
 
-* [Overview of the demos](markdown/demos/overview.md)
+* [Demo Overview](markdown/demos/overview.md)
 
 ## First attempts to train an image classifier
 
