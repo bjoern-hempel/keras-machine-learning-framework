@@ -1,6 +1,6 @@
 # MNIST Demo
 
-MNIST database<sup>[[1]](#mnist_database)</sup>
+The MNIST database<sup>[[1]](#mnist_database)</sup> is a set of handwritten numbers. These are often used as learning and test patterns in neural network investigations. It is, so to speak, the HelloWorld example of machine learning.
 
 ## A. Further Tutorials
 
