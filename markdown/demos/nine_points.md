@@ -1,6 +1,6 @@
 # Nine Points Demo
 
-In progress..
+<img src="/markdown/demos/nine_points.png">
 
 ## A. Further Tutorials
 
