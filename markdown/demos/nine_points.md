@@ -10,7 +10,7 @@ This could simply be implemented algorithmically.
 
 ## Deductive learning approach
 
-For example:
+The deductive learning approach implements functions as they are. A sum, for example. 1 plus 1 should give 2. Or in other words, if I give 10 and 3 to the system, 13 should come out. For example, for the example above:
 
 ```
 #toBeDone
