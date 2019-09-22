@@ -13,7 +13,7 @@ This could simply be implemented algorithmically.
 The deductive learning approach implements functions as they are. A sum, for example. 1 plus 1 should give 2. Or in other words, if I give 10 and 3 to the system, 13 should come out. For example, for the example above:
 
 ```python
-if x in [0, 1] and y in [0, 1]:
+if x in [0, 1] or y in [0, 1]:
     return 1
 else
     return 0
