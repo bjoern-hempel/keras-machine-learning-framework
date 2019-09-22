@@ -1,6 +1,14 @@
 # Nine Points Demo
 
+Imagine the following situation. We have given the following coordinates:
+
+Points around the x-values 1 and 0 as well as the y-values also around 1 and 0 should result in 1. Only the point [0.5, 0.5] should give 0:
+
 <img src="/markdown/demos/nine_points.png">
+
+This could simply be implemented algorithmically.
+
+
 
 ## A. Further Tutorials
 
