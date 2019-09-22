@@ -8,7 +8,7 @@ In progress..
 
 ## B. Sources
 
-* ...
+* <sup><a name="mnist_database">[1]</a></sup>[MNIST database (Wikipedia)](https://en.wikipedia.org/wiki/MNIST_database)
 
 ## C. Authors
 
