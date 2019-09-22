@@ -26,6 +26,14 @@ If you intend to implement and optimize Deep Neuronal Networks (DNN), the calcul
 * Transfer Learning
 * ...
 
+## Demos
+
+To test this framework immediately without any data, there is a selection of demos which can be executed immediately. Good to e.g. test the installation or make a GPU vs CPU comparison on the fly.
+
+Here is an overview of the demos:
+
+* [Overview of the demos](markdown/demos/overview.md)
+
 ## First attempts to train an image classifier
 
 * Train, build and save the model
