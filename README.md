@@ -22,7 +22,7 @@ If you intend to implement and optimize Deep Neuronal Networks (DNN), the calcul
 
 ## Some background knowledge
 
-* [The deductive learning approach versus the inductive learning approach: see nine points Demo](/markdown/demos/nine_points.md)
+* [The deductive learning approach versus the inductive learning approach: see nine points demo](/markdown/demos/nine_points.md)
 * Neuronal network vs Millions of parameters
 * Transfer Learning
 * ...
