@@ -34,10 +34,10 @@ import click
 from mlks.commands.info.main import Info
 from mlks.commands.prepare.main import Prepare
 from mlks.commands.train.main import Train
-from mlks.commands.test.mnist.main import Mnist
-from mlks.commands.test.simple_perceptron.main import SimplePerceptron
-from mlks.commands.test.xor_perceptron.main import XorPerceptron
-from mlks.commands.test.nine_points.main import NinePoints
+from mlks.commands.demo.mnist.main import Mnist
+from mlks.commands.demo.simple_perceptron.main import SimplePerceptron
+from mlks.commands.demo.xor_perceptron.main import XorPerceptron
+from mlks.commands.demo.nine_points.main import NinePoints
 from mlks.helper.config import Config
 from mlks.helper.config import general_config_writer, machine_learning_config_writer, transfer_learning_config_writer
 from mlks.helper.config import option_callback, add_options
@@ -187,54 +187,54 @@ def train(config):
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
-def test(config):
-    """This subcommand contains some test examples."""
+def demo(config):
+    """This subcommand contains some demo examples."""
 
     pass
 
 
-@test.command()
+@demo.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
 def simple_perceptron(config):
-    """This subcommand from test trains a simple perceptron."""
+    """This subcommand from demo trains a simple perceptron."""
 
-    test_class = SimplePerceptron(config)
-    test_class.do()
+    demo_class = SimplePerceptron(config)
+    demo_class.do()
 
 
-@test.command()
+@demo.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
 def xor_perceptron(config):
-    """This subcommand from test trains a xor perceptron."""
+    """This subcommand from demo trains a xor perceptron."""
 
-    test_class = XorPerceptron(config)
-    test_class.do()
+    demo_class = XorPerceptron(config)
+    demo_class.do()
 
 
-@test.command()
+@demo.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
 def nine_points(config):
-    """This subcommand from test trains a nine point example."""
+    """This subcommand from demo trains a nine point example."""
 
-    test_class = NinePoints(config)
-    test_class.do()
+    demo_class = NinePoints(config)
+    demo_class.do()
 
 
-@test.command()
+@demo.command()
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
 def mnist(config):
-    """This subcommand from test trains a mnist database."""
+    """This subcommand from demo trains a mnist database."""
 
-    test_class = Mnist(config)
-    test_class.do()
+    demo_class = Mnist(config)
+    demo_class.do()
 
 
 @cli.command()
