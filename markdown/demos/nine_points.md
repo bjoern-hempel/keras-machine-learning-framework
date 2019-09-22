@@ -16,7 +16,7 @@ For example:
 #toBeDone
 ```
 
-This should work. But what happens when there are changes. E.g. that [0, 0] should also result in 0? It needs a programmer who changes the above source code and thinks about the problem! Wouldn't it make more sense if it also worked automatically?
+This should work. But what happens when there are changes. E.g. that [0, 0] should also result in 0? It needs a programmer who changes the above source code and thinks about the problem! Wouldn't it make more sense if it also worked automatically? This is a simple example! What about more complex ones? E.g. the recognition of images? Implementing an algorithm is difficult, isn't it?
 
 ## Inductive learning approach
 
