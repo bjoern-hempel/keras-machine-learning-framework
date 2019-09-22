@@ -31,7 +31,6 @@
 # SOFTWARE.
 
 import click
-from typing import Dict
 from mlks.commands.info.main import Info
 from mlks.commands.prepare.main import Prepare
 from mlks.commands.train.main import Train
@@ -40,36 +39,31 @@ from mlks.commands.test.simple_perceptron.main import SimplePerceptron
 from mlks.commands.test.xor_perceptron.main import XorPerceptron
 from mlks.commands.test.nine_points.main import NinePoints
 from mlks.helper.config import Config
-from mlks.helper.config import general_config_writer
-from mlks.helper.config import machine_learning_config_writer
-from mlks.helper.config import transfer_learning_config_writer
+from mlks.helper.config import general_config_writer, machine_learning_config_writer, transfer_learning_config_writer
+from mlks.helper.config import option_callback, add_options
+from mlks.helper.config import set_config_translator
 
 # Make pass decorator for class Config
 pass_config = click.make_pass_decorator(Config, ensure=True)
 
-config_translator: Dict[str, str] = {
+# sets the config translator
+set_config_translator({
     # general config
-    'verbose': 'general_config_writer',
-    'debug': 'general_config_writer',
+    'verbose': general_config_writer,
+    'debug': general_config_writer,
 
     # machine learning config
-    'epochs': 'machine_learning_config_writer',
-    'learning_rate': 'machine_learning_config_writer',
-    'activation_function': 'machine_learning_config_writer',
-    'loss_function': 'machine_learning_config_writer',
-    'optimizer': 'machine_learning_config_writer',
-    'metrics': 'machine_learning_config_writer',
+    'epochs': machine_learning_config_writer,
+    'learning_rate': machine_learning_config_writer,
+    'activation_function': machine_learning_config_writer,
+    'loss_function': machine_learning_config_writer,
+    'optimizer': machine_learning_config_writer,
+    'metrics': machine_learning_config_writer,
 
     # transfer learning config
-    'transfer_learning_model': 'transfer_learning_config_writer',
-    'number_trainable_layers': 'transfer_learning_config_writer'
-}
-
-
-def option_callback(ctx, param, value):
-    """This function stores the passed values in the configuration classes before returning them."""
-
-    return globals()[config_translator[param.name]](ctx, param, value)
+    'transfer_learning_model': transfer_learning_config_writer,
+    'number_trainable_layers': transfer_learning_config_writer
+})
 
 
 # Configure the universal parameters here
@@ -149,20 +143,6 @@ option_set_general = [option_verbose, option_debug]
 option_set_machine_learning = [option_epochs, option_learning_rate, option_activation_function, option_loss_function,
                                option_optimizer, option_metrics]
 option_set_transfer_learning = [option_transfer_learning_model, option_number_trainable_layers]
-
-
-def add_options(options):
-    """The add options function to use as an easy to use decorator: @add_options"""
-
-    def _add_options(func):
-        if type(options) is list:
-            for option in reversed(options):
-                func = option(func)
-        elif callable(options):
-            func = options(func)
-        return func
-
-    return _add_options
 
 
 @click.group()

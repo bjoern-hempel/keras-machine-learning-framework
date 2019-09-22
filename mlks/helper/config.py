@@ -32,10 +32,17 @@
 
 
 import click
+from typing import Dict
 
 
 # some general variables
 debug = False
+config_translator: Dict[str, str] = {}
+
+
+def set_config_translator(ct):
+    global config_translator
+    config_translator = ct
 
 
 class Config(object):
@@ -44,6 +51,7 @@ class Config(object):
     def __init__(self):
         if debug:
             click.echo('Config.__init__')
+
         self.configs = {
             'general': {
                 'verbose': False,
@@ -103,3 +111,23 @@ def transfer_learning_config_writer(ctx, param, value):
                                                                     value=value))
     config.set(param.name, value, 'transfer_learning')
     return value
+
+
+def option_callback(ctx, param, value):
+    """This function stores the passed values in the configuration classes before returning them."""
+
+    return config_translator[param.name](ctx, param, value)
+
+
+def add_options(options):
+    """The add options function to use as an easy to use decorator: @add_options"""
+
+    def _add_options(func):
+        if type(options) is list:
+            for option in reversed(options):
+                func = option(func)
+        elif callable(options):
+            func = options(func)
+        return func
+
+    return _add_options
