@@ -4,9 +4,9 @@ This suite prepares, trains and validates an image classifier.
 
 ## Install Keras with GPU Support (Preparation)
 
-* [Keras GPU Installation on Windows](markdown/installation/keras-gpu-windows.md)
-* [Keras GPU Installation on Mac](markdown/installation/keras-gpu-mac.md)
-* [Keras GPU Installation on Linux](markdown/installation/keras-gpu-linux.md) _(In progress)_
+* [Keras GPU Installation on Windows](/markdown/installation/keras-gpu-windows.md)
+* [Keras GPU Installation on Mac](/markdown/installation/keras-gpu-mac.md)
+* [Keras GPU Installation on Linux](/markdown/installation/keras-gpu-linux.md) _(In progress)_
 
 ## Why is it important to choose a GPU over a CPU?
 
@@ -18,10 +18,11 @@ If you intend to implement and optimize Deep Neuronal Networks (DNN), the calcul
 
 ..but perfect for machine learning experiments. ;)
 
-* [Cross-language model exchange (Python → JAVA)](markdown/cross-language/python-java.md)
+* [Cross-language model exchange (Python → JAVA)](/markdown/cross-language/python-java.md)
 
 ## Some background knowledge
 
+* [The deductive learning approach versus the inductive learning approach: see nine points Demo](/markdown/demos/nine_points.md)
 * Neuronal network vs Millions of parameters
 * Transfer Learning
 * ...
@@ -32,7 +33,7 @@ To test this framework immediately without any data, there is a selection of dem
 
 Here is an overview of the demos:
 
-* [Demo Overview](markdown/demos/overview.md)
+* [Demo Overview](/markdown/demos/overview.md)
 
 ## First attempts to train an image classifier
 
