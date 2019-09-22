@@ -8,7 +8,17 @@ Points around the x-values 1 and 0 as well as the y-values also around 1 and 0 s
 
 This could simply be implemented algorithmically.
 
+## Deductive learning approach
 
+For example:
+
+```
+...
+```
+
+This should work. But what happens when there are changes. E.g. that [0, 0] should also result in 0? It needs a programmer who changes the above source code and thinks about the problem! Wouldn't it make more sense if it also worked automatically?
+
+## Inductive learning approach
 
 ## A. Further Tutorials
 
