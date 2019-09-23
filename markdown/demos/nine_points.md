@@ -10,7 +10,7 @@ This could simply be implemented algorithmically with the deductive learning app
 
 ## Deductive learning approach
 
-The deductive learning approach implements functions as they are. A sum, for example. 1 plus 1 should give 2. Or in other words, if I give 10 and 3 to the system, 13 should come out. For example, for the example above:
+The deductive learning approach implements functions as they are. A sum, for example. 1 plus 1 should give 2. Or in other words, if I give 10 and 3 to the system, 13 should come out. A deductive learning approach for the example above would be for example:
 
 ```python
 if x1 in [0, 1] or x2 in [0, 1]:
