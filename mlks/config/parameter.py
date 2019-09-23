@@ -119,7 +119,8 @@ option_model_path = click.option(
     '--model-path',
     expose_value=False,
     is_flag=False,
-    help='Sets the model path where the file can be saved.',
+    help='Sets the model path where it should be saved or loaded.',
+    callback=option_callback,
     default='-',
     type=click.File('w')
 )
@@ -177,7 +178,8 @@ option_set_machine_learning = [
     option_activation_function,
     option_loss_function,
     option_optimizer,
-    option_metrics
+    option_metrics,
+    option_model_path
 ]
 option_set_transfer_learning = [
     option_transfer_learning_model,

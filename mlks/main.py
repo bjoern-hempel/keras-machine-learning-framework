@@ -31,14 +31,15 @@
 # SOFTWARE.
 
 import click
-from mlks.commands.info.main import Info
-from mlks.commands.prepare.main import Prepare
-from mlks.commands.train.main import Train
-from mlks.commands.demo.mnist.main import Mnist
-from mlks.commands.demo.simple_perceptron.main import SimplePerceptron
-from mlks.commands.demo.xor_perceptron.main import XorPerceptron
-from mlks.commands.demo.nine_points.train.main import Train as NinePointsTrain
-from mlks.commands.demo.nine_points.execute.main import Execute as NinePointsExecute
+
+from mlks.commands.info.main import Info as CliInfo
+from mlks.commands.prepare.main import Prepare as CliPrepare
+from mlks.commands.train.main import Train as CliTrain
+from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
+from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
+from mlks.commands.demo.xor_perceptron.main import XorPerceptron as CliDemoXorPerceptron
+from mlks.commands.demo.nine_points.train.main import Train as CliDemoNinePointsTrain
+from mlks.commands.demo.nine_points.execute.main import Execute as CliDemoNinePointsExecute
 from mlks.helper.config import add_options
 from mlks.config.parameter import pass_config
 from mlks.config.parameter import option_set_general, \
@@ -64,7 +65,7 @@ def cli():
 def cli_prepare(config, string, repeat, out):
     """This subcommand trains a classifier."""
 
-    prepare_class = Prepare(config, string, repeat, out)
+    prepare_class = CliPrepare(config, string, repeat, out)
     prepare_class.do()
 
 
@@ -76,7 +77,7 @@ def cli_prepare(config, string, repeat, out):
 def cli_train(config):
     """This subcommand trains a classifier."""
 
-    train_class = Train(config)
+    train_class = CliTrain(config)
     train_class.do()
 
 
@@ -97,7 +98,7 @@ def cli_demo(config):
 def cli_demo_simple_perceptron(config):
     """This subcommand from demo trains a simple perceptron."""
 
-    demo_class = SimplePerceptron(config)
+    demo_class = CliDemoSimplePerceptron(config)
     demo_class.do()
 
 
@@ -108,7 +109,7 @@ def cli_demo_simple_perceptron(config):
 def cli_demo_xor_perceptron(config):
     """This subcommand from demo trains a xor perceptron."""
 
-    demo_class = XorPerceptron(config)
+    demo_class = CliDemoXorPerceptron(config)
     demo_class.do()
 
 
@@ -131,7 +132,7 @@ def cli_demo_nine_points(config):
 def cli_demo_nine_points_train(config):
     """This subcommand from demo trains a nine point example."""
 
-    demo_class = NinePointsTrain(config)
+    demo_class = CliDemoNinePointsTrain(config)
     demo_class.do()
 
 
@@ -143,7 +144,7 @@ def cli_demo_nine_points_train(config):
 def cli_demo_nine_points_execute(config):
     """This subcommand from demo execute a nine point example."""
 
-    demo_class = NinePointsExecute(config)
+    demo_class = CliDemoNinePointsExecute(config)
     demo_class.do()
 
 
@@ -154,7 +155,7 @@ def cli_demo_nine_points_execute(config):
 def cli_demo_mnist(config):
     """This subcommand from demo trains a mnist database."""
 
-    demo_class = Mnist(config)
+    demo_class = CliDemoMnist(config)
     demo_class.do()
 
 
@@ -164,5 +165,5 @@ def cli_demo_mnist(config):
 def cli_info(config):
     """This subcommand shows some infos."""
 
-    info_class = Info(config)
+    info_class = CliInfo(config)
     info_class.print()
