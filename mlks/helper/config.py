@@ -34,7 +34,6 @@
 import click
 from typing import Dict
 
-
 # some general variables
 debug = False
 config_translator: Dict[str, str] = {}
@@ -80,6 +79,59 @@ class Config(object):
 
     def gettl(self, name):
         return self.get(name, 'transfer_learning')
+
+
+class DefaultChooser(click.Option):
+    """A class that can different default options for different commands."""
+
+    def __init__(self, *args, **kwargs):
+        # add default_options parameter (allow them) and save the value
+        self.default_options = kwargs.pop('default_options', self.get_default_dict(kwargs))
+
+        # check type of argument default_options
+        if not isinstance(self.default_options, dict):
+            raise AssertionError('Attribute default_options must be a dict object.')
+
+        # call all parent option classes
+        super(DefaultChooser, self).__init__(*args, **kwargs)
+
+    @staticmethod
+    def get_default_dict(kwargs):
+        type_argument = kwargs['type']
+
+        # given type is an integer
+        if type_argument == int:
+            return {'default': 0}
+
+        # given type is a float
+        if type_argument == float:
+            return {'default': 0.0}
+
+        # given type is a sring
+        if type_argument == str:
+            return {'default': ''}
+
+        return {'default': None}
+
+    def get_default(self, ctx):
+        command = ctx.info_name
+
+        if command not in self.default_options:
+            if 'default' in self.default_options:
+                return self.default_options['default']
+            else:
+                return None
+
+        return self.default_options[command]
+
+    def prompt_for_value(self, ctx):
+        default = self.get_default(ctx)
+
+        # only prompt if the default value is None
+        if default is None:
+            return super(DefaultChooser, self).prompt_for_value(ctx)
+
+        return default
 
 
 def general_config_writer(ctx, param, value):

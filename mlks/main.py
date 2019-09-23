@@ -38,7 +38,7 @@ from mlks.commands.demo.mnist.main import Mnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron
 from mlks.commands.demo.nine_points.main import NinePoints
-from mlks.helper.config import Config
+from mlks.helper.config import Config, DefaultChooser
 from mlks.helper.config import general_config_writer, machine_learning_config_writer, transfer_learning_config_writer
 from mlks.helper.config import option_callback, add_options
 from mlks.helper.config import set_config_translator
@@ -64,11 +64,13 @@ option_debug = click.option(
 # Configure the machine learning parameters here
 option_epochs = click.option(
     '--epochs', '-e',
+    cls=DefaultChooser,
+    default_options={'default': 10, 'nine-points': 10000, 'mnist': 20},
     expose_value=False,
     is_flag=False,
     help='Sets the number of epochs.',
     callback=option_callback,
-    default=10,
+    default=lambda x: get_default(x),
     type=int
 )
 option_learning_rate = click.option(
