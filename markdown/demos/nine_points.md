@@ -6,7 +6,7 @@ Points around the x<sub>1</sub>-values 1 and 0 as well as the x<sub>2</sub>-valu
 
 <img src="/markdown/demos/nine_points.png">
 
-This could simply be implemented algorithmically.
+This could simply be implemented algorithmically:
 
 ## Deductive learning approach
 
