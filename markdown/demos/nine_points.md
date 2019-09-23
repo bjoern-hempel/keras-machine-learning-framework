@@ -1,6 +1,6 @@
 # Nine Points Demo
 
-Imagine the following situation. We have given the following situation:
+Imagine the following situation and parameters:
 
 Points around the x<sub>1</sub>-values 1 and 0 as well as the x<sub>2</sub>-values also around 1 and 0 should return 1. Only the point [0.5, 0.5] should give 0:
 
