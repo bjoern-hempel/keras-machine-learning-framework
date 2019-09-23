@@ -45,85 +45,125 @@ from mlks.helper.config import set_config_translator
 
 
 # Configure the universal parameters here
-option_verbose = click.option('--verbose', '-v',
-                              expose_value=False,
-                              is_flag=True,
-                              help='Switches the script to verbose mode.',
-                              callback=option_callback)
-option_debug = click.option('--debug', '-d',
-                            expose_value=False,
-                            is_flag=True,
-                            help='Switches the script to debug mode.',
-                            callback=option_callback)
+option_verbose = click.option(
+    '--verbose', '-v',
+    expose_value=False,
+    is_flag=True,
+    help='Switches the script to verbose mode.',
+    callback=option_callback
+)
+option_debug = click.option(
+    '--debug', '-d',
+    expose_value=False,
+    is_flag=True,
+    help='Switches the script to debug mode.',
+    callback=option_callback
+)
 
 
 # Configure the machine learning parameters here
-option_epochs = click.option('--epochs', '-e',
-                             expose_value=False,
-                             is_flag=False,
-                             help='Sets the number of epochs.',
-                             callback=option_callback,
-                             default=10,
-                             type=int)
-option_learning_rate = click.option('--learning-rate', '-l',
-                                    expose_value=False,
-                                    is_flag=False,
-                                    help='Sets the learning rate.',
-                                    callback=option_callback,
-                                    default=0.001,
-                                    type=float)
-option_activation_function = click.option('--activation-function', '-a',
-                                          expose_value=False,
-                                          is_flag=False,
-                                          help='Sets the activation function.',
-                                          callback=option_callback,
-                                          default='tanh',  # ['tanh', 'sigmoid']
-                                          type=str)
-option_loss_function = click.option('--loss-function',
-                                    expose_value=False,
-                                    is_flag=False,
-                                    help='Sets the loss function.',
-                                    callback=option_callback,
-                                    default='mean_squared_error',
-                                    type=str)
-option_optimizer = click.option('--optimizer', '-o',
-                                expose_value=False,
-                                is_flag=False,
-                                help='Sets the optimizer.',
-                                callback=option_callback,
-                                default='adam',
-                                type=str)
-option_metrics = click.option('--metrics',
-                              expose_value=False,
-                              is_flag=False,
-                              help='Sets the metrics.',
-                              callback=option_callback,
-                              default='accuracy',
-                              type=str)
+option_epochs = click.option(
+    '--epochs', '-e',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the number of epochs.',
+    callback=option_callback,
+    default=10,
+    type=int
+)
+option_learning_rate = click.option(
+    '--learning-rate', '-l',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the learning rate.',
+    callback=option_callback,
+    default=0.001,
+    type=float
+)
+option_activation_function = click.option(
+    '--activation-function', '-a',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the activation function.',
+    callback=option_callback,
+    default='tanh',
+    type=click.Choice(['tanh', 'sigmoid'])
+)
+option_loss_function = click.option(
+    '--loss-function',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the loss function.',
+    callback=option_callback,
+    default='mean_squared_error',
+    type=click.Choice(['mean_squared_error'])
+)
+option_optimizer = click.option(
+    '--optimizer', '-o',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the optimizer.',
+    callback=option_callback,
+    default='adam',
+    type=click.Choice(['adam'])
+)
+option_metrics = click.option(
+    '--metrics',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the metrics.',
+    callback=option_callback,
+    default='accuracy',
+    type=click.Choice(['accuracy'])
+)
+option_model_path = click.option(
+    '--model-path',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the model path where the file can be saved.',
+    default='-',
+    type=click.File('w')
+)
 
 
 # Configure the transfer learning parameters here
-option_transfer_learning_model = click.option('--transfer-learning-model', '-m',
-                                              expose_value=False,
-                                              is_flag=False,
-                                              help='Sets the transfer learning model.',
-                                              callback=option_callback,
-                                              default='Resnet52',
-                                              type=str)
-option_number_trainable_layers = click.option('--number-trainable-layers',
-                                              expose_value=False,
-                                              is_flag=False,
-                                              help='Sets the number trainable layers.',
-                                              callback=option_callback,
-                                              default=3,
-                                              type=int)
+option_transfer_learning_model = click.option(
+    '--transfer-learning-model', '-m',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the transfer learning model.',
+    callback=option_callback,
+    default='Resnet52',
+    type=str
+)
+option_number_trainable_layers = click.option(
+    '--number-trainable-layers',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the number trainable layers.',
+    callback=option_callback,
+    default=3,
+    type=int
+)
 
 
 # Configure some option sets
-option_set_general = [option_verbose, option_debug]
-option_set_machine_learning = [option_epochs, option_learning_rate, option_activation_function, option_loss_function,
-                               option_optimizer, option_metrics]
-option_set_transfer_learning = [option_transfer_learning_model, option_number_trainable_layers]
+option_set_general = [
+    option_verbose,
+    option_debug
+]
+option_set_machine_learning = [
+    option_epochs,
+    option_learning_rate,
+    option_activation_function,
+    option_loss_function,
+    option_optimizer,
+    option_metrics
+]
+option_set_transfer_learning = [
+    option_transfer_learning_model,
+    option_number_trainable_layers
+]
 
 
 # sets the config translator
@@ -139,6 +179,7 @@ set_config_translator({
     'loss_function': machine_learning_config_writer,
     'optimizer': machine_learning_config_writer,
     'metrics': machine_learning_config_writer,
+    'model_path': machine_learning_config_writer,
 
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,
