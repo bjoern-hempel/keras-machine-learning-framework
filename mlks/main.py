@@ -39,190 +39,12 @@ from mlks.commands.demo.simple_perceptron.main import SimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron
 from mlks.commands.demo.nine_points.train.main import Train as NinePointsTrain
 from mlks.commands.demo.nine_points.execute.main import Execute as NinePointsExecute
-from mlks.helper.config import Config, DefaultChooser
-from mlks.helper.config import general_config_writer, \
-    machine_learning_config_writer, \
-    transfer_learning_config_writer, \
-    nine_points_config_writer
-from mlks.helper.config import option_callback, add_options
-from mlks.helper.config import set_config_translator
-
-
-# Configure the universal parameters here
-option_verbose = click.option(
-    '--verbose', '-v',
-    expose_value=False,
-    is_flag=True,
-    help='Switches the script to verbose mode.',
-    callback=option_callback
-)
-option_debug = click.option(
-    '--debug', '-d',
-    expose_value=False,
-    is_flag=True,
-    help='Switches the script to debug mode.',
-    callback=option_callback
-)
-
-
-# Configure the machine learning parameters here
-option_epochs = click.option(
-    '--epochs', '-e',
-    cls=DefaultChooser,
-    default_options={'default': 10, 'nine-points': 10000, 'mnist': 20},
-    expose_value=False,
-    is_flag=False,
-    help='Sets the number of epochs.',
-    callback=option_callback,
-    default=DefaultChooser.get_default,
-    type=int
-)
-option_learning_rate = click.option(
-    '--learning-rate', '-l',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the learning rate.',
-    callback=option_callback,
-    default=0.001,
-    type=float
-)
-option_activation_function = click.option(
-    '--activation-function', '-a',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the activation function.',
-    callback=option_callback,
-    default='tanh',
-    type=click.Choice(['tanh', 'sigmoid'])
-)
-option_loss_function = click.option(
-    '--loss-function',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the loss function.',
-    callback=option_callback,
-    default='mean_squared_error',
-    type=click.Choice(['mean_squared_error'])
-)
-option_optimizer = click.option(
-    '--optimizer', '-o',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the optimizer.',
-    callback=option_callback,
-    default='adam',
-    type=click.Choice(['adam'])
-)
-option_metrics = click.option(
-    '--metrics',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the metrics.',
-    callback=option_callback,
-    default='accuracy',
-    type=click.Choice(['accuracy'])
-)
-option_model_path = click.option(
-    '--model-path',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the model path where the file can be saved.',
-    default='-',
-    type=click.File('w')
-)
-
-
-# Configure the transfer learning parameters here
-option_transfer_learning_model = click.option(
-    '--transfer-learning-model', '-m',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the transfer learning model.',
-    callback=option_callback,
-    default='Resnet52',
-    type=str
-)
-option_number_trainable_layers = click.option(
-    '--number-trainable-layers',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the number trainable layers.',
-    callback=option_callback,
-    default=3,
-    type=int
-)
-
-# some other parameters here
-option_x_0_1 = click.option(
-    '--x',
-    expose_value=False,
-    is_flag=False,
-    help='Sets a x value.',
-    callback=option_callback,
-    default=0.0,
-    type=click.FloatRange(min=0, max=1, clamp=False)
-)
-option_y_0_1 = click.option(
-    '--y',
-    expose_value=False,
-    is_flag=False,
-    help='Sets a y value.',
-    callback=option_callback,
-    default=0.0,
-    type=click.FloatRange(min=0, max=1, clamp=False)
-)
-
-
-# Configure some option sets
-option_set_general = [
-    option_verbose,
-    option_debug
-]
-option_set_machine_learning = [
-    option_epochs,
-    option_learning_rate,
-    option_activation_function,
-    option_loss_function,
-    option_optimizer,
-    option_metrics
-]
-option_set_transfer_learning = [
-    option_transfer_learning_model,
-    option_number_trainable_layers
-]
-option_set_nine_points = [
-    option_x_0_1,
-    option_y_0_1
-]
-
-
-# sets the config translator
-set_config_translator({
-    # general config
-    'verbose': general_config_writer,
-    'debug': general_config_writer,
-
-    # machine learning config
-    'epochs': machine_learning_config_writer,
-    'learning_rate': machine_learning_config_writer,
-    'activation_function': machine_learning_config_writer,
-    'loss_function': machine_learning_config_writer,
-    'optimizer': machine_learning_config_writer,
-    'metrics': machine_learning_config_writer,
-    'model_path': machine_learning_config_writer,
-
-    # transfer learning config
-    'transfer_learning_model': transfer_learning_config_writer,
-    'number_trainable_layers': transfer_learning_config_writer,
-
-    # some other configs
-    'x': nine_points_config_writer,
-    'y': nine_points_config_writer
-})
-
-
-# Make pass decorator for class Config
-pass_config = click.make_pass_decorator(Config, ensure=True)
+from mlks.helper.config import add_options
+from mlks.config.parameter import pass_config
+from mlks.config.parameter import option_set_general, \
+    option_set_machine_learning, \
+    option_set_transfer_learning, \
+    option_set_nine_points
 
 
 @click.group(name='cli')
@@ -337,7 +159,7 @@ def cli_demo_mnist(config):
 
 
 @cli.command(name='info')
-@add_options(option_verbose)
+@add_options(option_set_general)
 @pass_config
 def cli_info(config):
     """This subcommand shows some infos."""
