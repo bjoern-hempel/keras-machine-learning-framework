@@ -165,6 +165,16 @@ def transfer_learning_config_writer(ctx, param, value):
     return value
 
 
+def nine_points_config_writer(ctx, param, value):
+    config = ctx.ensure_object(Config)
+
+    if debug:
+        click.echo('{object: <30}: {name: <30} {value: <30}'.format(object='Config.transfer_learning', name=param.name,
+                                                                    value=value))
+    config.set(param.name, value, 'nine_points')
+    return value
+
+
 def option_callback(ctx, param, value):
     """This function stores the passed values in the configuration classes before returning them."""
 

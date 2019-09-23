@@ -37,9 +37,13 @@ from mlks.commands.train.main import Train
 from mlks.commands.demo.mnist.main import Mnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron
-from mlks.commands.demo.nine_points.main import NinePoints
+from mlks.commands.demo.nine_points.train.main import Train as NinePointsTrain
+from mlks.commands.demo.nine_points.execute.main import Execute as NinePointsExecute
 from mlks.helper.config import Config, DefaultChooser
-from mlks.helper.config import general_config_writer, machine_learning_config_writer, transfer_learning_config_writer
+from mlks.helper.config import general_config_writer, \
+    machine_learning_config_writer, \
+    transfer_learning_config_writer, \
+    nine_points_config_writer
 from mlks.helper.config import option_callback, add_options
 from mlks.helper.config import set_config_translator
 
@@ -70,7 +74,7 @@ option_epochs = click.option(
     is_flag=False,
     help='Sets the number of epochs.',
     callback=option_callback,
-    default=lambda x: get_default(x),
+    default=DefaultChooser.get_default,
     type=int
 )
 option_learning_rate = click.option(
@@ -148,6 +152,26 @@ option_number_trainable_layers = click.option(
     type=int
 )
 
+# some other parameters here
+option_x_0_1 = click.option(
+    '--x',
+    expose_value=False,
+    is_flag=False,
+    help='Sets a x value.',
+    callback=option_callback,
+    default=0.0,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
+option_y_0_1 = click.option(
+    '--y',
+    expose_value=False,
+    is_flag=False,
+    help='Sets a y value.',
+    callback=option_callback,
+    default=0.0,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
+
 
 # Configure some option sets
 option_set_general = [
@@ -165,6 +189,10 @@ option_set_machine_learning = [
 option_set_transfer_learning = [
     option_transfer_learning_model,
     option_number_trainable_layers
+]
+option_set_nine_points = [
+    option_x_0_1,
+    option_y_0_1
 ]
 
 
@@ -185,7 +213,11 @@ set_config_translator({
 
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,
-    'number_trainable_layers': transfer_learning_config_writer
+    'number_trainable_layers': transfer_learning_config_writer,
+
+    # some other configs
+    'x': nine_points_config_writer,
+    'y': nine_points_config_writer
 })
 
 
@@ -193,7 +225,7 @@ set_config_translator({
 pass_config = click.make_pass_decorator(Config, ensure=True)
 
 
-@click.group()
+@click.group(name='cli')
 @add_options(option_set_general)
 def cli():
     """This scripts prepares, trains and validates an image classifier."""
@@ -201,89 +233,113 @@ def cli():
     pass
 
 
-@cli.command()
+@cli.command(name='prepare')
 @add_options(option_set_general)
 @click.option('--string', default='World', type=click.STRING, help='This is a string.')
 @click.option('--repeat', default=1, type=click.INT, show_default=True, help='This is a integer.')
 @click.argument('out', default='-', type=click.File('w'), required=False)
 @pass_config
-def prepare(config, string, repeat, out):
+def cli_prepare(config, string, repeat, out):
     """This subcommand trains a classifier."""
 
     prepare_class = Prepare(config, string, repeat, out)
     prepare_class.do()
 
 
-@cli.command()
+@cli.command(name='train')
 @add_options(option_set_transfer_learning)
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
-def train(config):
+def cli_train(config):
     """This subcommand trains a classifier."""
 
     train_class = Train(config)
     train_class.do()
 
 
-@cli.group()
+@cli.group(name='demo')
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
-def demo(config):
+def cli_demo(config):
     """This subcommand contains some demo examples."""
 
     pass
 
 
-@demo.command()
+@cli_demo.command(name='simple-perceptron')
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
-def simple_perceptron(config):
+def cli_demo_simple_perceptron(config):
     """This subcommand from demo trains a simple perceptron."""
 
     demo_class = SimplePerceptron(config)
     demo_class.do()
 
 
-@demo.command()
+@cli_demo.command(name='xor-perceptron')
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
-def xor_perceptron(config):
+def cli_demo_xor_perceptron(config):
     """This subcommand from demo trains a xor perceptron."""
 
     demo_class = XorPerceptron(config)
     demo_class.do()
 
 
-@demo.command()
+@cli_demo.group(name='nine-points')
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
+@add_options(option_set_nine_points)
 @pass_config
-def nine_points(config):
+def cli_demo_nine_points(config):
+    """This subcommand from demo trains or execute a nine point example."""
+
+    pass
+
+
+@cli_demo_nine_points.command(name='train')
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
+@add_options(option_set_nine_points)
+@pass_config
+def cli_demo_nine_points_train(config):
     """This subcommand from demo trains a nine point example."""
 
-    demo_class = NinePoints(config)
+    demo_class = NinePointsTrain(config)
     demo_class.do()
 
 
-@demo.command()
+@cli_demo_nine_points.command(name='execute')
+@add_options(option_set_machine_learning)
+@add_options(option_set_general)
+@add_options(option_set_nine_points)
+@pass_config
+def cli_demo_nine_points_execute(config):
+    """This subcommand from demo execute a nine point example."""
+
+    demo_class = NinePointsExecute(config)
+    demo_class.do()
+
+
+@cli_demo.command(name='mnist')
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
-def mnist(config):
+def cli_demo_mnist(config):
     """This subcommand from demo trains a mnist database."""
 
     demo_class = Mnist(config)
     demo_class.do()
 
 
-@cli.command()
+@cli.command(name='info')
 @add_options(option_verbose)
 @pass_config
-def info(config):
+def cli_info(config):
     """This subcommand shows some infos."""
 
     info_class = Info(config)
