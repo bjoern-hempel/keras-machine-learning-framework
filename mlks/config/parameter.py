@@ -32,7 +32,7 @@
 
 import click
 
-from mlks.helper.config import Config, DefaultChooser
+from mlks.helper.config import Config, OptionDefaultChooser, OptionConcat
 from mlks.helper.config import general_config_writer, \
     machine_learning_config_writer, \
     transfer_learning_config_writer, \
@@ -61,13 +61,13 @@ option_debug = click.option(
 # Configure the machine learning parameters here
 option_epochs = click.option(
     '--epochs', '-e',
-    cls=DefaultChooser,
+    cls=OptionDefaultChooser,
     default_options={'default': 10, 'nine-points': 10000, 'mnist': 20},
     expose_value=False,
     is_flag=False,
     help='Sets the number of epochs.',
     callback=option_callback,
-    default=DefaultChooser.get_default,
+    default=OptionDefaultChooser.get_default,
     type=int
 )
 option_learning_rate = click.option(
@@ -115,14 +115,27 @@ option_metrics = click.option(
     default='accuracy',
     type=click.Choice(['accuracy'])
 )
-option_model_path = click.option(
-    '--model-path',
+option_environment_path = click.option(
+    '--environment-path',
+    cls=OptionConcat,
     expose_value=False,
     is_flag=False,
-    help='Sets the model path where it should be saved or loaded.',
+    help='Sets the environment path (used for example by --model-file).',
     callback=option_callback,
-    default='-',
-    type=click.File('w')
+    concat=None,
+    default=None,
+    type=str
+)
+option_model_file = click.option(
+    '--model-file',
+    cls=OptionConcat,
+    expose_value=False,
+    is_flag=False,
+    help='Sets the model file where it should be saved or loaded.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    type=str
 )
 
 
@@ -134,7 +147,7 @@ option_transfer_learning_model = click.option(
     help='Sets the transfer learning model.',
     callback=option_callback,
     default='Resnet52',
-    type=str
+    type=click.Choice(['Resnet52'])
 )
 option_number_trainable_layers = click.option(
     '--number-trainable-layers',
@@ -179,7 +192,8 @@ option_set_machine_learning = [
     option_loss_function,
     option_optimizer,
     option_metrics,
-    option_model_path
+    option_environment_path,
+    option_model_file
 ]
 option_set_transfer_learning = [
     option_transfer_learning_model,
@@ -204,7 +218,8 @@ set_config_translator({
     'loss_function': machine_learning_config_writer,
     'optimizer': machine_learning_config_writer,
     'metrics': machine_learning_config_writer,
-    'model_path': machine_learning_config_writer,
+    'environment_path': machine_learning_config_writer,
+    'model_file': machine_learning_config_writer,
 
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,

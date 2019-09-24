@@ -30,7 +30,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 import click
 from typing import Dict
 
@@ -81,7 +80,7 @@ class Config(object):
         return self.get(name, 'transfer_learning')
 
 
-class DefaultChooser(click.Option):
+class OptionDefaultChooser(click.Option):
     """A class that can different default options for different commands."""
 
     def __init__(self, *args, **kwargs):
@@ -93,7 +92,7 @@ class DefaultChooser(click.Option):
             raise AssertionError('Attribute default_options must be a dict object.')
 
         # call all parent option classes
-        super(DefaultChooser, self).__init__(*args, **kwargs)
+        super(OptionDefaultChooser, self).__init__(*args, **kwargs)
 
     @staticmethod
     def get_default_dict(kwargs):
@@ -124,14 +123,25 @@ class DefaultChooser(click.Option):
 
         return self.default_options[command]
 
-    def prompt_for_value(self, ctx):
-        default = self.get_default(ctx)
 
-        # only prompt if the default value is None
-        if default is None:
-            return super(DefaultChooser, self).prompt_for_value(ctx)
+class OptionConcat(click.Option):
+    parameters = {}
 
-        return default
+    def __init__(self, *args, **kwargs):
+        self.concat = kwargs.pop('concat', None)
+        super(OptionConcat, self).__init__(*args, **kwargs)
+
+    def process_value(self, ctx, value):
+        if value is not None:
+            return_value = self.type_cast_value(ctx, value)
+
+            if self.concat is None:
+                OptionConcat.parameters[self.name] = return_value
+
+            if self.concat in OptionConcat.parameters and OptionConcat.parameters[self.concat] is not None:
+                return OptionConcat.parameters[self.concat] + return_value
+
+            return return_value
 
 
 def general_config_writer(ctx, param, value):
