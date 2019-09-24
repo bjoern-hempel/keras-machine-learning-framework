@@ -62,7 +62,7 @@ option_debug = click.option(
 option_epochs = click.option(
     '--epochs', '-e',
     cls=OptionDefaultChooser,
-    default_options={'default': 10, 'nine-points': 10000, 'mnist': 20},
+    default_options={'default': 10, 'demo_nine_points_train': 10000, 'demo_mnist': 20},
     expose_value=False,
     is_flag=False,
     help='Sets the number of epochs.',
@@ -122,7 +122,6 @@ option_environment_path = click.option(
     is_flag=False,
     help='Sets the environment path (used for example by --model-file).',
     callback=option_callback,
-    concat=None,
     default=None,
     type=str
 )

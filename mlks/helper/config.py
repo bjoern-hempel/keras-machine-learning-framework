@@ -82,6 +82,7 @@ class Config(object):
 
 class OptionDefaultChooser(click.Option):
     """A class that can different default options for different commands."""
+    command_path = {}
 
     def __init__(self, *args, **kwargs):
         # add default_options parameter (allow them) and save the value
@@ -113,18 +114,23 @@ class OptionDefaultChooser(click.Option):
         return {'default': None}
 
     def get_default(self, ctx):
-        command = ctx.info_name
+        if self.name not in OptionDefaultChooser.command_path:
+            OptionDefaultChooser.command_path[self.name] = ctx.info_name
+        else:
+            OptionDefaultChooser.command_path[self.name] += '_' + ctx.info_name.replace('-', '_')
 
-        if command not in self.default_options:
+        command_path = OptionDefaultChooser.command_path[self.name]
+        if command_path not in self.default_options:
             if 'default' in self.default_options:
                 return self.default_options['default']
             else:
                 return None
 
-        return self.default_options[command]
+        return self.default_options[command_path]
 
 
 class OptionConcat(click.Option):
+    """An option class that can concat given other options."""
     parameters = {}
 
     def __init__(self, *args, **kwargs):
