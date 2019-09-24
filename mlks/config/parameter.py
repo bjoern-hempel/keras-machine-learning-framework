@@ -125,6 +125,15 @@ option_environment_path = click.option(
     default=None,
     type=str
 )
+option_environment_path_2 = click.option(
+    '--environment-path-2',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the environment path (used for example by --model-file).',
+    callback=option_callback,
+    default=None,
+    type=click.Path()
+)
 option_model_file = click.option(
     '--model-file',
     cls=OptionConcat,
@@ -192,6 +201,7 @@ option_set_machine_learning = [
     option_optimizer,
     option_metrics,
     option_environment_path,
+    option_environment_path_2,
     option_model_file
 ]
 option_set_transfer_learning = [
@@ -218,6 +228,7 @@ set_config_translator({
     'optimizer': machine_learning_config_writer,
     'metrics': machine_learning_config_writer,
     'environment_path': machine_learning_config_writer,
+    'environment_path_2': machine_learning_config_writer,
     'model_file': machine_learning_config_writer,
 
     # transfer learning config
