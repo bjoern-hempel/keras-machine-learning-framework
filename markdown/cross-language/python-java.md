@@ -4,7 +4,7 @@ It is possible to exchange data between Python and Java. For example the model g
 
 ## Nine points example
 
-Let's use the nine points demo to generate and save a model. It's pretty simple:
+Let's use the [Nine Points Demo](/markdown/demos/nine_points.md) to generate and save a model. It's pretty simple:
 
 ```bash
 (keras-gpu) C:\Users> ml demo nine-points train --environment-path=./ --model-file=model.h5
