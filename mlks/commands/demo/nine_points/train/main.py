@@ -187,4 +187,6 @@ class Train(NinePoints):
         click.echo(model.predict(train_values))
 
         # save the model to import within dl4j
-        #model.save('/Users/bjoern/.spyder-py3/model.h5')
+        model_path = self.config.getml('model_file')
+        if model_path is not None:
+            model.save(model_path)
