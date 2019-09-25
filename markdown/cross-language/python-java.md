@@ -13,18 +13,33 @@ Let's use the [Nine Points Demo](/markdown/demos/nine_points.md) to generate and
 Now we have a file named model.h5 in the main directory of the project. Now we use this model in a Java project:
 
 ```java
-ComputationGraph model = KerasModelImport.importKerasModelAndWeights("model.h5", false);
+import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
+import org.deeplearning4j.nn.modelimport.keras.exceptions.InvalidKerasConfigurationException;
+import org.deeplearning4j.nn.modelimport.keras.exceptions.UnsupportedKerasConfigurationException;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
+import org.slf4j.Logger;
+```
+
+```java
+MultiLayerNetwork model = KerasModelImport.importKerasSequentialModelAndWeights(modelPathFull);
 
 double prediction = 0;
 
 int inputs = 2;
 INDArray features = Nd4j.create(1, inputs);
 
-# x1 = 0 and x2 = 0
-features.putScalar(0, 0, 0.0);
-features.putScalar(0, 1, 0.0);
+features.putScalar(0, 0, 0.5);
+features.putScalar(0, 1, 0.5);
+
 
 prediction = model.output(features).getDouble(0);
+log.info(String.valueOf(prediction));
+```
+
+```java
+2.710958069656044E-4
 ```
 
 ## A. Further Tutorials
