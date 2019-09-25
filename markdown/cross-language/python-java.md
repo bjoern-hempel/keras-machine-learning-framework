@@ -13,7 +13,7 @@ Let's use the nine points demo to generate and save a model. It's pretty simple:
 Now we have a file named model.h5 in the main directory of the project. Now we use this model in a Java project:
 
 ```java
-ComputationGraph model = KerasModelImport.importKerasModelAndWeights(modelPathFull, false);
+ComputationGraph model = KerasModelImport.importKerasModelAndWeights("model.h5", false);
 
 double prediction = 0;
 
