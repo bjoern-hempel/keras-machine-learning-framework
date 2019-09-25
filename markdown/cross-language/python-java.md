@@ -33,7 +33,6 @@ INDArray features = Nd4j.create(1, inputs);
 features.putScalar(0, 0, 0.5);
 features.putScalar(0, 1, 0.5);
 
-
 prediction = model.output(features).getDouble(0);
 log.info(String.valueOf(prediction));
 ```
