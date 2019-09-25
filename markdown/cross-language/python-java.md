@@ -13,7 +13,18 @@ Let's use the nine points demo to generate and save a model. It's pretty simple:
 Now we have a file named model.h5 in the main directory of the project. Now we use this model in a Java project:
 
 ```java
+ComputationGraph model = KerasModelImport.importKerasModelAndWeights(modelPathFull, false);
 
+double prediction = 0;
+
+int inputs = 2;
+INDArray features = Nd4j.create(1, inputs);
+
+# x1 = 0 and x2 = 0
+features.putScalar(0, 0, 0.0);
+features.putScalar(0, 1, 0.0);
+
+prediction = model.output(features).getDouble(0);
 ```
 
 ## A. Further Tutorials
