@@ -20,6 +20,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.slf4j.Logger;
+import java.io.IOException;
 ```
 
 ```java
@@ -34,11 +35,12 @@ features.putScalar(0, 0, 0.5);
 features.putScalar(0, 1, 0.5);
 
 prediction = model.output(features).getDouble(0);
-log.info(String.valueOf(prediction));
+output = String.format("x1 = %.2f; x2 = %.2f; prediction = %.2f", x1, x2, prediction);
+log.info(output);
 ```
 
 ```java
-2.710958069656044E-4
+INFORMATION: x1 = 0,50; x2 = 0,50; prediction = -0,00
 ```
 
 ## A. Further Tutorials
