@@ -10,7 +10,7 @@ Let's use the [Nine Points Demo](/markdown/demos/nine_points.md) to generate and
 (keras-gpu) C:\Users> ml demo nine-points train --environment-path=./ --model-file=model.h5
 ```
 
-Now we have a file named model.h5 in the main directory of the project. Let's now use the model with the help of the [dl4j](https://deeplearning4j.org/) framework:
+Now we have a file named model.h5 in the main directory of the project. Let's now use the model with the help of the [dl4j](https://deeplearning4j.org/) framework (see [ImportNinePoints.java](https://github.com/bjoern-hempel/keras-machine-learning-suite-java-import/blob/master/src/main/java/ImportNinePoints.java)):
 
 ```java
 import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
