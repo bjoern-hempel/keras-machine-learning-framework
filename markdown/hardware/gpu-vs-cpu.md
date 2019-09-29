@@ -41,6 +41,8 @@ Are these configurations correct? Continue? [Y/n] y
 
 ## Comparison
 
+The exact output of the mentioned commands can be viewed here: [Train, build and save the model](/markdown/image-classifier/train-build-save.md)
+
 |                                           | Preparation | Train       | Save model |
 |-------------------------------------------|-------------|-------------|------------|
 | NVIDIA GeForce GTX 1060 6GB (Desktop)     | 17.5051 s   | 303.5375 s  | 33.7900 s  |
