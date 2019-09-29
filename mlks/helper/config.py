@@ -129,6 +129,45 @@ class OptionDefaultChooser(click.Option):
         return self.default_options[command_path]
 
 
+class OptionDefaultChooserByParameter(click.Option):
+    """An option class that can defaults according to other parameters."""
+    parameters = {}
+
+    def __init__(self, *args, **kwargs):
+        self.default_options = kwargs.pop('default_options', None)
+        self.dependent = kwargs.pop('dependent', None)
+
+        super(OptionDefaultChooserByParameter, self).__init__(*args, **kwargs)
+
+    def process_value(self, ctx, value):
+        if value is not None:
+            return_value = self.type_cast_value(ctx, value)
+
+            if self.dependent is None:
+                 OptionDefaultChooserByParameter.parameters[self.name] = return_value
+
+            return return_value
+
+    def get_default(self, ctx):
+        # no choice given
+        if not isinstance(self.default_options, dict) or self.dependent is None:
+            OptionDefaultChooserByParameter.parameters[self.name] = self.default_options
+            return self.default_options
+
+        if self.dependent not in OptionDefaultChooserByParameter.parameters:
+            raise AssertionError('%s was not found' % self.dependent)
+
+        key = OptionDefaultChooserByParameter.parameters[self.dependent]
+
+        if key not in self.default_options:
+            if 'default' in self.default_options:
+                return self.default_options['default']
+            else:
+                return None
+
+        return self.default_options[key]
+
+
 class OptionConcat(click.Option):
     """An option class that can concat given other options."""
     parameters = {}

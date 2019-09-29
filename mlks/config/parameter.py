@@ -32,7 +32,7 @@
 
 import click
 
-from mlks.helper.config import Config, OptionDefaultChooser, OptionConcat
+from mlks.helper.config import Config, OptionDefaultChooser, OptionConcat, OptionDefaultChooserByParameter
 from mlks.helper.config import general_config_writer, \
     machine_learning_config_writer, \
     transfer_learning_config_writer, \
@@ -141,21 +141,75 @@ option_model_file = click.option(
 # Configure the transfer learning parameters here
 option_transfer_learning_model = click.option(
     '--transfer-learning-model', '-m',
+    cls=OptionDefaultChooserByParameter,
+    default_options='InceptionV3',
     expose_value=False,
     is_flag=False,
     help='Sets the transfer learning model.',
     callback=option_callback,
-    default='Resnet52',
-    type=click.Choice(['Resnet52'])
+    default=OptionDefaultChooserByParameter.get_default,
+    type=click.Choice(['Resnet52', 'InceptionV3'])
 )
 option_number_trainable_layers = click.option(
     '--number-trainable-layers',
+    cls=OptionDefaultChooserByParameter,
+    dependent='transfer_learning_model',
+    default_options={'default': 10, 'InceptionV3': 305},
     expose_value=False,
     is_flag=False,
     help='Sets the number trainable layers.',
     callback=option_callback,
-    default=3,
+    default=OptionDefaultChooserByParameter.get_default,
     type=int
+)
+option_input_dimension = click.option(
+    '--input-dimension',
+    cls=OptionDefaultChooserByParameter,
+    dependent='transfer_learning_model',
+    default_options={'default': 224, 'InceptionV3': 299},
+    expose_value=False,
+    is_flag=False,
+    help='Sets the size of input dimension.',
+    callback=option_callback,
+    default=OptionDefaultChooserByParameter.get_default,
+    type=int
+)
+option_dense_size = click.option(
+    '--dense-size',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the dense size.',
+    callback=option_callback,
+    default=512,
+    type=int
+)
+option_dropout = click.option(
+    '--dropout',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the dropout value.',
+    callback=option_callback,
+    default=0.5,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
+option_weights = click.option(
+    '--weights',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the database with which the weights are to be set (pre-trained transfer learning model).',
+    callback=option_callback,
+    default='imagenet',
+    type=click.Choice(['imagenet'])
+)
+option_data_path = click.option(
+    '--data-path',
+    expose_value=False,
+    is_flag=False,
+    help='The data path the model should learn from.',
+    callback=option_callback,
+    default=None,
+    required=True,
+    type=str
 )
 
 # some other parameters here
@@ -196,7 +250,12 @@ option_set_machine_learning = [
 ]
 option_set_transfer_learning = [
     option_transfer_learning_model,
-    option_number_trainable_layers
+    option_number_trainable_layers,
+    option_input_dimension,
+    option_dense_size,
+    option_dropout,
+    option_weights,
+    option_data_path
 ]
 option_set_nine_points = [
     option_x_0_1,
@@ -223,6 +282,11 @@ set_config_translator({
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,
     'number_trainable_layers': transfer_learning_config_writer,
+    'input_dimension': transfer_learning_config_writer,
+    'dense_size': transfer_learning_config_writer,
+    'dropout': transfer_learning_config_writer,
+    'weights': transfer_learning_config_writer,
+    'data_path': transfer_learning_config_writer,
 
     # some other configs
     'x': nine_points_config_writer,
