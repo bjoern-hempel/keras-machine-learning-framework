@@ -48,7 +48,7 @@ The exact output of the mentioned commands can be viewed here: [Train, build and
 | NVIDIA GeForce GTX 1060 6GB (Desktop)                   | 17.5051 s   | 303.5375 s  |  1.00 x        | 33.7900 s  |
 | NVIDIA GeForce GT 750M 2GB (Notebook)                   | 18.3966 s   | 2415.0062 s |  7.96 x        | 29.7956 s  |
 | Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) | 16.8698 s   | 9016.7745 s | 29.71 x        | 28.6788 s  |
-| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core)   |             |             |                |            |
+| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core)   | still running :'D |             |                |            |
 
 ## A. Further Tutorials
 
