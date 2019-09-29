@@ -25,6 +25,12 @@ This should work. But what happens when there are changes. E.g. that [0, 0] shou
 
 The indicative learning approach (and thus all artificial intelligence approaches) takes a different path: the learning process takes place through observation of the environment. A system is only given the start variables and the expected results from which the system is to learn. This is what makes machine learning so successful: Give a system the start variables and the expected results and let it learn! Learning by observing the environment!
 
+## Inductive vs deductive in graphical form
+
+<img src="/markdown/demos/deductive.png">
+
+<img src="/markdown/demos/inductive.png">
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
