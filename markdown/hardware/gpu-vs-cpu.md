@@ -2,7 +2,7 @@
 
 Performance comparison based on the Kaggle floral data set training: https://www.kaggle.com/alxmamaev/flowers-recognition
 
-InceptionV3 is used as the transfer learning model. The times were executed with the following standard command:
+InceptionV3 is used as the transfer learning model. The times were determined with the following standard command:
 
 ```bash
 (keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
