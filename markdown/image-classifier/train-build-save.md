@@ -6,7 +6,7 @@
 
 Data set based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition
 
-### NVIDIA GeForce GT 750M - 2GB
+### @NVIDIA GeForce GT 750M - 2GB
 
 ```bash
 (keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
@@ -67,6 +67,12 @@ Epoch 10/10
 --- time measurement for "fit": 2415.0062s ---
 
 --- time measurement for "save model": 29.7956s ---     
+```
+
+### @Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz
+
+```bash
+
 ```
 
 ## A. Further Tutorials
