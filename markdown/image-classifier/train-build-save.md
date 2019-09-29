@@ -4,10 +4,10 @@
 
 ## Train, build and save the model
 
-Data set based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition
+The data set `./data/raw/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains using the specified data folder `./data/raw/flowers` and writes the calculated model to `./data/inceptionv3-trained.h5`.
 
 ```bash
-(keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
+(keras-gpu) C:\Users> ml train --data-path=./data/raw/flowers --model-file=./data/inceptionv3-trained.h5
 Using TensorFlow backend.
 
 general
@@ -39,6 +39,8 @@ environment_path:         None
 
 Are these configurations correct? Continue? [Y/n] y
 ```
+
+A time overview and graphic can be found on the CPU/GPU comparison page: [GPU vs CPU](/markdown/hardware/gpu-vs-cpu.md)
 
 ### @NVIDIA GeForce GTX 1060 6GB (Desktop)
 
