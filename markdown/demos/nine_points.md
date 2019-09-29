@@ -27,7 +27,11 @@ The indicative learning approach (and thus all artificial intelligence approache
 
 ## Inductive vs deductive in graphical form
 
+In other words, in the deductive approach, the model is written by hand (algorithm) to obtain the output:
+
 <img src="/markdown/demos/deductive.png">
+
+In the indicative procedure, we also have given the output set for an input set. An algorithm tries to create a model from these two sets that comes closest to it. The automatically created model can be used to predict the output from a given input, as with the deductive method:
 
 <img src="/markdown/demos/inductive.png">
 
