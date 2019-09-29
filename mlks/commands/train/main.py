@@ -1,6 +1,6 @@
 # Machine Learning Keras Suite
 #
-# A Python submodule that prepares the given data structure.
+# A Python submodule that trains the given data structure.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
 # Date:   15.09.2019
