@@ -4,6 +4,8 @@
 
 ## Train, build and save the model
 
+Data set based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition
+
 ```bash
 (keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
 Using TensorFlow backend.
