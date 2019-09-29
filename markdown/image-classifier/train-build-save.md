@@ -4,7 +4,7 @@
 
 ## Train, build and save the model
 
-The data set `./data/raw/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains using the specified data folder `./data/raw/flowers` and writes the calculated model to `./data/inceptionv3-trained.h5`.
+The data set `./data/raw/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains the specified data folder `./data/raw/flowers` and writes the calculated model to `./data/inceptionv3-trained.h5`.
 
 ```bash
 (keras-gpu) C:\Users> ml train --data-path=./data/raw/flowers --model-file=./data/inceptionv3-trained.h5
