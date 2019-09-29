@@ -1,6 +1,47 @@
 # GPU vs CPU
 
-In progress..
+Performance comparison based on the Kaggle floral data set training: https://www.kaggle.com/alxmamaev/flowers-recognition
+
+InceptionV3 is used as the transfer learning model:
+
+```bash
+(keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
+
+Using TensorFlow backend.
+
+general
+-------
+verbose:                  False
+debug:                    False
+
+transfer_learning
+-----------------
+data_path:                ./Data/raw/flowers
+transfer_learning_model:  InceptionV3
+number_trainable_layers:  305
+input_dimension:          299
+dense_size:               512
+dropout:                  0.5
+weights:                  imagenet
+
+machine_learning
+----------------
+model_file:               ./Data/inceptionv3-trained.h5
+epochs:                   10
+learning_rate:            0.001
+activation_function:      tanh
+loss_function:            mean_squared_error
+optimizer:                adam
+metrics:                  accuracy
+environment_path:         None
+
+
+Are these configurations correct? Continue? [Y/n] y
+```
+
+## Comparison
+
+
 
 ## A. Further Tutorials
 
