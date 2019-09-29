@@ -6,8 +6,6 @@
 
 Data set based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition
 
-### @NVIDIA GeForce GT 750M - 2GB
-
 ```bash
 (keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
 Using TensorFlow backend.
@@ -40,7 +38,44 @@ environment_path:         None
 
 
 Are these configurations correct? Continue? [Y/n] y
+```
 
+### @NVIDIA GeForce GTX 1060 6GB (Desktop)
+
+```bash
+...
+Epoch 1/10
+135/135 [==============================] - 55s 405ms/step - loss: 0.8413 - acc: 0.6882
+Epoch 2/10
+135/135 [==============================] - 26s 195ms/step - loss: 0.5610 - acc: 0.7954
+Epoch 3/10
+135/135 [==============================] - 26s 190ms/step - loss: 0.4741 - acc: 0.8235
+Epoch 4/10
+135/135 [==============================] - 26s 190ms/step - loss: 0.4466 - acc: 0.8337
+Epoch 5/10
+135/135 [==============================] - 27s 196ms/step - loss: 0.3825 - acc: 0.8639
+Epoch 6/10
+135/135 [==============================] - 27s 202ms/step - loss: 0.4184 - acc: 0.8466
+Epoch 7/10
+135/135 [==============================] - 34s 252ms/step - loss: 0.3591 - acc: 0.8711
+Epoch 8/10
+135/135 [==============================] - 26s 192ms/step - loss: 0.3598 - acc: 0.8771
+Epoch 9/10
+135/135 [==============================] - 29s 213ms/step - loss: 0.3258 - acc: 0.8762
+Epoch 10/10
+135/135 [==============================] - 28s 207ms/step - loss: 0.3448 - acc: 0.8758
+
+--- time measurement for "preparations": 17.5051s ---
+
+--- time measurement for "fit": 303.5375s ---
+
+--- time measurement for "save model": 33.7900s ---
+```
+
+### @NVIDIA GeForce GT 750M 2GB (Notebook)
+
+```bash
+...
 Epoch 1/10
 135/135 [==============================] - 233s 2s/step - loss: 0.8411 - acc: 0.6910
 Epoch 2/10
