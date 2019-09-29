@@ -41,7 +41,12 @@ Are these configurations correct? Continue? [Y/n] y
 
 ## Comparison
 
-
+|                                           | Preparation | Train      | Save model |
+|-------------------------------------------|-------------|------------|------------|
+| NVIDIA GeForce GTX 1060 6GB (Desktop)     | 17.5051s    | 303.5375s  | 33.7900s   |
+| NVIDIA GeForce GT 750M 2GB (Notebook)     | 18.3966s    | 2415.0062s | 29.7956s   |
+| Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz |             |            |            |
+| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz   |             |            |            |
 
 ## A. Further Tutorials
 
