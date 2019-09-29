@@ -141,7 +141,7 @@ Epoch 10/10
 ### Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz
 
 ```bash
-
+still running :'D
 ```
 
 ## A. Further Tutorials
