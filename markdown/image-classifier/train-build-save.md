@@ -108,6 +108,8 @@ Epoch 10/10
 
 ### @Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS
 
+Computer went into sleep mode in the 6th epoch:
+
 ```bash
 Epoch 1/10
 135/135 [==============================] - 677s 5s/step - loss: 0.8181 - acc: 0.6961
