@@ -45,7 +45,7 @@ The exact output of the mentioned commands can be viewed here: [Train, build and
 
 |                                                                   | Preparation | Train       | Train (Factor) | Save model |
 |-------------------------------------------------------------------|-------------|-------------|----------------|------------|
-| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5s    | 303.5s 00:05:03.5   |  1.00x        | 33.7900s   |
+| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5s    | 303.5s 00:05:03.5   |  1.00x        | 33.8s   |
 | NVIDIA GeForce GT 750M 2GB (Notebook) - Windows                   | 18.4s    | 2415.0s 00:40:15.0  |  7.96x        | 29.8s   |
 | Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS   | 17.5s    | 17110.1s 04:45:10.1 | 56.37x        | 131.7s  |
 | Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows | 16.9s    | 9016.8s 02:30:16.8  | 29.71x        | 28.7s   |
