@@ -106,7 +106,13 @@ Epoch 10/10
 --- time measurement for "save model": 29.7956s ---     
 ```
 
-### @Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz
+### @Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS
+
+```bash
+
+```
+
+### @Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows
 
 ```bash
 ...
@@ -138,10 +144,35 @@ Epoch 10/10
 --- time measurement for "save model": 28.6788s ---
 ```
 
-### Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz
+### Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows
 
 ```bash
-still running :'D
+...
+135/135 [==============================] - 2586s 19s/step - loss: 0.8425 - acc: 0.6845
+Epoch 2/10
+135/135 [==============================] - 2544s 19s/step - loss: 0.5630 - acc: 0.7936
+Epoch 3/10
+135/135 [==============================] - 2511s 19s/step - loss: 0.4737 - acc: 0.8254
+Epoch 4/10
+135/135 [==============================] - 2488s 18s/step - loss: 0.4387 - acc: 0.8361
+Epoch 5/10
+135/135 [==============================] - 2516s 19s/step - loss: 0.3825 - acc: 0.8637
+Epoch 6/10
+135/135 [==============================] - 2515s 19s/step - loss: 0.4168 - acc: 0.8427
+Epoch 7/10
+135/135 [==============================] - 2512s 19s/step - loss: 0.3707 - acc: 0.8700
+Epoch 8/10
+135/135 [==============================] - 2517s 19s/step - loss: 0.3599 - acc: 0.8713
+Epoch 9/10
+135/135 [==============================] - 2492s 18s/step - loss: 0.3429 - acc: 0.8701
+Epoch 10/10
+135/135 [==============================] - 2502s 19s/step - loss: 0.3526 - acc: 0.8739
+
+--- time measurement for "preparations": 16.2699s ---
+
+--- time measurement for "fit": 25183.4061s ---
+
+--- time measurement for "save model": 28.3226s ---
 ```
 
 ## A. Further Tutorials
