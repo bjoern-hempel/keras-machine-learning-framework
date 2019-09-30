@@ -201,6 +201,50 @@ Epoch 10/10
 --- time measurement for "save model": 28.3226s ---
 ```
 
+## JSON config format
+
+```json
+{
+    "environment": {
+        "classes": [
+            "daisy",
+            "dandelion",
+            "rose",
+            "sunflower",
+            "tulip"
+        ],
+        "measurement": {
+            "fit": 12345,
+            "preparation": 987
+        }
+    },
+    "general": {
+        "debug": false,
+        "verbose": true
+    },
+    "machine_learning": {
+        "activation_function": "tanh",
+        "environment_path": null,
+        "epochs": 10,
+        "learning_rate": 0.001,
+        "loss_function": "mean_squared_error",
+        "metrics": "accuracy",
+        "model_config": "./Data/inceptionv3-trained.json",
+        "model_file": "./Data/inceptionv3-trained.h5",
+        "optimizer": "adam"
+    },
+    "transfer_learning": {
+        "data_path": "./Data/raw/flowers",
+        "dense_size": 512,
+        "dropout": 0.5,
+        "input_dimension": 299,
+        "number_trainable_layers": 305,
+        "transfer_learning_model": "InceptionV3",
+        "weights": "imagenet"
+    }
+}
+```
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
