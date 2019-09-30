@@ -1,8 +1,8 @@
 # GPU vs CPU
 
-Performance comparison based on the Kaggle floral data set training: https://www.kaggle.com/alxmamaev/flowers-recognition
+Performance comparison based on the Kaggle floral data set training: https://www.kaggle.com/alxmamaev/flowers-recognition This picture set consists of 5 classes with about 4350 training pictures.
 
-InceptionV3 is used as the transfer learning model. The times were determined with the following standard command:
+The training time includes 10 training epochs, whereby InceptionV3 was used as a transfer learning model. The times were determined with the following standard command:
 
 ```bash
 (keras-gpu) C:\Users> ml train --data-path=./Data/raw/flowers --model-file=./Data/inceptionv3-trained.h5
