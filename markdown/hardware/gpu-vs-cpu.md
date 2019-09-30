@@ -45,11 +45,11 @@ The exact output of the mentioned commands can be viewed here: [Train, build and
 
 |                                                         | Preparation | Train       | Train (Factor) | Save model |
 |---------------------------------------------------------|-------------|-------------|----------------|------------|
-| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5051s    | 303.5375s   |  1.00x         | 33.7900s   |
+| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5051s    | 303.5375s 00:05:03.5375   |  1.00x         | 33.7900s   |
 | NVIDIA GeForce GT 750M 2GB (Notebook) - Windows                   | 18.3966s    | 2415.0062s  |  7.96x         | 29.7956s   |
 | Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS   | still running :'D    |             |                |            |
 | Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows | 16.8698s    | 9016.7745s  | 29.71x         | 28.6788s   |
-| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows   | 16.2699s    | 25183.4061s | 82.97x         | 28.3226s   |
+| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows   | 16.2699s    | 25183.4061s 06:59:43.4061 | 82.97x         | 28.3226s   |
 
 ## A. Further Tutorials
 
