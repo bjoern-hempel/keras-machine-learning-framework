@@ -32,6 +32,7 @@
 
 import click
 import os
+import json
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.applications.inception_v3 import InceptionV3, preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
@@ -128,6 +129,9 @@ class Train(Command):
             shuffle=True
         )
 
+        # set current classes to config class
+        self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
+
         # compile the model
         model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -148,3 +152,14 @@ class Train(Command):
             self.start_timer('save model')
             model.save(model_path)
             self.finish_timer('save model')
+
+        # save config data from model to import within dl4j
+        model_config = self.config.getml('model_config')
+        if model_config is not None:
+            #self.config.set_measurement('fit', 12345)
+            #self.config.set_measurement('preparation', 987)
+
+            if self.config.get('verbose'):
+                click.echo('Write config file to %s' % model_config)
+            with open(model_config, 'w') as json_file:
+                json.dump(self.config.get_dict(), json_file, sort_keys=True, indent=4, separators=(',', ': '))

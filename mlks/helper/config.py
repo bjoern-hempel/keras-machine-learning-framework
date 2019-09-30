@@ -31,6 +31,8 @@
 # SOFTWARE.
 
 import click
+import json
+import os
 from typing import Dict
 
 # some general variables
@@ -57,16 +59,34 @@ class Config(object):
             }
         }
 
-    def set(self, name, value, namespace='general'):
+    def set(self, name, value, namespace='general', flip=False, flip_as_array=False):
         if namespace not in self.configs:
             self.configs[namespace] = {}
 
+        if flip:
+            if isinstance(value, dict):
+                if flip_as_array:
+                    array = []
+                    for k in value.items():
+                        array.append(k[0])
+                    value = array
+                else:
+                    value = dict((v, k) for k, v in value.items())
+
         self.configs[namespace][name] = value
 
-    def get(self, name, namespace='general'):
+        if name == 'model_file':
+            if value is None:
+                self.configs[namespace]['model_config'] = None
+            else:
+                self.configs[namespace]['model_config'] = os.path.splitext(value)[0] + '.json'
+
+    def get(self, name, namespace='general', force=False):
         if namespace not in self.configs:
-            raise AssertionError('Namespace "%s" is not available' % namespace)
-            return None
+            if force:
+                self.configs[namespace] = {}
+            else:
+                raise AssertionError('Namespace "%s" is not available' % namespace)
 
         if name not in self.configs[namespace]:
             return None
@@ -78,6 +98,33 @@ class Config(object):
 
     def gettl(self, name):
         return self.get(name, 'transfer_learning')
+
+    def set_environment(self, name, value, flip=False, flip_as_array=False):
+        self.set(name, value, 'environment', flip=flip, flip_as_array=flip_as_array)
+
+    def get_environment(self, name):
+        return self.get(name, 'environment')
+
+    def set_measurement(self, name, value):
+        measurements = self.get_environment('measurement')
+
+        if measurements is None:
+            measurements = {}
+
+        measurements[name] = value
+
+        self.set_environment('measurement', measurements)
+
+    def get_dict(self):
+        dictionary = {}
+
+        for config in self.configs:
+            dictionary[config] = self.configs[config]
+
+        return dictionary
+
+    def get_json(self):
+        return json.dumps(self.get_dict(), sort_keys=True, indent=4, separators=(',', ': '))
 
 
 class OptionDefaultChooser(click.Option):
