@@ -43,13 +43,13 @@ Are these configurations correct? Continue? [Y/n] y
 
 The exact output of the mentioned commands can be viewed here: [Train, build and save the model](/markdown/image-classifier/train-build-save.md)
 
-|                                                         | Preparation | Train       | Train (Factor) | Save model |
-|---------------------------------------------------------|-------------|-------------|----------------|------------|
-| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5051s    | 303.5375s 00:05:03.5375   |  1.00x         | 33.7900s   |
-| NVIDIA GeForce GT 750M 2GB (Notebook) - Windows                   | 18.3966s    | 2415.0062s 00:40:15.0062s |  7.96x         | 29.7956s   |
-| Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS   | 17.5051s    | 17110.0726s 04:45:10.0726   | 56.37x        | 131.6849s  |
-| Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows | 16.8698s    | 9016.7745s 02:30:16.7745  | 29.71x         | 28.6788s   |
-| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows   | 16.2699s    | 25183.4061s 06:59:43.4061 | 82.97x         | 28.3226s   |
+|                                                                   | Preparation | Train       | Train (Factor) | Save model |
+|-------------------------------------------------------------------|-------------|-------------|----------------|------------|
+| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5s    | 303.5s 00:05:03.5   |  1.00x        | 33.7900s   |
+| NVIDIA GeForce GT 750M 2GB (Notebook) - Windows                   | 18.4s    | 2415.0s 00:40:15.0  |  7.96x        | 29.8s   |
+| Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS   | 17.5s    | 17110.1s 04:45:10.1 | 56.37x        | 131.7s  |
+| Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows | 16.9s    | 9016.8s 02:30:16.8  | 29.71x        | 28.7s   |
+| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows   | 16.3s    | 25183.4s 06:59:43.4 | 82.97x        | 28.3s   |
 
 ## A. Further Tutorials
 
