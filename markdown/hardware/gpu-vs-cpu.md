@@ -27,6 +27,7 @@ weights:                  imagenet
 machine_learning
 ----------------
 model_file:               ./Data/inceptionv3-trained.h5
+model_config:             ./Data/inceptionv3-trained.json
 epochs:                   10
 learning_rate:            0.001
 activation_function:      tanh
