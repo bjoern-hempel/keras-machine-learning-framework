@@ -28,6 +28,7 @@ weights:                  imagenet
 machine_learning
 ----------------
 model_file:               ./Data/inceptionv3-trained.h5
+model_config:             ./Data/inceptionv3-trained.json
 epochs:                   10
 learning_rate:            0.001
 activation_function:      tanh
@@ -108,35 +109,33 @@ Epoch 10/10
 
 ### @Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS
 
-Computer went into sleep mode in the 6th epoch:
-
 ```bash
 Epoch 1/10
-135/135 [==============================] - 677s 5s/step - loss: 0.8181 - acc: 0.6961
+135/135 [==============================] - 659s 5s/step - loss: 0.8175 - acc: 0.6991
 Epoch 2/10
-135/135 [==============================] - 569s 4s/step - loss: 0.5629 - acc: 0.7945 
+135/135 [==============================] - 641s 5s/step - loss: 0.5490 - acc: 0.7976
 Epoch 3/10
-135/135 [==============================] - 582s 4s/step - loss: 0.4735 - acc: 0.8273
+135/135 [==============================] - 639s 5s/step - loss: 0.4698 - acc: 0.8268
 Epoch 4/10
-135/135 [==============================] - 571s 4s/step - loss: 0.4528 - acc: 0.8360
+135/135 [==============================] - 640s 5s/step - loss: 0.4399 - acc: 0.8417
 Epoch 5/10
-135/135 [==============================] - 590s 4s/step - loss: 0.3859 - acc: 0.8625
+135/135 [==============================] - 636s 5s/step - loss: 0.3821 - acc: 0.8625
 Epoch 6/10
-135/135 [==============================] - 880s 7s/step - loss: 0.4115 - acc: 0.8492
+135/135 [==============================] - 635s 5s/step - loss: 0.3999 - acc: 0.8526
 Epoch 7/10
-135/135 [==============================] - 4587s 34s/step - loss: 0.3646 - acc: 0.8692
+135/135 [==============================] - 636s 5s/step - loss: 0.3524 - acc: 0.8750
 Epoch 8/10
-135/135 [==============================] - 2497s 18s/step - loss: 0.3517 - acc: 0.8743
+135/135 [==============================] - 638s 5s/step - loss: 0.3414 - acc: 0.8812
 Epoch 9/10
-135/135 [==============================] - 2427s 18s/step - loss: 0.3304 - acc: 0.8753
+135/135 [==============================] - 632s 5s/step - loss: 0.3261 - acc: 0.8829
 Epoch 10/10
-135/135 [==============================] - 3729s 28s/step - loss: 0.3412 - acc: 0.8772
+135/135 [==============================] - 638s 5s/step - loss: 0.3445 - acc: 0.8774
 
---- time measurement for "preparations": 17.4988s ---
+--- time measurement for "preparations": 19.0787s ---
 
---- time measurement for "fit": 17110.0726s ---
+--- time measurement for "fit": 6393.7390s ---
 
---- time measurement for "save model": 131.6849s ---
+--- time measurement for "save model": 41.3459s ---
 ```
 
 ### @Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows
@@ -200,6 +199,50 @@ Epoch 10/10
 --- time measurement for "fit": 25183.4061s ---
 
 --- time measurement for "save model": 28.3226s ---
+```
+
+## JSON config format
+
+```json
+{
+    "environment": {
+        "classes": [
+            "daisy",
+            "dandelion",
+            "rose",
+            "sunflower",
+            "tulip"
+        ],
+        "measurement": {
+            "fit": 12345,
+            "preparation": 987
+        }
+    },
+    "general": {
+        "debug": false,
+        "verbose": true
+    },
+    "machine_learning": {
+        "activation_function": "tanh",
+        "environment_path": null,
+        "epochs": 10,
+        "learning_rate": 0.001,
+        "loss_function": "mean_squared_error",
+        "metrics": "accuracy",
+        "model_config": "./Data/inceptionv3-trained.json",
+        "model_file": "./Data/inceptionv3-trained.h5",
+        "optimizer": "adam"
+    },
+    "transfer_learning": {
+        "data_path": "./Data/raw/flowers",
+        "dense_size": 512,
+        "dropout": 0.5,
+        "input_dimension": 299,
+        "number_trainable_layers": 305,
+        "transfer_learning_model": "InceptionV3",
+        "weights": "imagenet"
+    }
+}
 ```
 
 ## A. Further Tutorials
