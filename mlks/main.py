@@ -34,6 +34,7 @@ import click
 
 from mlks.commands.info.main import Info as CliInfo
 from mlks.commands.prepare.main import Prepare as CliPrepare
+from mlks.commands.evaluate.main import Evaluate as CliEvaluate
 from mlks.commands.train.main import Train as CliTrain
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
@@ -79,6 +80,16 @@ def cli_train(config):
 
     train_class = CliTrain(config)
     train_class.do()
+
+
+@cli.command(name='evaluate')
+@add_options(option_set_general)
+@pass_config
+def cli_evaluate(config):
+    """This subcommand evaluate a classifier."""
+
+    prepare_class = CliEvaluate(config)
+    prepare_class.do()
 
 
 @cli.group(name='demo')
