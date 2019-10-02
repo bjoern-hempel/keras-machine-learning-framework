@@ -37,7 +37,8 @@ import sys
 
 class Command:
 
-    def __init__(self):
+    def __init__(self, config):
+        self.config = config
         self.start_time = {}
         self.finish_time = {}
         pass

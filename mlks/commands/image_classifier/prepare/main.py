@@ -36,10 +36,12 @@ import click
 class Prepare:
 
     def __init__(self, config, string, repeat, out):
-        self.config = config
         self.string = string
         self.repeat = repeat
         self.out = out
+
+        # initialize the parent class
+        super().__init__(config)
 
     def do(self):
         if self.config.get('verbose'):

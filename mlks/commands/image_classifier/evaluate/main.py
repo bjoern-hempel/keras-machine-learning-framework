@@ -31,16 +31,15 @@
 # SOFTWARE.
 
 import click
-from mlks.commands.main import Command
+from mlks.commands.image_classifier.main import ImageClassifier
 
 
-class Evaluate(Command):
+class Evaluate(ImageClassifier):
 
     def __init__(self, config):
-        self.config = config
 
         # initialize the parent class
-        super().__init__()
+        super().__init__(config)
 
     def do(self):
         if not self.is_config_correct(self.config):

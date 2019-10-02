@@ -44,14 +44,12 @@ from mlks.helper.filesystem import get_number_of_folders_and_files
 class Train(Command):
 
     def __init__(self, config):
-        self.config = config
-
         self.tl_models = {
             'InceptionV3': Train.get_tl_inceptionv3,
         }
 
         # initialize the parent class
-        super().__init__()
+        super().__init__(config)
 
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')

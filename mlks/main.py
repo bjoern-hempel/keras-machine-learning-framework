@@ -33,9 +33,9 @@
 import click
 
 from mlks.commands.info.main import Info as CliInfo
-from mlks.commands.prepare.main import Prepare as CliPrepare
-from mlks.commands.evaluate.main import Evaluate as CliEvaluate
-from mlks.commands.train.main import Train as CliTrain
+from mlks.commands.image_classifier.prepare.main import Prepare as CliPrepare
+from mlks.commands.image_classifier.evaluate.main import Evaluate as CliEvaluate
+from mlks.commands.image_classifier.train.main import Train as CliTrain
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron as CliDemoXorPerceptron
