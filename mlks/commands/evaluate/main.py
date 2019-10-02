@@ -31,17 +31,26 @@
 # SOFTWARE.
 
 import click
+from mlks.commands.main import Command
 
 
-class Evaluate:
+class Evaluate(Command):
 
     def __init__(self, config):
         self.config = config
 
+        # initialize the parent class
+        super().__init__()
+
     def do(self):
+        if not self.is_config_correct(self.config):
+            return
+
         if self.config.get('verbose'):
             click.echo('verbose')
         else:
             click.echo('not verbose')
+
+
 
         click.echo('Evaluate it!')

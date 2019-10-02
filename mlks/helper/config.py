@@ -231,7 +231,7 @@ class OptionConcat(click.Option):
                 OptionConcat.parameters[self.name] = return_value
 
             if self.concat in OptionConcat.parameters and OptionConcat.parameters[self.concat] is not None:
-                return OptionConcat.parameters[self.concat] + return_value
+                return OptionConcat.parameters[self.concat] + '/' + return_value
 
             return return_value
 
@@ -267,11 +267,21 @@ def transfer_learning_config_writer(ctx, param, value):
     return value
 
 
+def data_config_writer(ctx, param, value):
+    config = ctx.ensure_object(Config)
+
+    if debug:
+        click.echo('{object: <30}: {name: <30} {value: <30}'.format(object='Config.data', name=param.name,
+                                                                    value=value))
+    config.set(param.name, value, 'data')
+    return value
+
+
 def nine_points_config_writer(ctx, param, value):
     config = ctx.ensure_object(Config)
 
     if debug:
-        click.echo('{object: <30}: {name: <30} {value: <30}'.format(object='Config.transfer_learning', name=param.name,
+        click.echo('{object: <30}: {name: <30} {value: <30}'.format(object='Config.nine_points', name=param.name,
                                                                     value=value))
     config.set(param.name, value, 'nine_points')
     return value
@@ -280,7 +290,8 @@ def nine_points_config_writer(ctx, param, value):
 def option_callback(ctx, param, value):
     """This function stores the passed values in the configuration classes before returning them."""
 
-    return config_translator[param.name](ctx, param, value)
+    translator = config_translator[param.name]
+    return translator(ctx, param, value)
 
 
 def add_options(options):

@@ -46,6 +46,8 @@ from mlks.config.parameter import pass_config
 from mlks.config.parameter import option_set_general, \
     option_set_machine_learning, \
     option_set_transfer_learning, \
+    option_set_train_process, \
+    option_set_evaluation_process, \
     option_set_nine_points
 
 
@@ -73,6 +75,7 @@ def cli_prepare(config, string, repeat, out):
 @cli.command(name='train')
 @add_options(option_set_transfer_learning)
 @add_options(option_set_machine_learning)
+@add_options(option_set_train_process)
 @add_options(option_set_general)
 @pass_config
 def cli_train(config):
@@ -83,6 +86,7 @@ def cli_train(config):
 
 
 @cli.command(name='evaluate')
+@add_options(option_set_evaluation_process)
 @add_options(option_set_general)
 @pass_config
 def cli_evaluate(config):

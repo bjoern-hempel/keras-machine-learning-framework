@@ -36,6 +36,7 @@ from mlks.helper.config import Config, OptionDefaultChooser, OptionConcat, Optio
 from mlks.helper.config import general_config_writer, \
     machine_learning_config_writer, \
     transfer_learning_config_writer, \
+    data_config_writer, \
     nine_points_config_writer
 from mlks.helper.config import option_callback
 from mlks.helper.config import set_config_translator
@@ -115,28 +116,6 @@ option_metrics = click.option(
     default='accuracy',
     type=click.Choice(['accuracy'])
 )
-option_environment_path = click.option(
-    '--environment-path',
-    cls=OptionConcat,
-    expose_value=False,
-    is_flag=False,
-    help='Sets the environment path (used for example by --model-file).',
-    callback=option_callback,
-    default=None,
-    type=click.Path(exists=True)
-)
-option_model_file = click.option(
-    '--model-file',
-    cls=OptionConcat,
-    expose_value=False,
-    is_flag=False,
-    help='Sets the model file where it should be saved or loaded.',
-    callback=option_callback,
-    concat='environment_path',
-    default=None,
-    type=str
-)
-
 
 # Configure the transfer learning parameters here
 option_transfer_learning_model = click.option(
@@ -201,12 +180,50 @@ option_weights = click.option(
     default='imagenet',
     type=click.Choice(['imagenet'])
 )
+
+# Configure the data parameter here
+option_environment_path = click.option(
+    '--environment-path',
+    cls=OptionConcat,
+    expose_value=False,
+    is_flag=False,
+    help='Sets the environment path (used for example by --model-file).',
+    callback=option_callback,
+    default=None,
+    type=click.Path(exists=True)
+)
+option_model_file = click.option(
+    '--model-file',
+    cls=OptionConcat,
+    expose_value=False,
+    is_flag=False,
+    help='Sets the model file where it should be saved or loaded.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=True,
+    type=str
+)
 option_data_path = click.option(
     '--data-path',
+    cls=OptionConcat,
     expose_value=False,
     is_flag=False,
     help='The data path the model should learn from.',
     callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=True,
+    type=str
+)
+option_evaluation_file = click.option(
+    '--evaluation-file',
+    cls=OptionConcat,
+    expose_value=False,
+    is_flag=False,
+    help='The evaluation file which should be predicted.',
+    callback=option_callback,
+    concat='environment_path',
     default=None,
     required=True,
     type=str
@@ -244,9 +261,7 @@ option_set_machine_learning = [
     option_activation_function,
     option_loss_function,
     option_optimizer,
-    option_metrics,
-    option_environment_path,
-    option_model_file
+    option_metrics
 ]
 option_set_transfer_learning = [
     option_transfer_learning_model,
@@ -255,7 +270,16 @@ option_set_transfer_learning = [
     option_dense_size,
     option_dropout,
     option_weights,
+]
+option_set_train_process = [
+    option_environment_path,
+    option_model_file,
     option_data_path
+]
+option_set_evaluation_process = [
+    option_environment_path,
+    option_model_file,
+    option_evaluation_file
 ]
 option_set_nine_points = [
     option_x_0_1,
@@ -276,8 +300,6 @@ set_config_translator({
     'loss_function': machine_learning_config_writer,
     'optimizer': machine_learning_config_writer,
     'metrics': machine_learning_config_writer,
-    'environment_path': machine_learning_config_writer,
-    'model_file': machine_learning_config_writer,
 
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,
@@ -286,7 +308,12 @@ set_config_translator({
     'dense_size': transfer_learning_config_writer,
     'dropout': transfer_learning_config_writer,
     'weights': transfer_learning_config_writer,
-    'data_path': transfer_learning_config_writer,
+
+    # data (files and folders)
+    'environment_path': data_config_writer,
+    'model_file': data_config_writer,
+    'data_path': data_config_writer,
+    'evaluation_file': data_config_writer,
 
     # some other configs
     'x': nine_points_config_writer,
