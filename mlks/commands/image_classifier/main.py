@@ -30,7 +30,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import click
 from mlks.commands.main import Command
+from keras.applications.inception_v3 import InceptionV3
 
 
 class ImageClassifier(Command):
@@ -41,3 +43,19 @@ class ImageClassifier(Command):
         # initialize the parent class
         super().__init__(config)
         pass
+
+    def get_tl_model(self):
+        transfer_learning_model = self.config.gettl('transfer_learning_model')
+
+        if transfer_learning_model not in self.tl_models:
+            raise AssertionError('Model "%s" was not assigned within tl_models.' % transfer_learning_model)
+
+        if self.config.get('verbose'):
+            click.echo('Use tl model "%s".' % transfer_learning_model)
+
+        return self.tl_models[transfer_learning_model](self)
+
+    def get_tl_inceptionv3(self):
+        dim = self.config.gettl('input_dimension')
+        weights = self.config.gettl('weights')
+        return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))

@@ -34,14 +34,14 @@ import click
 import os
 import json
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
-from keras.applications.inception_v3 import InceptionV3, preprocess_input
+from keras.applications.inception_v3 import preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
-from mlks.commands.main import Command
+from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import get_number_of_folders_and_files
 
 
-class Train(Command):
+class Train(ImageClassifier):
 
     def __init__(self, config):
         self.tl_models = {
@@ -50,22 +50,6 @@ class Train(Command):
 
         # initialize the parent class
         super().__init__(config)
-
-    def get_tl_model(self):
-        transfer_learning_model = self.config.gettl('transfer_learning_model')
-
-        if transfer_learning_model not in self.tl_models:
-            raise AssertionError('Model "%s" was not assigned within tl_models.' % transfer_learning_model)
-
-        if self.config.get('verbose'):
-            click.echo('Use tl model "%s".' % transfer_learning_model)
-
-        return self.tl_models[transfer_learning_model](self)
-
-    def get_tl_inceptionv3(self):
-        dim = self.config.gettl('input_dimension')
-        weights = self.config.gettl('weights')
-        return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
     def do(self):
         if not self.is_config_correct(self.config):
@@ -76,7 +60,7 @@ class Train(Command):
         dense_size = self.config.gettl('dense_size')
         dropout = self.config.gettl('dropout')
         number_trainable = self.config.gettl('number_trainable_layers')
-        data_path = self.config.gettl('data_path')
+        data_path = self.config.getData('data_path')
 
         # check folder
         if not os.path.isdir(data_path):
@@ -145,14 +129,14 @@ class Train(Command):
         self.finish_timer('fit')
 
         # save the model to import within dl4j
-        model_path = self.config.getml('model_file')
+        model_path = self.config.getData('model_file')
         if model_path is not None:
             self.start_timer('save model')
             model.save(model_path)
             self.finish_timer('save model')
 
         # save config data from model to import within dl4j
-        model_config = self.config.getml('model_config')
+        model_config = self.config.getData('model_config')
         if model_config is not None:
             #self.config.set_measurement('fit', 12345)
             #self.config.set_measurement('preparation', 987)

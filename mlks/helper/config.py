@@ -99,6 +99,9 @@ class Config(object):
     def gettl(self, name):
         return self.get(name, 'transfer_learning')
 
+    def getData(self, name):
+        return self.get(name, 'data')
+
     def set_environment(self, name, value, flip=False, flip_as_array=False):
         self.set(name, value, 'environment', flip=flip, flip_as_array=flip_as_array)
 
