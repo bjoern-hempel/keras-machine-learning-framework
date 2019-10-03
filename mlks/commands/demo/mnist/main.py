@@ -44,10 +44,9 @@ from mlks.commands.main import Command
 class Mnist(Command):
 
     def __init__(self, config):
-        self.config = config
 
         # initialize the parent class
-        super().__init__()
+        super().__init__(config)
 
     def do(self):
         if not self.is_config_correct(self.config):

@@ -33,7 +33,6 @@
 import click
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
-from mlks.helper.log import disable_warnings
 
 
 class Evaluate(ImageClassifier):
@@ -44,13 +43,6 @@ class Evaluate(ImageClassifier):
         super().__init__(config)
 
     def do(self):
-
-        # disable warnings
-        disable_warnings()
-
-        # check config
-        if not self.is_config_correct(self.config):
-            return
 
         # load config file
         self.start_timer('load json config file')

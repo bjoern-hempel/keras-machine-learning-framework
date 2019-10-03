@@ -34,18 +34,31 @@ import click
 import time
 import sys
 
+from mlks.helper.log import disable_warnings
+
 
 class Command:
 
     def __init__(self, config):
         self.config = config
+
+        # disable warnings
+        disable_warnings()
+
+        # check config
+        if not self.is_config_correct(self.config):
+            sys.exit()
+
+        # start timer
         self.start_time = {}
         self.finish_time = {}
-        pass
+        self.start_timer('overall')
 
     def __del__(self):
-        for name in self.start_time:
-            self.print_timer(name)
+        if hasattr(self, 'start_time'):
+            self.finish_timer('overall')
+            for name in self.start_time:
+                self.print_timer(name)
 
     def start_timer(self, name='default'):
         self.start_time[name] = time.time()

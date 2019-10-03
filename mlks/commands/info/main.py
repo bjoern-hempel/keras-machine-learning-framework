@@ -40,6 +40,7 @@ import re
 class Info:
 
     def __init__(self, config):
+        # save config file
         self.config = config
 
     def print(self):

@@ -38,10 +38,10 @@ from mlks.commands.demo.nine_points.main import NinePoints
 class Execute(NinePoints):
 
     def __init__(self, config):
+
+        # initialize the parent class
         super().__init__(config)
 
     def do(self):
-        if not self.is_config_correct(self.config):
-            return
 
         click.echo('Execute the nine points demo! ;)')

@@ -36,6 +36,8 @@ import click
 class Prepare:
 
     def __init__(self, config, string, repeat, out):
+
+        # some properties
         self.string = string
         self.repeat = repeat
         self.out = out

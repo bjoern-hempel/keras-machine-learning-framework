@@ -31,15 +31,15 @@
 # SOFTWARE.
 
 import click
-import os
-import json
+
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.log import disable_warnings
 
 
 class Train(ImageClassifier):
 
     def __init__(self, config):
+
+        # some properties
         self.tl_models = {
             'InceptionV3': Train.get_tl_inceptionv3,
         }
@@ -48,13 +48,6 @@ class Train(ImageClassifier):
         super().__init__(config)
 
     def do(self):
-
-        # disable warnings
-        disable_warnings()
-
-        # check config
-        if not self.is_config_correct(self.config):
-            return
 
         # preparations
         self.start_timer('preparations')

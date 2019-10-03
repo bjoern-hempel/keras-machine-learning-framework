@@ -33,7 +33,6 @@
 import click
 
 from mlks.commands.demo.nine_points.main import NinePoints
-from mlks.helper.log import disable_warnings
 
 from keras.layers import Dense
 from keras.models import Sequential
@@ -48,6 +47,8 @@ np.random.seed(1337)
 class Train(NinePoints):
 
     def __init__(self, config):
+
+        # initialize the parent class
         super().__init__(config)
 
     def create_model(self, number_input_nodes, number_inner_nodes, number_output_nodes):
@@ -65,13 +66,6 @@ class Train(NinePoints):
         return model
 
     def do(self):
-
-        # disable warnings
-        disable_warnings()
-
-        # check config
-        if not self.is_config_correct(self.config):
-            return
 
         # network settings
         number_input_nodes = 2
