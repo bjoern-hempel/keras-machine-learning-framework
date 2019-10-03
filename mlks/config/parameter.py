@@ -32,7 +32,7 @@
 
 import click
 
-from mlks.helper.config import Config, OptionDefaultChooser, OptionConcat, OptionDefaultChooserByParameter
+from mlks.helper.config import Config, OptionDefaultChooserByCommand, OptionConcat, OptionDefaultChooserByParameter
 from mlks.helper.config import general_config_writer, \
     machine_learning_config_writer, \
     transfer_learning_config_writer, \
@@ -62,13 +62,13 @@ option_debug = click.option(
 # Configure the machine learning parameters here
 option_epochs = click.option(
     '--epochs', '-e',
-    cls=OptionDefaultChooser,
+    cls=OptionDefaultChooserByCommand,
     default_options={'default': 10, 'demo_nine_points_train': 10000, 'demo_mnist': 20},
     expose_value=False,
     is_flag=False,
     help='Sets the number of epochs.',
     callback=option_callback,
-    default=OptionDefaultChooser.get_default,
+    default=OptionDefaultChooserByCommand.get_default,
     type=int
 )
 option_learning_rate = click.option(

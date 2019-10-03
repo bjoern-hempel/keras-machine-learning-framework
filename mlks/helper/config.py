@@ -166,7 +166,7 @@ class Config(object):
         self.set_dict(data)
 
 
-class OptionDefaultChooser(click.Option):
+class OptionDefaultChooserByCommand(click.Option):
     """A class that can different default options for different commands."""
     command_path = {}
 
@@ -179,7 +179,7 @@ class OptionDefaultChooser(click.Option):
             raise AssertionError('Attribute default_options must be a dict object.')
 
         # call all parent option classes
-        super(OptionDefaultChooser, self).__init__(*args, **kwargs)
+        super(OptionDefaultChooserByCommand, self).__init__(*args, **kwargs)
 
     @staticmethod
     def get_default_dict(kwargs):
@@ -200,12 +200,12 @@ class OptionDefaultChooser(click.Option):
         return {'default': None}
 
     def get_default(self, ctx):
-        if self.name not in OptionDefaultChooser.command_path:
-            OptionDefaultChooser.command_path[self.name] = ctx.info_name
+        if self.name not in OptionDefaultChooserByCommand.command_path:
+            OptionDefaultChooserByCommand.command_path[self.name] = ctx.info_name
         else:
-            OptionDefaultChooser.command_path[self.name] += '_' + ctx.info_name.replace('-', '_')
+            OptionDefaultChooserByCommand.command_path[self.name] += '_' + ctx.info_name.replace('-', '_')
 
-        command_path = OptionDefaultChooser.command_path[self.name]
+        command_path = OptionDefaultChooserByCommand.command_path[self.name]
         if command_path not in self.default_options:
             if 'default' in self.default_options:
                 return self.default_options['default']
