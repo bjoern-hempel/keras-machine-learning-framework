@@ -42,7 +42,7 @@ Are these configurations correct? Continue? [Y/n] y
 
 ## Comparison
 
-The exact output of the mentioned commands can be viewed here: [Train, build and save the model](/markdown/image-classifier/train-build-save.md)
+The exact output of the mentioned commands can be viewed here: [Train, build and save the model](/markdown/image-classification/train-build-save.md)
 
 |                                                                   | Preparation | Train       | Train (Factor) | Save model |
 |-------------------------------------------------------------------|-------------|-------------|----------------|------------|
