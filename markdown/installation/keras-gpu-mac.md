@@ -76,8 +76,8 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ```bash
 (base) user$ conda install -c anaconda git
-(base) user$ git clone https://github.com/bjoern-hempel/keras-machine-learning-suite.git
-(base) user$ cd machine-learning-keras-suite
+(base) user$ git clone https://github.com/bjoern-hempel/keras-machine-learning-framework.git
+(base) user$ cd machine-learning-keras-framework
 ```
 
 ### Test the GPU environment
@@ -91,7 +91,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 #### Build the command line execution script
 
 ```bash
-(keras-gpu) user$ cd machine-learning-keras-suite
+(keras-gpu) user$ cd machine-learning-keras-framework
 (keras-gpu) user$ pip install --editable .
 ...
 (keras-gpu) user$ which ml
@@ -131,7 +131,7 @@ Information: You are running this script with GPU support.
 #### Build the command line execution script
 
 ```bash
-(keras) user$ cd machine-learning-keras-suite
+(keras) user$ cd machine-learning-keras-framework
 (keras) user$ pip install --editable .
 ...
 (keras) user$ where ml

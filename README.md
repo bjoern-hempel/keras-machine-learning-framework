@@ -1,6 +1,6 @@
 # Keras Machine Learning Suite
 
-This suite prepares, trains and validates an image classifier.
+This machine learning framework prepares, trains and validates an image classifier.
 
 ## Install Keras with GPU Support (Preparation)
 
