@@ -33,20 +33,41 @@
 import click
 
 
-class OptionDefaultChooserByCommand(click.Option):
+class OptionHelper(click.Option):
     """A class that can different default options for different commands."""
     command_path = {}
+    parameters = {}
 
     def __init__(self, *args, **kwargs):
-        # add default_options parameter (allow them) and save the value
+        # add option type
+        self.option_type = kwargs.pop('option_type', 'default')
+
+        # check option type
+        if self.option_type not in ['default', 'default_by_command', 'default_by_parameter', 'concat_parameters']:
+            raise AssertionError('Unknown option type "%s"' % self.option_type)
+
+        # call init function
+        getattr(self, 'init_' + self.option_type)(kwargs)
+
+        # call all parent option classes
+        super(OptionHelper, self).__init__(*args, **kwargs)
+
+    def init_default(self, kwargs):
+        pass
+
+    def init_default_by_command(self, kwargs):
         self.default_options = kwargs.pop('default_options', self.get_default_dict(kwargs))
 
         # check type of argument default_options
         if not isinstance(self.default_options, dict):
             raise AssertionError('Attribute default_options must be a dict object.')
 
-        # call all parent option classes
-        super(OptionDefaultChooserByCommand, self).__init__(*args, **kwargs)
+    def init_default_by_parameter(self, kwargs):
+        self.default_options = kwargs.pop('default_options', None)
+        self.dependent = kwargs.pop('dependent', None)
+
+    def init_concat_parameters(self, kwargs):
+        self.concat = kwargs.pop('concat', None)
 
     @staticmethod
     def get_default_dict(kwargs):
@@ -67,12 +88,15 @@ class OptionDefaultChooserByCommand(click.Option):
         return {'default': None}
 
     def get_default(self, ctx):
-        if self.name not in OptionDefaultChooserByCommand.command_path:
-            OptionDefaultChooserByCommand.command_path[self.name] = ctx.info_name
-        else:
-            OptionDefaultChooserByCommand.command_path[self.name] += '_' + ctx.info_name.replace('-', '_')
+        return getattr(self, 'get_default_' + self.option_type)(ctx)
 
-        command_path = OptionDefaultChooserByCommand.command_path[self.name]
+    def get_default_default_by_command(self, ctx):
+        if self.name not in OptionHelper.command_path:
+            OptionHelper.command_path[self.name] = ctx.info_name
+        else:
+            OptionHelper.command_path[self.name] += '_' + ctx.info_name.replace('-', '_')
+
+        command_path = OptionHelper.command_path[self.name]
         if command_path not in self.default_options:
             if 'default' in self.default_options:
                 return self.default_options['default']
@@ -81,36 +105,16 @@ class OptionDefaultChooserByCommand(click.Option):
 
         return self.default_options[command_path]
 
-
-class OptionDefaultChooserByParameter(click.Option):
-    """An option class that can defaults according to other parameters."""
-    parameters = {}
-
-    def __init__(self, *args, **kwargs):
-        self.default_options = kwargs.pop('default_options', None)
-        self.dependent = kwargs.pop('dependent', None)
-
-        super(OptionDefaultChooserByParameter, self).__init__(*args, **kwargs)
-
-    def process_value(self, ctx, value):
-        if value is not None:
-            return_value = self.type_cast_value(ctx, value)
-
-            if self.dependent is None:
-                 OptionDefaultChooserByParameter.parameters[self.name] = return_value
-
-            return return_value
-
-    def get_default(self, ctx):
+    def get_default_default_by_parameter(self, ctx):
         # no choice given
         if not isinstance(self.default_options, dict) or self.dependent is None:
-            OptionDefaultChooserByParameter.parameters[self.name] = self.default_options
+            OptionHelper.parameters[self.name] = self.default_options
             return self.default_options
 
-        if self.dependent not in OptionDefaultChooserByParameter.parameters:
+        if self.dependent not in OptionHelper.parameters:
             raise AssertionError('%s was not found' % self.dependent)
 
-        key = OptionDefaultChooserByParameter.parameters[self.dependent]
+        key = OptionHelper.parameters[self.dependent]
 
         if key not in self.default_options:
             if 'default' in self.default_options:
@@ -120,23 +124,32 @@ class OptionDefaultChooserByParameter(click.Option):
 
         return self.default_options[key]
 
-
-class OptionConcat(click.Option):
-    """An option class that can concat given other options."""
-    parameters = {}
-
-    def __init__(self, *args, **kwargs):
-        self.concat = kwargs.pop('concat', None)
-        super(OptionConcat, self).__init__(*args, **kwargs)
+    def get_default_concat_parameters(self, ctx):
+        return super(OptionHelper, self).get_default(ctx)
 
     def process_value(self, ctx, value):
+        return getattr(self, 'process_value_' + self.option_type)(ctx, value)
+
+    def process_value_default_by_command(self, ctx, value):
+        return super(OptionHelper, self).process_value(ctx, value)
+
+    def process_value_default_by_parameter(self, ctx, value):
+        if value is not None:
+            return_value = self.type_cast_value(ctx, value)
+
+            if self.dependent is None:
+                 OptionHelper.parameters[self.name] = return_value
+
+            return return_value
+
+    def process_value_concat_parameters(self, ctx, value):
         if value is not None:
             return_value = self.type_cast_value(ctx, value)
 
             if self.concat is None:
-                OptionConcat.parameters[self.name] = return_value
+                OptionHelper.parameters[self.name] = return_value
 
-            if self.concat in OptionConcat.parameters and OptionConcat.parameters[self.concat] is not None:
-                return OptionConcat.parameters[self.concat] + '/' + return_value
+            if self.concat in OptionHelper.parameters and OptionHelper.parameters[self.concat] is not None:
+                return OptionHelper.parameters[self.concat] + '/' + return_value
 
             return return_value

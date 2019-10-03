@@ -38,7 +38,7 @@ from mlks.helper.config import general_config_writer, \
     transfer_learning_config_writer, \
     data_config_writer, \
     nine_points_config_writer
-from mlks.helper.option import OptionDefaultChooserByCommand, OptionConcat, OptionDefaultChooserByParameter
+from mlks.helper.option import OptionHelper
 from mlks.helper.config import option_callback
 from mlks.helper.config import set_config_translator
 
@@ -63,13 +63,14 @@ option_debug = click.option(
 # Configure the machine learning parameters here
 option_epochs = click.option(
     '--epochs', '-e',
-    cls=OptionDefaultChooserByCommand,
-    default_options={'default': 10, 'demo_nine_points_train': 10000, 'demo_mnist': 20},
+    cls=OptionHelper,
+    default_options={'default': 10, 'demo_nine_points_train': 10000, 'demo_mnist': 20, 'train': 20},
+    option_type='default_by_command',
     expose_value=False,
     is_flag=False,
     help='Sets the number of epochs.',
     callback=option_callback,
-    default=OptionDefaultChooserByCommand.get_default,
+    default=OptionHelper.get_default,
     type=int
 )
 option_learning_rate = click.option(
@@ -121,37 +122,40 @@ option_metrics = click.option(
 # Configure the transfer learning parameters here
 option_transfer_learning_model = click.option(
     '--transfer-learning-model', '-m',
-    cls=OptionDefaultChooserByParameter,
+    cls=OptionHelper,
+    option_type='default_by_parameter',
     default_options='InceptionV3',
     expose_value=False,
     is_flag=False,
     help='Sets the transfer learning model.',
     callback=option_callback,
-    default=OptionDefaultChooserByParameter.get_default,
+    default=OptionHelper.get_default,
     type=click.Choice(['Resnet52', 'InceptionV3'])
 )
 option_number_trainable_layers = click.option(
     '--number-trainable-layers',
-    cls=OptionDefaultChooserByParameter,
+    cls=OptionHelper,
+    option_type='default_by_parameter',
     dependent='transfer_learning_model',
     default_options={'default': 10, 'InceptionV3': 305},
     expose_value=False,
     is_flag=False,
     help='Sets the number trainable layers.',
     callback=option_callback,
-    default=OptionDefaultChooserByParameter.get_default,
+    default=OptionHelper.get_default,
     type=int
 )
 option_input_dimension = click.option(
     '--input-dimension',
-    cls=OptionDefaultChooserByParameter,
+    cls=OptionHelper,
+    option_type='default_by_parameter',
     dependent='transfer_learning_model',
     default_options={'default': 224, 'InceptionV3': 299},
     expose_value=False,
     is_flag=False,
     help='Sets the size of input dimension.',
     callback=option_callback,
-    default=OptionDefaultChooserByParameter.get_default,
+    default=OptionHelper.get_default,
     type=int
 )
 option_dense_size = click.option(
@@ -185,7 +189,8 @@ option_weights = click.option(
 # Configure the data parameter here
 option_environment_path = click.option(
     '--environment-path',
-    cls=OptionConcat,
+    cls=OptionHelper,
+    option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
     help='Sets the environment path (used for example by --model-file, --config-file, --evaluation-file or '
@@ -196,7 +201,8 @@ option_environment_path = click.option(
 )
 option_model_file = click.option(
     '--model-file',
-    cls=OptionConcat,
+    cls=OptionHelper,
+    option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
     help='Sets the model file where it should be saved or loaded.',
@@ -208,7 +214,8 @@ option_model_file = click.option(
 )
 option_config_file = click.option(
     '--config-file',
-    cls=OptionConcat,
+    cls=OptionHelper,
+    option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
     help='Sets the json config file.',
@@ -220,7 +227,8 @@ option_config_file = click.option(
 )
 option_data_path = click.option(
     '--data-path',
-    cls=OptionConcat,
+    cls=OptionHelper,
+    option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
     help='The data path the model should learn from.',
@@ -232,7 +240,8 @@ option_data_path = click.option(
 )
 option_evaluation_file = click.option(
     '--evaluation-file',
-    cls=OptionConcat,
+    cls=OptionHelper,
+    option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
     help='The evaluation file which should be predicted.',
