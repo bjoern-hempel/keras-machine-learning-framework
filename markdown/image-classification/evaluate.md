@@ -4,6 +4,10 @@
 
 ## Evaluate the model
 
+Example based on this image: [Sunflower](https://www.flickr.com/photos/erikslife/36073451125)
+
+
+
 ```bash
 (keras-gpu) C:\Users> ml evaluate --verbose --config-file=./data/inceptionv3-trained.json --evaluation-file=./data/eval/sunflower/1.jpg
 Using TensorFlow backend.
