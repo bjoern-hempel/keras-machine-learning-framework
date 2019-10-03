@@ -50,6 +50,4 @@ class Evaluate(ImageClassifier):
         else:
             click.echo('not verbose')
 
-
-
         click.echo('Evaluate it!')

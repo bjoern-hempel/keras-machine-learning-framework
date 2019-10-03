@@ -33,6 +33,10 @@
 import click
 from mlks.commands.main import Command
 from keras.applications.inception_v3 import InceptionV3
+from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
+from keras.applications.inception_v3 import preprocess_input
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Model
 
 
 class ImageClassifier(Command):
@@ -59,3 +63,51 @@ class ImageClassifier(Command):
         dim = self.config.gettl('input_dimension')
         weights = self.config.gettl('weights')
         return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))
+
+    def get_model(self, categories, number_trainable):
+        dense_size = self.config.gettl('dense_size')
+        dropout = self.config.gettl('dropout')
+
+        # get the transfer learning model
+        base_model = self.get_tl_model()
+
+        x = base_model.output
+        x = GlobalAveragePooling2D()(x)
+        x = Dense(dense_size, activation='relu')(x)
+        x = Dropout(dropout)(x)
+
+        if categories == 2:
+            probabilities = Dense(1)(x)
+            predictions = Activation('sigmoid')(probabilities)
+        else:
+            probabilities = Dense(categories)(x)
+            predictions = Activation('softmax')(probabilities)
+
+        model = Model(inputs=base_model.input, outputs=predictions)
+
+        # set the first number_trainable layers of the network to be non-trainable
+        for layer in model.layers[:number_trainable]:
+            layer.trainable = False
+        for layer in model.layers[number_trainable:]:
+            layer.trainable = True
+
+        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+        return model
+
+    def get_train_generator(self):
+        dim = self.config.gettl('input_dimension')
+        data_path = self.config.getData('data_path')
+
+        # build the train generator
+        train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+        train_generator = train_datagen.flow_from_directory(
+            data_path,
+            target_size=(dim, dim),
+            color_mode='rgb',
+            batch_size=32,
+            class_mode='categorical',
+            shuffle=True
+        )
+
+        return train_generator

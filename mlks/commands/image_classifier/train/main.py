@@ -33,10 +33,6 @@
 import click
 import os
 import json
-from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
-from keras.applications.inception_v3 import preprocess_input
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Model
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import get_number_of_folders_and_files
 
@@ -56,9 +52,6 @@ class Train(ImageClassifier):
             return
 
         # get some needed configuration parameters
-        dim = self.config.gettl('input_dimension')
-        dense_size = self.config.gettl('dense_size')
-        dropout = self.config.gettl('dropout')
         number_trainable = self.config.gettl('number_trainable_layers')
         data_path = self.config.getData('data_path')
 
@@ -69,56 +62,19 @@ class Train(ImageClassifier):
         data_path_info = get_number_of_folders_and_files(data_path)
         categories = data_path_info['folders']
 
-        # timer
+        # timer - preparations
         self.start_timer('preparations')
-
-        # get the transfer learning model
-        base_model = self.get_tl_model()
-
-        x = base_model.output
-        x = GlobalAveragePooling2D()(x)
-        x = Dense(dense_size, activation='relu')(x)
-        x = Dropout(dropout)(x)
-
-        if categories == 2:
-            probabilities = Dense(1)(x)
-            predictions = Activation('sigmoid')(probabilities)
-        else:
-            probabilities = Dense(categories)(x)
-            predictions = Activation('softmax')(probabilities)
-
-        model = Model(inputs=base_model.input, outputs=predictions)
-
-        # set the first number_trainable layers of the network to be non-trainable
-        for layer in model.layers[:number_trainable]:
-            layer.trainable = False
-        for layer in model.layers[number_trainable:]:
-            layer.trainable = True
+        model = self.get_model(categories, number_trainable)
 
         # prints the used layers of the current model
         if self.config.get('verbose'):
             for i, layer in enumerate(model.layers):
                 print(i, ': ', layer.name, '(trainable)' if layer.trainable else '(not trainable)')
 
-        # build the train generator
-        train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
-        train_generator = train_datagen.flow_from_directory(
-            data_path,
-            target_size=(dim, dim),
-            color_mode='rgb',
-            batch_size=32,
-            class_mode='categorical',
-            shuffle=True
-        )
-
-        # set current classes to config class
+        train_generator = self.get_train_generator()
         self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
-
-        # compile the model
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-        # timer
         self.finish_timer('preparations')
+        # timer - preparations
 
         # train the model
         step_size_train = train_generator.n // train_generator.batch_size
