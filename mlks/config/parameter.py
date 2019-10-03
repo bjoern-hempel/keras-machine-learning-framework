@@ -32,12 +32,13 @@
 
 import click
 
-from mlks.helper.config import Config, OptionDefaultChooserByCommand, OptionConcat, OptionDefaultChooserByParameter
+from mlks.helper.config import Config
 from mlks.helper.config import general_config_writer, \
     machine_learning_config_writer, \
     transfer_learning_config_writer, \
     data_config_writer, \
     nine_points_config_writer
+from mlks.helper.option import OptionDefaultChooserByCommand, OptionConcat, OptionDefaultChooserByParameter
 from mlks.helper.config import option_callback
 from mlks.helper.config import set_config_translator
 
