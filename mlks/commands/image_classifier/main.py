@@ -52,7 +52,7 @@ class ImageClassifier(Command):
 
     def get_categories(self):
         # get some needed configuration parameters
-        data_path = self.config.getData('data_path')
+        data_path = self.config.get_data('data_path')
 
         # check folder
         if not os.path.isdir(data_path):
@@ -113,7 +113,7 @@ class ImageClassifier(Command):
 
     def get_train_generator(self):
         dim = self.config.gettl('input_dimension')
-        data_path = self.config.getData('data_path')
+        data_path = self.config.get_data('data_path')
 
         # build the train generator
         train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)

@@ -75,20 +75,20 @@ class Train(ImageClassifier):
         self.finish_timer('fit')
 
         # save the model to import within dl4j
-        model_file = self.config.getData('model_file')
+        model_file = self.config.get_data('model_file')
         if model_file is not None:
             self.start_timer('save model')
             model.save(model_file)
             self.finish_timer('save model')
 
         # save config data from model to import within dl4j
-        model_config = self.config.getData('model_config')
-        if model_config is not None:
+        config_file = self.config.get_data('config_file')
+        if config_file is not None:
             self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
             #self.config.set_measurement('fit', 12345)
             #self.config.set_measurement('preparation', 987)
 
             if self.config.get('verbose'):
-                click.echo('Write config file to %s' % model_config)
-            with open(model_config, 'w') as json_file:
+                click.echo('Write config file to %s' % config_file)
+            with open(config_file, 'w') as json_file:
                 json.dump(self.config.get_dict(), json_file, sort_keys=True, indent=4, separators=(',', ': '))

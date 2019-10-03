@@ -77,9 +77,9 @@ class Config(object):
 
         if name == 'model_file':
             if value is None:
-                self.configs[namespace]['model_config'] = None
+                self.configs[namespace]['config_file'] = None
             else:
-                self.configs[namespace]['model_config'] = os.path.splitext(value)[0] + '.json'
+                self.configs[namespace]['config_file'] = os.path.splitext(value)[0] + '.json'
 
     def get(self, name, namespace='general', force=False):
         if namespace not in self.configs:
@@ -99,7 +99,7 @@ class Config(object):
     def gettl(self, name):
         return self.get(name, 'transfer_learning')
 
-    def getData(self, name):
+    def get_data(self, name):
         return self.get(name, 'data')
 
     def set_environment(self, name, value, flip=False, flip_as_array=False):
@@ -118,6 +118,16 @@ class Config(object):
 
         self.set_environment('measurement', measurements)
 
+    def set_dict(self, data):
+        for config, values in data.items():
+            if config in self.configs and isinstance(values, dict):
+                # merge config
+                for key, value in values.items():
+                    if key not in self.configs[config]:
+                        self.configs[config][key] = value
+            else:
+                self.configs[config] = values
+
     def get_dict(self):
         dictionary = {}
 
@@ -128,6 +138,20 @@ class Config(object):
 
     def get_json(self):
         return json.dumps(self.get_dict(), sort_keys=True, indent=4, separators=(',', ': '))
+
+    def load_json_from_config_file(self, config_file):
+        click.echo(config_file)
+        if not os.path.exists(config_file) or not os.path.isfile(config_file):
+            raise AssertionError('Model config "%s" does not exist.' % config_file)
+
+        # parse json file
+        with open(config_file) as json_file:
+            data = json.load(json_file)
+
+        self.load_json(data)
+
+    def load_json(self, data):
+        self.set_dict(data)
 
 
 class OptionDefaultChooser(click.Option):

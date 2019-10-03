@@ -45,9 +45,14 @@ class Evaluate(ImageClassifier):
         if not self.is_config_correct(self.config):
             return
 
-        if self.config.get('verbose'):
-            click.echo('verbose')
-        else:
-            click.echo('not verbose')
+        # load config file
+        self.config.load_json_from_config_file(self.config.get_data('config_file'))
 
-        click.echo('Evaluate it!')
+        if not self.is_config_correct(self.config):
+            return
+
+        model_file = self.config.get_data('model_file')
+        click.echo(model_file)
+
+        click.echo('oki')
+
