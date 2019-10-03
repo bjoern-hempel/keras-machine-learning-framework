@@ -4,7 +4,69 @@
 
 ## Evaluate the model
 
-...
+Example based on this image: [Sunflower - Flickr](https://www.flickr.com/photos/erikslife/36073451125)
+
+<img src="/markdown/image-classification/sunflower.jpg">
+
+```bash
+(keras-gpu) C:\Users> ml evaluate --verbose --config-file=./data/inceptionv3-trained.json --evaluation-file=./data/eval/sunflower/1.jpg
+Using TensorFlow backend.
+
+general
+-------
+verbose:                  True
+debug:                    False
+
+data
+----
+environment_path:         F:/data
+config_file:              F:/data/inceptionv3-trained.json
+evaluation_file:          F:/data/eval/sunflower/1.jpg
+
+
+Are these configurations correct? Continue? [Y/n] y
+
+
+
+-> Start "load json config file".
+<- Finished "load json config file".
+
+
+-> Start "load model file".
+<- Finished "load model file".
+
+
+-> Start "load image file".
+<- Finished "load image file".
+
+
+-> Start "predict image file".
+<- Finished "predict image file".
+
+
+classes
+-------
+daisy:                8.53%
+dandelion:            0.00%
+rose:                 0.00%
+sunflower:           91.47%
+tulip:                0.00%
+-------
+
+
+predicted class:
+----------------
+predicted: sunflower
+----------------
+
+--- time measurement for "load json config file": 0.0010s ---
+
+--- time measurement for "load model file": 19.4119s ---
+
+--- time measurement for "load image file": 0.0353s ---
+
+--- time measurement for "predict image file": 4.0958s ---
+```
 
 ## A. Further Tutorials
 
