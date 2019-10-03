@@ -34,7 +34,6 @@ import click
 import os
 import json
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import get_number_of_folders_and_files
 
 
 class Train(ImageClassifier):
@@ -51,49 +50,41 @@ class Train(ImageClassifier):
         if not self.is_config_correct(self.config):
             return
 
-        # get some needed configuration parameters
-        number_trainable = self.config.gettl('number_trainable_layers')
-        data_path = self.config.getData('data_path')
-
-        # check folder
-        if not os.path.isdir(data_path):
-            raise AssertionError('"%s" does not exists or seems not to be a folder.')
-
-        data_path_info = get_number_of_folders_and_files(data_path)
-        categories = data_path_info['folders']
-
-        # timer - preparations
+        # preparations
         self.start_timer('preparations')
-        model = self.get_model(categories, number_trainable)
+        model = self.get_model()
+        train_generator = self.get_train_generator()
+        self.finish_timer('preparations')
 
-        # prints the used layers of the current model
+        # prints out some informations
         if self.config.get('verbose'):
+            click.echo('LAYERS')
+            click.echo('------')
             for i, layer in enumerate(model.layers):
                 print(i, ': ', layer.name, '(trainable)' if layer.trainable else '(not trainable)')
+            click.echo('------\n\n')
 
-        train_generator = self.get_train_generator()
-        self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
-        self.finish_timer('preparations')
-        # timer - preparations
+            click.echo('CLASSES')
+            click.echo('-------')
+            click.echo(train_generator.class_indices)
+            click.echo('-------\n\n')
 
         # train the model
-        step_size_train = train_generator.n // train_generator.batch_size
         self.start_timer('fit')
-        model.fit_generator(generator=train_generator,
-                            steps_per_epoch=step_size_train,
-                            epochs=10, verbose=1)
+        self.train(model, train_generator)
         self.finish_timer('fit')
 
         # save the model to import within dl4j
-        model_path = self.config.getData('model_file')
-        if model_path is not None:
+        model_file = self.config.getData('model_file')
+        if model_file is not None:
             self.start_timer('save model')
-            model.save(model_path)
+            model.save(model_file)
             self.finish_timer('save model')
 
         # save config data from model to import within dl4j
         model_config = self.config.getData('model_config')
         if model_config is not None:
+            self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
             #self.config.set_measurement('fit', 12345)
             #self.config.set_measurement('preparation', 987)
 

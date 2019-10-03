@@ -31,12 +31,14 @@
 # SOFTWARE.
 
 import click
+import os
 from mlks.commands.main import Command
 from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.applications.inception_v3 import preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
+from mlks.helper.filesystem import get_number_of_folders_and_files
 
 
 class ImageClassifier(Command):
@@ -47,6 +49,18 @@ class ImageClassifier(Command):
         # initialize the parent class
         super().__init__(config)
         pass
+
+    def get_categories(self):
+        # get some needed configuration parameters
+        data_path = self.config.getData('data_path')
+
+        # check folder
+        if not os.path.isdir(data_path):
+            raise AssertionError('"%s" does not exists or seems not to be a folder.')
+
+        data_path_info = get_number_of_folders_and_files(data_path)
+
+        return data_path_info['folders']
 
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')
@@ -64,9 +78,11 @@ class ImageClassifier(Command):
         weights = self.config.gettl('weights')
         return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
-    def get_model(self, categories, number_trainable):
+    def get_model(self):
+        number_trainable = self.config.gettl('number_trainable_layers')
         dense_size = self.config.gettl('dense_size')
         dropout = self.config.gettl('dropout')
+        categories = self.get_categories()
 
         # get the transfer learning model
         base_model = self.get_tl_model()
@@ -111,3 +127,15 @@ class ImageClassifier(Command):
         )
 
         return train_generator
+
+    def train(self, model, train_generator):
+        step_size_train = train_generator.n // train_generator.batch_size
+        epochs = self.config.getml('epochs')
+        verbose = 1 if self.config.get('verbose') else 0
+
+        model.fit_generator(
+            generator=train_generator,
+            steps_per_epoch=step_size_train,
+            epochs=epochs,
+            verbose=verbose
+        )
