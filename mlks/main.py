@@ -33,9 +33,9 @@
 import click
 
 from mlks.commands.info.main import Info as CliInfo
-from mlks.commands.image_classifier.prepare.main import Prepare as CliPrepare
-from mlks.commands.image_classifier.evaluate.main import Evaluate as CliEvaluate
-from mlks.commands.image_classifier.train.main import Train as CliTrain
+from mlks.commands.image_classifier.prepare.main import Prepare as CliImageClassifierPrepare
+from mlks.commands.image_classifier.evaluate.main import Evaluate as CliImageClassifierEvaluate
+from mlks.commands.image_classifier.train.main import Train as CliImageClassifierTrain
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron as CliDemoXorPerceptron
@@ -68,7 +68,7 @@ def cli():
 def cli_prepare(config, string, repeat, out):
     """This subcommand trains a classifier."""
 
-    prepare_class = CliPrepare(config, string, repeat, out)
+    prepare_class = CliImageClassifierPrepare(config, string, repeat, out)
     prepare_class.do()
 
 
@@ -81,7 +81,7 @@ def cli_prepare(config, string, repeat, out):
 def cli_train(config):
     """This subcommand trains a classifier."""
 
-    train_class = CliTrain(config)
+    train_class = CliImageClassifierTrain(config)
     train_class.do()
 
 
@@ -92,7 +92,7 @@ def cli_train(config):
 def cli_evaluate(config):
     """This subcommand evaluate a classifier."""
 
-    prepare_class = CliEvaluate(config)
+    prepare_class = CliImageClassifierEvaluate(config)
     prepare_class.do()
 
 
