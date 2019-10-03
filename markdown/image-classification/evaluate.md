@@ -4,7 +4,7 @@
 
 ## Evaluate the model
 
-Example based on this image: [Sunflower](https://www.flickr.com/photos/erikslife/36073451125)
+Example based on this image: [Sunflower - Flickr](https://www.flickr.com/photos/erikslife/36073451125)
 
 
 
