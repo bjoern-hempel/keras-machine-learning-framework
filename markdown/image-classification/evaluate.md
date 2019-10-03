@@ -9,7 +9,8 @@ Example based on this image: [Sunflower - Flickr](https://www.flickr.com/photos/
 <img src="/markdown/image-classification/sunflower.jpg">
 
 ```bash
-(keras-gpu) C:\Users> ml evaluate --verbose --config-file=./data/inceptionv3-trained.json --evaluation-file=./data/eval/sunflower/1.jpg
+(keras-gpu) C:\Users> ml evaluate --verbose --config-file=./data/inceptionv3-trained.json \
+--evaluation-file=./data/eval/sunflower/1.jpg
 Using TensorFlow backend.
 
 general
