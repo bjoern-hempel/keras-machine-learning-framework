@@ -69,26 +69,10 @@ class OptionHelper(click.Option):
     def init_concat_parameters(self, kwargs):
         self.concat = kwargs.pop('concat', None)
 
-    @staticmethod
-    def get_default_dict(kwargs):
-        type_argument = kwargs['type']
-
-        # given type is an integer
-        if type_argument == int:
-            return {'default': 0}
-
-        # given type is a float
-        if type_argument == float:
-            return {'default': 0.0}
-
-        # given type is a sring
-        if type_argument == str:
-            return {'default': ''}
-
-        return {'default': None}
-
     def get_default(self, ctx):
-        return getattr(self, 'get_default_' + self.option_type)(ctx)
+        processed_value = getattr(self, 'get_default_' + self.option_type)(ctx)
+        OptionHelper.parameters[self.name] = processed_value
+        return processed_value
 
     def get_default_default_by_command(self, ctx):
         if self.name not in OptionHelper.command_path:
@@ -128,7 +112,9 @@ class OptionHelper(click.Option):
         return super(OptionHelper, self).get_default(ctx)
 
     def process_value(self, ctx, value):
-        return getattr(self, 'process_value_' + self.option_type)(ctx, value)
+        processed_value = getattr(self, 'process_value_' + self.option_type)(ctx, value)
+        OptionHelper.parameters[self.name] = processed_value
+        return processed_value
 
     def process_value_default_by_command(self, ctx, value):
         return super(OptionHelper, self).process_value(ctx, value)
@@ -153,3 +139,21 @@ class OptionHelper(click.Option):
                 return OptionHelper.parameters[self.concat] + '/' + return_value
 
             return return_value
+
+    @staticmethod
+    def get_default_dict(kwargs):
+        type_argument = kwargs['type']
+
+        # given type is an integer
+        if type_argument == int:
+            return {'default': 0}
+
+        # given type is a float
+        if type_argument == float:
+            return {'default': 0.0}
+
+        # given type is a sring
+        if type_argument == str:
+            return {'default': ''}
+
+        return {'default': None}

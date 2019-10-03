@@ -52,3 +52,13 @@ def check_if_file_exists(file_path):
         raise AssertionError('File "%s" does not exists.' % file_path)
 
     return True
+
+
+def add_file_extension(file, extension, before=False, replace=True):
+    if before:
+        return os.path.splitext(file)[0] + '.' + extension + os.path.splitext(file)[1]
+
+    if replace:
+        return os.path.splitext(file)[0] + '.' + extension
+    else:
+        return file + '.' + extension
