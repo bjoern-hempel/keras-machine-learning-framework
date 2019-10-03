@@ -45,3 +45,9 @@ def get_number_of_folders_and_files(path):
         'files': files,
         'folders': folders
     }
+
+def check_if_file_exists(file_path):
+    if not os.path.exists(file_path) or not os.path.isfile(file_path):
+        raise AssertionError('File "%s" does not exists.' % file_path)
+
+    return True

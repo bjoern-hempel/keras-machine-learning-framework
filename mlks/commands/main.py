@@ -51,11 +51,17 @@ class Command:
         self.start_time[name] = time.time()
         self.finish_time[name] = 0
 
+        if self.config.get('verbose'):
+            print('\n\n-> Start "%s".' % name)
+
     def finish_timer(self, name='default'):
         if name not in self.start_time:
             raise AssertionError('You have not started the timer "%s" yet.' % name)
 
         self.finish_time[name] = time.time()
+
+        if self.config.get('verbose'):
+            print('<- Finished "%s".' % name)
 
     def print_timer(self, name='default'):
         if name not in self.start_time:

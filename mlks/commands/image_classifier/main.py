@@ -32,12 +32,16 @@
 
 import click
 import os
+import tensorflow as tf
 from mlks.commands.main import Command
 from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.applications.inception_v3 import preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
+from keras.models import load_model
+from keras.preprocessing.image import load_img, img_to_array
+from keras.applications.mobilenet import preprocess_input
 from mlks.helper.filesystem import get_number_of_folders_and_files
 
 
@@ -49,6 +53,14 @@ class ImageClassifier(Command):
         # initialize the parent class
         super().__init__(config)
         pass
+
+    @staticmethod
+    def disable_warnings():
+        # disable the standard logging outputs
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+        # disable deprecated warnings
+        tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
     def get_categories(self):
         # get some needed configuration parameters
@@ -77,6 +89,24 @@ class ImageClassifier(Command):
         dim = self.config.gettl('input_dimension')
         weights = self.config.gettl('weights')
         return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))
+
+    def compile_model(self, model):
+        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    def load_model(self, model_file):
+        model = load_model(model_file)
+        self.compile_model(model)
+
+        return model
+
+    def load_image(self, path):
+        image = load_img(
+            path,
+            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
+        )
+        image = img_to_array(image)
+        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+        return preprocess_input(image)
 
     def get_model(self):
         number_trainable = self.config.gettl('number_trainable_layers')
@@ -107,7 +137,8 @@ class ImageClassifier(Command):
         for layer in model.layers[number_trainable:]:
             layer.trainable = True
 
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        # compile model
+        self.compile_model(model)
 
         return model
 

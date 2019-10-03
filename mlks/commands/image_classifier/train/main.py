@@ -47,6 +47,11 @@ class Train(ImageClassifier):
         super().__init__(config)
 
     def do(self):
+
+        # disable warnings
+        self.disable_warnings()
+
+        # check config
         if not self.is_config_correct(self.config):
             return
 

@@ -140,7 +140,6 @@ class Config(object):
         return json.dumps(self.get_dict(), sort_keys=True, indent=4, separators=(',', ': '))
 
     def load_json_from_config_file(self, config_file):
-        click.echo(config_file)
         if not os.path.exists(config_file) or not os.path.isfile(config_file):
             raise AssertionError('Model config "%s" does not exist.' % config_file)
 

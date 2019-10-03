@@ -187,7 +187,8 @@ option_environment_path = click.option(
     cls=OptionConcat,
     expose_value=False,
     is_flag=False,
-    help='Sets the environment path (used for example by --model-file).',
+    help='Sets the environment path (used for example by --model-file, --config-file, --evaluation-file or '
+         '--data-path).',
     callback=option_callback,
     default=None,
     type=click.Path(exists=True)
