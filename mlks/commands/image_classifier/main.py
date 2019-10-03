@@ -32,16 +32,21 @@
 
 import click
 import os
+import sys
 import tensorflow as tf
 from mlks.commands.main import Command
+
 from keras.applications.inception_v3 import InceptionV3
+from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
+
+from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
+
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
-from keras.applications.inception_v3 import preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
-from keras.applications.mobilenet import preprocess_input
 from mlks.helper.filesystem import get_number_of_folders_and_files
 
 
@@ -69,18 +74,20 @@ class ImageClassifier(Command):
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')
 
-        if transfer_learning_model not in self.tl_models:
-            raise AssertionError('Model "%s" was not assigned within tl_models.' % transfer_learning_model)
-
         if self.config.get('verbose'):
             click.echo('Use tl model "%s".' % transfer_learning_model)
 
-        return self.tl_models[transfer_learning_model](self)
+        return getattr(self, 'get_tl_' + transfer_learning_model.lower())()
 
     def get_tl_inceptionv3(self):
         dim = self.config.gettl('input_dimension')
         weights = self.config.gettl('weights')
         return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))
+
+    def get_tl_resnet50(self):
+        dim = self.config.gettl('input_dimension')
+        weights = self.config.gettl('weights')
+        return ResNet50(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
     def compile_model(self, model):
         model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -92,13 +99,31 @@ class ImageClassifier(Command):
         return model
 
     def load_image(self, path):
+        return getattr(self, 'load_image_' + self.config.gettl('transfer_learning_model').lower())()
+
+    def load_image_inceptionv3(self, path):
         image = load_img(
             path,
             target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
         )
         image = img_to_array(image)
         image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-        return preprocess_input(image)
+        return InceptionV3PreprocessInput(image)
+
+    def load_image_resnet50(self, path):
+        image = load_img(
+            path,
+            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
+        )
+        image = img_to_array(image)
+        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+        return ResNet50PreprocessInput(image)
+
+    def get_preprocessing_function_inceptionv3(self):
+        return InceptionV3PreprocessInput
+
+    def get_preprocessing_function_resnet50(self):
+        return ResNet50PreprocessInput
 
     def get_model(self):
         number_trainable = self.config.gettl('number_trainable_layers')
@@ -139,7 +164,9 @@ class ImageClassifier(Command):
         data_path = self.config.get_data('data_path')
 
         # build the train generator
-        train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+        train_datagen = ImageDataGenerator(preprocessing_function=getattr(
+            self, 'get_preprocessing_function_' + self.config.gettl('transfer_learning_model').lower())()
+        )
         train_generator = train_datagen.flow_from_directory(
             data_path,
             target_size=(dim, dim),

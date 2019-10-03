@@ -39,11 +39,6 @@ class Train(ImageClassifier):
 
     def __init__(self, config):
 
-        # some properties
-        self.tl_models = {
-            'InceptionV3': Train.get_tl_inceptionv3,
-        }
-
         # initialize the parent class
         super().__init__(config)
 
