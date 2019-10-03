@@ -54,14 +54,6 @@ class ImageClassifier(Command):
         super().__init__(config)
         pass
 
-    @staticmethod
-    def disable_warnings():
-        # disable the standard logging outputs
-        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
-        # disable deprecated warnings
-        tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
     def get_categories(self):
         # get some needed configuration parameters
         data_path = self.config.get_data('data_path')

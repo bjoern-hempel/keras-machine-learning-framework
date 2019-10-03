@@ -1,9 +1,9 @@
 # Machine Learning Keras Suite
 #
-# A Python helper file: Provides some file system helper.
+# A Python helper file: Provides some log output helper.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   29.09.2019
+# Date:   03.10.2019
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
@@ -31,24 +31,12 @@
 # SOFTWARE.
 
 import os
+import tensorflow as tf
 
 
-def get_number_of_folders_and_files(path):
-    files = 0
-    folders = 0
+def disable_warnings():
+    # disable the standard logging outputs
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-    for _, dir_names, file_names in os.walk(path):
-        files += len(file_names)
-        folders += len(dir_names)
-
-    return {
-        'files': files,
-        'folders': folders
-    }
-
-
-def check_if_file_exists(file_path):
-    if not os.path.exists(file_path) or not os.path.isfile(file_path):
-        raise AssertionError('File "%s" does not exists.' % file_path)
-
-    return True
+    # disable deprecated warnings
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)

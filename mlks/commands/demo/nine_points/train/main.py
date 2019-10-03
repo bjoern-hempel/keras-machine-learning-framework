@@ -33,6 +33,7 @@
 import click
 
 from mlks.commands.demo.nine_points.main import NinePoints
+from mlks.helper.log import disable_warnings
 
 from keras.layers import Dense
 from keras.models import Sequential
@@ -64,6 +65,11 @@ class Train(NinePoints):
         return model
 
     def do(self):
+
+        # disable warnings
+        disable_warnings()
+
+        # check config
         if not self.is_config_correct(self.config):
             return
 
@@ -131,26 +137,27 @@ class Train(NinePoints):
         result_values_graphic = model.predict(train_values_graphic).reshape(x1Grid.shape)
 
         # print the predicted points
-        click.echo('resultValuesGraphic:')
-        counter_y = 0
-        step_x = (range_x[1] - range_x[0]) / (range_x_steps - 1)
-        step_y = (range_y[1] - range_y[0]) / (range_y_steps - 1)
+        if self.config.get('verbose'):
+            counter_y = 0
+            step_x = (range_x[1] - range_x[0]) / (range_x_steps - 1)
+            step_y = (range_y[1] - range_y[0]) / (range_y_steps - 1)
+            click.echo('\n\nresultValuesGraphic:')
+            click.echo('--------------------')
+            for x2 in result_values_graphic:
+                counter_y += 1
+                counter_x = 0
 
-        # print out the graphic points
-        for x2 in result_values_graphic:
-            counter_y += 1
-            counter_x = 0
-
-            for x1 in x2:
-                counter_x += 1
-                print(
-                    'x = ',
-                    '{0: <10}'.format(round(range_x[0] + step_x * (counter_x - 1), 2)),
-                    'y = ',
-                    '{0: <10}'.format(round(range_y[0] + step_y * (counter_y - 1), 2)),
-                    'value = ',
-                    round(x1, 2)
-                )
+                for x1 in x2:
+                    counter_x += 1
+                    print(
+                        'x = ',
+                        '{0: <10}'.format(round(range_x[0] + step_x * (counter_x - 1), 2)),
+                        'y = ',
+                        '{0: <10}'.format(round(range_y[0] + step_y * (counter_y - 1), 2)),
+                        'value = ',
+                        round(x1, 2)
+                    )
+            click.echo('--------------------')
 
         plt.contourf(x1Grid, x2Grid, result_values_graphic, range_x_steps)
         plt.colorbar()
@@ -181,12 +188,22 @@ class Train(NinePoints):
         # show the plot
         plt.show()
 
-        click.echo('expected values:')
+        click.echo('\n\nexpected values:')
+        click.echo('----------------')
         click.echo(result_values)
-        click.echo('predicted values:')
+        click.echo('----------------')
+
+        click.echo('\n\npredicted values:')
+        click.echo('-----------------')
         click.echo(model.predict(train_values))
+        click.echo('-----------------')
 
         # save the model to import within dl4j
-        model_path = self.config.getml('model_file')
-        if model_path is not None:
-            model.save(model_path)
+        self.start_timer('save model')
+        self.config.save_model(model)
+        self.finish_timer('save model')
+
+        # save config data from model to import within dl4j
+        self.start_timer('save config')
+        self.config.save_json()
+        self.finish_timer('save config')

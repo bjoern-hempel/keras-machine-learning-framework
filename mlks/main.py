@@ -107,7 +107,6 @@ def cli_demo(config):
 
 
 @cli_demo.command(name='simple-perceptron')
-@add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
 def cli_demo_simple_perceptron(config):
@@ -118,7 +117,6 @@ def cli_demo_simple_perceptron(config):
 
 
 @cli_demo.command(name='xor-perceptron')
-@add_options(option_set_machine_learning)
 @add_options(option_set_general)
 @pass_config
 def cli_demo_xor_perceptron(config):
@@ -131,7 +129,6 @@ def cli_demo_xor_perceptron(config):
 @cli_demo.group(name='nine-points')
 @add_options(option_set_machine_learning)
 @add_options(option_set_general)
-@add_options(option_set_nine_points)
 @pass_config
 def cli_demo_nine_points(config):
     """This subcommand from demo trains or execute a nine point example."""
@@ -141,8 +138,9 @@ def cli_demo_nine_points(config):
 
 @cli_demo_nine_points.command(name='train')
 @add_options(option_set_machine_learning)
-@add_options(option_set_general)
+@add_options(option_set_train_process)
 @add_options(option_set_nine_points)
+@add_options(option_set_general)
 @pass_config
 def cli_demo_nine_points_train(config):
     """This subcommand from demo trains a nine point example."""
@@ -153,8 +151,9 @@ def cli_demo_nine_points_train(config):
 
 @cli_demo_nine_points.command(name='execute')
 @add_options(option_set_machine_learning)
-@add_options(option_set_general)
+@add_options(option_set_evaluation_process)
 @add_options(option_set_nine_points)
+@add_options(option_set_general)
 @pass_config
 def cli_demo_nine_points_execute(config):
     """This subcommand from demo execute a nine point example."""

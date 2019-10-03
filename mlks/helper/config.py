@@ -136,6 +136,19 @@ class Config(object):
 
         return dictionary
 
+    def save_json(self):
+        config_file = self.get_data('config_file')
+        if config_file is not None:
+            if self.get('verbose'):
+                click.echo('Write config file to %s' % config_file)
+            with open(config_file, 'w') as json_file:
+                json.dump(self.get_dict(), json_file, sort_keys=True, indent=4, separators=(',', ': '))
+
+    def save_model(self, model):
+        model_file = self.get_data('model_file')
+        if model_file is not None:
+            model.save(model_file)
+
     def get_json(self):
         return json.dumps(self.get_dict(), sort_keys=True, indent=4, separators=(',', ': '))
 

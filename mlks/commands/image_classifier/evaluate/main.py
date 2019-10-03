@@ -33,6 +33,7 @@
 import click
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
+from mlks.helper.log import disable_warnings
 
 
 class Evaluate(ImageClassifier):
@@ -45,7 +46,7 @@ class Evaluate(ImageClassifier):
     def do(self):
 
         # disable warnings
-        self.disable_warnings()
+        disable_warnings()
 
         # check config
         if not self.is_config_correct(self.config):

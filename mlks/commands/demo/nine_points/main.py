@@ -36,7 +36,6 @@ from mlks.commands.main import Command
 class NinePoints(Command):
 
     def __init__(self, config):
-        self.config = config
 
         # initialize the parent class
-        super().__init__()
+        super().__init__(config)
