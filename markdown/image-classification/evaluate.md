@@ -9,7 +9,7 @@ Example based on this image: [Sunflower from Flickr by erikslife](https://www.fl
 <img src="/markdown/image-classification/sunflower.jpg">
 
 ```bash
-(keras-gpu) C:\Users> ml evaluate --verbose --config-file=./data/inceptionv3-trained.json \
+(keras-gpu) C:\Users> ml evaluate --config-file=./data/inceptionv3-trained.json \
 --evaluation-file=./data/eval/sunflower/1.jpg
 Using TensorFlow backend.
 
@@ -26,23 +26,6 @@ evaluation_file:          F:/data/eval/sunflower/1.jpg
 
 
 Are these configurations correct? Continue? [Y/n] y
-
-
-
--> Start "load json config file".
-<- Finished "load json config file".
-
-
--> Start "load model file".
-<- Finished "load model file".
-
-
--> Start "load image file".
-<- Finished "load image file".
-
-
--> Start "predict image file".
-<- Finished "predict image file".
 
 
 classes
