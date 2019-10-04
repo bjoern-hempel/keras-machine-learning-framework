@@ -13,7 +13,7 @@ The data set ./data/raw/flowers is based on Kaggle's floral data set: https://ww
 | ResNet50          | 97,75%   | 1638.6s 00:27:18.6 |  2,96x | 0,33                   |
 | VGG19             | 97,99%   |  721.5s 00:12:01.5 |  1.30x | 0,75                   |
 
-<sup>*</sup> = Time / Factor
+<sup>*</sup> = Accuracy / Factor
 
 ## A. Further Tutorials
 
