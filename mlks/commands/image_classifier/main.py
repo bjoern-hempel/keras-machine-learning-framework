@@ -140,7 +140,7 @@ class ImageClassifier(Command):
         return VGG19PreprocessInput
 
     def get_preprocessing_function_inceptionresnetv2(self):
-        return InceptionResNetV2
+        return InceptionResNetV2PreprocessInput
 
     def get_model(self):
         number_trainable = self.config.gettl('number_trainable_layers')
