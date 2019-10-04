@@ -32,6 +32,7 @@
 
 import click
 import os
+import sys
 
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
@@ -166,9 +167,10 @@ class ImageClassifier(Command):
         model = Model(inputs=base_model.input, outputs=predictions)
 
         # set the first number_trainable layers of the network to be non-trainable
-        for layer in model.layers[:number_trainable]:
+        number_not_trainable = len(model.layers) - number_trainable
+        for layer in model.layers[:number_not_trainable]:
             layer.trainable = False
-        for layer in model.layers[number_trainable:]:
+        for layer in model.layers[number_not_trainable:]:
             layer.trainable = True
 
         # compile model
