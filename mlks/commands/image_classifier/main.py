@@ -45,6 +45,9 @@ from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessIn
 from keras.applications.vgg19 import VGG19
 from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
 
+from keras.applications.inception_resnet_v2 import InceptionResNetV2
+from keras.applications.inception_resnet_v2 import preprocess_input as InceptionResNetV2PreprocessInput
+
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
@@ -83,8 +86,13 @@ class ImageClassifier(Command):
         weights = self.config.gettl('weights')
         return VGG19(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
+    def get_tl_inceptionresnetv2(self):
+        dim = self.config.gettl('input_dimension')
+        weights = self.config.gettl('weights')
+        return InceptionResNetV2(weights=weights, include_top=False, input_shape=(dim, dim, 3))
+
     def load_image(self, path):
-        return getattr(self, 'load_image_' + self.config.gettl('transfer_learning_model').lower())()
+        return getattr(self, 'load_image_' + self.config.gettl('transfer_learning_model').lower())(path)
 
     def load_image_inceptionv3(self, path):
         image = load_img(
@@ -113,6 +121,15 @@ class ImageClassifier(Command):
         image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
         return VGG19PreprocessInput(image)
 
+    def load_image_inceptionresnetv2(self, path):
+        image = load_img(
+            path,
+            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
+        )
+        image = img_to_array(image)
+        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+        return InceptionResNetV2(image)
+
     def get_preprocessing_function_inceptionv3(self):
         return InceptionV3PreprocessInput
 
@@ -121,6 +138,9 @@ class ImageClassifier(Command):
 
     def get_preprocessing_function_vgg19(self):
         return VGG19PreprocessInput
+
+    def get_preprocessing_function_inceptionresnetv2(self):
+        return InceptionResNetV2
 
     def get_model(self):
         number_trainable = self.config.gettl('number_trainable_layers')

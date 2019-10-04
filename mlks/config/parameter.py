@@ -130,14 +130,14 @@ option_transfer_learning_model = click.option(
     help='Sets the transfer learning model.',
     callback=option_callback,
     default=OptionHelper.get_default,
-    type=click.Choice(['InceptionV3', 'ResNet50', 'VGG19'])
+    type=click.Choice(['InceptionV3', 'ResNet50', 'VGG19', 'InceptionResNetV2'])
 )
 option_number_trainable_layers = click.option(
     '--number-trainable-layers',
     cls=OptionHelper,
     option_type='default_by_parameter',
     dependent='transfer_learning_model',
-    default_options={'default': 10, 'InceptionV3': 305, 'ResNet50': 173, 'VGG19': 22},
+    default_options={'default': 10, 'InceptionV3': 305, 'ResNet50': 173, 'VGG19': 22, 'InceptionResNetV2': 20},
     expose_value=False,
     is_flag=False,
     help='Sets the number trainable layers.',
