@@ -32,9 +32,9 @@
 
 import click
 import os
-import sys
-import tensorflow as tf
+
 from mlks.commands.main import Command
+from mlks.helper.filesystem import get_number_of_folders_and_files
 
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
@@ -42,12 +42,14 @@ from keras.applications.inception_v3 import preprocess_input as InceptionV3Prepr
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
 
+from keras.applications.vgg19 import VGG19
+from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
+
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
-from mlks.helper.filesystem import get_number_of_folders_and_files
 
 
 class ImageClassifier(Command):
@@ -57,19 +59,6 @@ class ImageClassifier(Command):
 
         # initialize the parent class
         super().__init__(config)
-        pass
-
-    def get_categories(self):
-        # get some needed configuration parameters
-        data_path = self.config.get_data('data_path')
-
-        # check folder
-        if not os.path.isdir(data_path):
-            raise AssertionError('"%s" does not exists or seems not to be a folder.')
-
-        data_path_info = get_number_of_folders_and_files(data_path)
-
-        return data_path_info['folders']
 
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')
@@ -89,14 +78,10 @@ class ImageClassifier(Command):
         weights = self.config.gettl('weights')
         return ResNet50(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
-    def compile_model(self, model):
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-    def load_model(self, model_file):
-        model = load_model(model_file)
-        self.compile_model(model)
-
-        return model
+    def get_tl_vgg19(self):
+        dim = self.config.gettl('input_dimension')
+        weights = self.config.gettl('weights')
+        return VGG19(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
     def load_image(self, path):
         return getattr(self, 'load_image_' + self.config.gettl('transfer_learning_model').lower())()
@@ -119,11 +104,23 @@ class ImageClassifier(Command):
         image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
         return ResNet50PreprocessInput(image)
 
+    def load_image_vgg19(self, path):
+        image = load_img(
+            path,
+            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
+        )
+        image = img_to_array(image)
+        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+        return VGG19PreprocessInput(image)
+
     def get_preprocessing_function_inceptionv3(self):
         return InceptionV3PreprocessInput
 
     def get_preprocessing_function_resnet50(self):
         return ResNet50PreprocessInput
+
+    def get_preprocessing_function_vgg19(self):
+        return VGG19PreprocessInput
 
     def get_model(self):
         number_trainable = self.config.gettl('number_trainable_layers')
@@ -159,6 +156,15 @@ class ImageClassifier(Command):
 
         return model
 
+    def load_model(self, model_file):
+        model = load_model(model_file)
+        self.compile_model(model)
+
+        return model
+
+    def compile_model(self, model):
+        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
     def get_train_generator(self):
         dim = self.config.gettl('input_dimension')
         data_path = self.config.get_data('data_path')
@@ -189,3 +195,15 @@ class ImageClassifier(Command):
             epochs=epochs,
             verbose=verbose
         )
+
+    def get_categories(self):
+        # get some needed configuration parameters
+        data_path = self.config.get_data('data_path')
+
+        # check folder
+        if not os.path.isdir(data_path):
+            raise AssertionError('"%s" does not exists or seems not to be a folder.')
+
+        data_path_info = get_number_of_folders_and_files(data_path)
+
+        return data_path_info['folders']
