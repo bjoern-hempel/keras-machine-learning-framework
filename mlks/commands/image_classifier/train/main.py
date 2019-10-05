@@ -67,7 +67,9 @@ class Train(ImageClassifier):
 
         # train the model
         self.start_timer('fit')
-        self.train(model, train_generator, validation_generator)
+        ml_logger = self.train(model, train_generator, validation_generator)
+        print(ml_logger.validation_accuracies)
+        print(ml_logger.train_accuracies)
         self.finish_timer('fit')
 
         # save the model to import within dl4j
@@ -78,5 +80,7 @@ class Train(ImageClassifier):
         # save config data from model to import within dl4j
         self.start_timer('save config')
         self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
+        self.config.set_environment('validation_accuracies', ml_logger.validation_accuracies)
+        self.config.set_environment('train_accuracies', ml_logger.train_accuracies)
         self.config.save_json()
         self.finish_timer('save config')

@@ -148,6 +148,10 @@ class Command:
         # prints out the given configuration
         self.show_config(configs)
 
+        # skip demand
+        if self.config.get('yes'):
+            return True
+
         positive = self.query_yes_no(question)
 
         if not positive:

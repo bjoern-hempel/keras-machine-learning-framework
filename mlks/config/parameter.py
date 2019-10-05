@@ -58,6 +58,14 @@ option_debug = click.option(
     help='Switches the script to debug mode.',
     callback=option_callback
 )
+option_yes = click.option(
+    '--yes', '-y',
+    expose_value=False,
+    is_flag=True,
+    help='Skip demands.',
+    callback=option_callback,
+    default=False
+)
 
 
 # Configure the machine learning parameters here
@@ -311,7 +319,8 @@ option_y_0_1 = click.option(
 # Configure some option sets
 option_set_general = [
     option_verbose,
-    option_debug
+    option_debug,
+    option_yes
 ]
 option_set_machine_learning = [
     option_epochs,
@@ -354,6 +363,7 @@ set_config_translator({
     # general config
     'verbose': general_config_writer,
     'debug': general_config_writer,
+    'yes': general_config_writer,
 
     # machine learning config
     'epochs': machine_learning_config_writer,

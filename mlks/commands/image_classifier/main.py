@@ -32,10 +32,10 @@
 
 import click
 import os
-import sys
 
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
+from mlks.helper.ml_logger import MlLogger
 
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
@@ -132,7 +132,7 @@ class ImageClassifier(Command):
         )
         image = img_to_array(image)
         image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-        return InceptionResNetV2(image)
+        return InceptionResNetV2PreprocessInput(image)
 
     def get_preprocessing_function_inceptionv3(self):
         return InceptionV3PreprocessInput
@@ -261,14 +261,18 @@ class ImageClassifier(Command):
         epochs = self.config.getml('epochs')
         verbose = 1 if self.config.get('verbose') else 0
 
+        ml_logger = MlLogger()
         model.fit_generator(
             generator=train_generator,
             steps_per_epoch=step_size_train,
             validation_data=validation_generator,
             validation_steps=step_size_validation,
             epochs=epochs,
-            verbose=verbose
+            verbose=verbose,
+            callbacks=[ml_logger]
         )
+
+        return ml_logger
 
     def get_categories(self):
         # get some needed configuration parameters
