@@ -33,6 +33,8 @@
 import click
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
+from keras.preprocessing.image import load_img
+import matplotlib.pyplot as plt
 
 
 class Evaluate(ImageClassifier):
@@ -43,6 +45,8 @@ class Evaluate(ImageClassifier):
         super().__init__(config)
 
     def do(self):
+
+        show_image = True
 
         # load config file
         self.start_timer('load json config file')
@@ -88,3 +92,10 @@ class Evaluate(ImageClassifier):
         click.echo('----------------')
         click.echo('predicted: %s' % classes[predicted_values[0]])
         click.echo('----------------')
+
+        # show image
+        if show_image:
+            img = load_img(evaluation_file)
+            plt.imshow(img)
+            plt.title(classes[predicted_values[0]])
+            plt.show()

@@ -73,15 +73,6 @@ option_epochs = click.option(
     default=OptionHelper.get_default,
     type=int
 )
-option_learning_rate = click.option(
-    '--learning-rate', '-l',
-    expose_value=False,
-    is_flag=False,
-    help='Sets the learning rate.',
-    callback=option_callback,
-    default=0.001,
-    type=float
-)
 option_activation_function = click.option(
     '--activation-function', '-a',
     expose_value=False,
@@ -97,8 +88,8 @@ option_loss_function = click.option(
     is_flag=False,
     help='Sets the loss function.',
     callback=option_callback,
-    default='mean_squared_error',
-    type=click.Choice(['mean_squared_error'])
+    default='categorical_crossentropy',
+    type=click.Choice(['mean_squared_error', 'categorical_crossentropy'])
 )
 option_optimizer = click.option(
     '--optimizer', '-o',
@@ -106,8 +97,43 @@ option_optimizer = click.option(
     is_flag=False,
     help='Sets the optimizer.',
     callback=option_callback,
-    default='adam',
-    type=click.Choice(['adam'])
+    default='sgd',
+    type=click.Choice(['adam', 'sgd'])
+)
+option_learning_rate = click.option(
+    '--learning-rate', '-l',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the learning rate.',
+    callback=option_callback,
+    default=0.001,
+    type=float
+)
+option_momentum = click.option(
+    '--momentum',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the momentum value.',
+    callback=option_callback,
+    default=0.9,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
+option_decay = click.option(
+    '--decay',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the decay value.',
+    callback=option_callback,
+    default=0.0,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
+option_nesterov = click.option(
+    '--nesterov',
+    expose_value=False,
+    is_flag=True,
+    help='Switches on the nesterov mode.',
+    callback=option_callback,
+    default=True
 )
 option_metrics = click.option(
     '--metrics',
@@ -280,10 +306,13 @@ option_set_general = [
 ]
 option_set_machine_learning = [
     option_epochs,
-    option_learning_rate,
     option_activation_function,
     option_loss_function,
     option_optimizer,
+    option_learning_rate,
+    option_momentum,
+    option_decay,
+    option_nesterov,
     option_metrics
 ]
 option_set_transfer_learning = [
@@ -318,11 +347,14 @@ set_config_translator({
 
     # machine learning config
     'epochs': machine_learning_config_writer,
-    'learning_rate': machine_learning_config_writer,
     'activation_function': machine_learning_config_writer,
     'loss_function': machine_learning_config_writer,
     'optimizer': machine_learning_config_writer,
     'metrics': machine_learning_config_writer,
+    'learning_rate': machine_learning_config_writer,
+    'momentum': machine_learning_config_writer,
+    'decay': machine_learning_config_writer,
+    'nesterov': machine_learning_config_writer,
 
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,

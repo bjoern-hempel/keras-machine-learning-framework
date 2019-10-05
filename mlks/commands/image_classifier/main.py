@@ -54,6 +54,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
+from keras.optimizers import SGD
 
 
 class ImageClassifier(Command):
@@ -93,6 +94,8 @@ class ImageClassifier(Command):
         return InceptionResNetV2(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
     def load_image(self, path):
+        if self.config.get('verbose'):
+            click.echo('load image: %s' % self.config.gettl('transfer_learning_model'))
         return getattr(self, 'load_image_' + self.config.gettl('transfer_learning_model').lower())(path)
 
     def load_image_inceptionv3(self, path):
@@ -148,13 +151,14 @@ class ImageClassifier(Command):
         dense_size = self.config.gettl('dense_size')
         dropout = self.config.gettl('dropout')
         categories = self.get_categories()
+        activation = 'relu'
 
         # get the transfer learning model
         base_model = self.get_tl_model()
 
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
-        x = Dense(dense_size, activation='relu')(x)
+        x = Dense(dense_size, activation=activation)(x)
         x = Dropout(dropout)(x)
 
         if categories == 2:
@@ -179,13 +183,38 @@ class ImageClassifier(Command):
         return model
 
     def load_model(self, model_file):
+        if self.config.get('verbose'):
+            click.echo('load model: %s' % self.config.gettl('transfer_learning_model'))
+
         model = load_model(model_file)
         self.compile_model(model)
 
         return model
 
     def compile_model(self, model):
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        if self.config.getml('optimizer') == 'sgd':
+            learning_rate = self.config.getml('learning_rate')
+            momentum = 0.9 # TODO
+            decay = 0.0 # TODO
+            nesterov = True # TODO
+            optimizer = SGD(lr=learning_rate, momentum=momentum, decay=decay, nesterov=nesterov)
+        else:
+            optimizer = 'Adam'
+
+        loss = self.config.getml('loss_function')
+        metrics = self.config.getml('metrics')
+
+        if self.config.get('verbose'):
+            click.echo('Used optimizer: %s' % self.config.getml('optimizer'))
+            click.echo('Loss: %s' % loss)
+            click.echo('Metrics: %s' % metrics)
+            if self.config.getml('optimizer') == 'sgd':
+                click.echo('Learning rate: %s' % learning_rate)
+                click.echo('Momentum: %s' % momentum)
+                click.echo('Decay: %s' % decay)
+                click.echo('Nesterov: %s' % nesterov)
+
+        model.compile(optimizer=optimizer, loss=loss, metrics=[metrics])
 
     def get_train_generator(self):
         dim = self.config.gettl('input_dimension')
