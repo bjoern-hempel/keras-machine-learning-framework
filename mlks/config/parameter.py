@@ -144,6 +144,15 @@ option_metrics = click.option(
     default='accuracy',
     type=click.Choice(['accuracy'])
 )
+option_validation_split = click.option(
+    '--validation-split',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the validation split.',
+    callback=option_callback,
+    default=0.2,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
 
 # Configure the transfer learning parameters here
 option_transfer_learning_model = click.option(
@@ -313,7 +322,8 @@ option_set_machine_learning = [
     option_momentum,
     option_decay,
     option_nesterov,
-    option_metrics
+    option_metrics,
+    option_validation_split
 ]
 option_set_transfer_learning = [
     option_transfer_learning_model,
@@ -355,6 +365,7 @@ set_config_translator({
     'momentum': machine_learning_config_writer,
     'decay': machine_learning_config_writer,
     'nesterov': machine_learning_config_writer,
+    'validation_split': machine_learning_config_writer,
 
     # transfer learning config
     'transfer_learning_model': transfer_learning_config_writer,

@@ -216,33 +216,56 @@ class ImageClassifier(Command):
 
         model.compile(optimizer=optimizer, loss=loss, metrics=[metrics])
 
-    def get_train_generator(self):
+    def get_image_generator(self):
+        validation_split = self.config.getml('validation_split')
+
+        if self.config.get('verbose'):
+            click.echo('Validation split: %s' % validation_split)
+
+        return ImageDataGenerator(
+            preprocessing_function=getattr(
+                self, 'get_preprocessing_function_' + self.config.gettl('transfer_learning_model').lower()
+            )(),
+            validation_split=validation_split
+        )
+
+    def get_train_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
         data_path = self.config.get_data('data_path')
 
-        # build the train generator
-        train_datagen = ImageDataGenerator(preprocessing_function=getattr(
-            self, 'get_preprocessing_function_' + self.config.gettl('transfer_learning_model').lower())()
-        )
-        train_generator = train_datagen.flow_from_directory(
+        return image_generator.flow_from_directory(
             data_path,
             target_size=(dim, dim),
             color_mode='rgb',
             batch_size=32,
             class_mode='categorical',
-            shuffle=True
+            subset='training'
         )
 
-        return train_generator
+    def get_validation_generator(self, image_generator):
+        dim = self.config.gettl('input_dimension')
+        data_path = self.config.get_data('data_path')
 
-    def train(self, model, train_generator):
+        return image_generator.flow_from_directory(
+            data_path,
+            target_size=(dim, dim),
+            color_mode='rgb',
+            batch_size=32,
+            class_mode='categorical',
+            subset='validation'
+        )
+
+    def train(self, model, train_generator, validation_generator):
         step_size_train = train_generator.n // train_generator.batch_size
+        step_size_validation = validation_generator.n // validation_generator.batch_size
         epochs = self.config.getml('epochs')
         verbose = 1 if self.config.get('verbose') else 0
 
         model.fit_generator(
             generator=train_generator,
             steps_per_epoch=step_size_train,
+            validation_data=validation_generator,
+            validation_steps=step_size_validation,
             epochs=epochs,
             verbose=verbose
         )

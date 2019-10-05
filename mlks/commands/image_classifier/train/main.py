@@ -47,7 +47,9 @@ class Train(ImageClassifier):
         # preparations
         self.start_timer('preparations')
         model = self.get_model()
-        train_generator = self.get_train_generator()
+        image_generator = self.get_image_generator()
+        train_generator = self.get_train_generator(image_generator)
+        validation_generator = self.get_validation_generator(image_generator)
         self.finish_timer('preparations')
 
         # prints out some informations
@@ -65,7 +67,7 @@ class Train(ImageClassifier):
 
         # train the model
         self.start_timer('fit')
-        self.train(model, train_generator)
+        self.train(model, train_generator, validation_generator)
         self.finish_timer('fit')
 
         # save the model to import within dl4j
