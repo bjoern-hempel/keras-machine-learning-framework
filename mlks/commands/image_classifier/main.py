@@ -37,20 +37,29 @@ import math
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
 
-from keras.applications.inception_v3 import InceptionV3
-from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
-
-from keras.applications.resnet50 import ResNet50
-from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
-
+# DenseNet121, DenseNet169, DenseNet201
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 from keras.applications.densenet import preprocess_input as DenseNetPreprocessInput
 
-from keras.applications.vgg19 import VGG19
-from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
-
+# InceptionResNetV2
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras.applications.inception_resnet_v2 import preprocess_input as InceptionResNetV2PreprocessInput
+
+# InceptionV3
+from keras.applications.inception_v3 import InceptionV3
+from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
+
+# MobileNet
+from keras_applications.mobilenet import MobileNet
+from keras.applications.mobilenet import preprocess_input as MobileNetPreprocessInput
+
+# ResNet50
+from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
+
+# VGG19
+from keras.applications.vgg19 import VGG19
+from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
 
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.preprocessing.image import ImageDataGenerator
@@ -68,18 +77,6 @@ class ImageClassifier(Command):
         self.config = config
 
         self.transfer_learning_wrapper = {
-            'inceptionresnetv2': {
-                'class': InceptionResNetV2,
-                'preprocess_input': InceptionResNetV2PreprocessInput
-            },
-            'inceptionv3': {
-                'class': InceptionV3,
-                'preprocess_input': InceptionV3PreprocessInput
-            },
-            'resnet50': {
-                'class': ResNet50,
-                'preprocess_input': ResNet50PreprocessInput
-            },
             'densenet121': {
                 'class': DenseNet121,
                 'preprocess_input': DenseNetPreprocessInput
@@ -91,6 +88,22 @@ class ImageClassifier(Command):
             'densenet201': {
                 'class': DenseNet201,
                 'preprocess_input': DenseNetPreprocessInput
+            },
+            'mobilenet': {
+                'class': MobileNet,
+                'preprocess_input': MobileNetPreprocessInput
+            },
+            'inceptionresnetv2': {
+                'class': InceptionResNetV2,
+                'preprocess_input': InceptionResNetV2PreprocessInput
+            },
+            'inceptionv3': {
+                'class': InceptionV3,
+                'preprocess_input': InceptionV3PreprocessInput
+            },
+            'resnet50': {
+                'class': ResNet50,
+                'preprocess_input': ResNet50PreprocessInput
             },
             'vgg19': {
                 'class': VGG19,
