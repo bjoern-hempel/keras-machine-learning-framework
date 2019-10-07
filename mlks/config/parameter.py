@@ -299,6 +299,32 @@ option_accuracy_file = click.option(
     required=True,
     type=str
 )
+option_log_file = click.option(
+    '--log-file',
+    cls=OptionHelper,
+    option_type='concat_parameters',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the log file.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=True,
+    type=str
+)
+option_json_file = click.option(
+    '--json-file',
+    cls=OptionHelper,
+    option_type='concat_parameters',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the json log file.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=True,
+    type=str
+)
 option_data_path = click.option(
     '--data-path',
     cls=OptionHelper,
