@@ -80,8 +80,10 @@ class Config(object):
         namespace_transfer_learning = 'transfer_learning'
         name_config_file = 'config_file'
         name_model_file = 'model_file'
+        name_accuracy_file = 'accuracy_file'
         name_transfer_learning_model = 'transfer_learning_model'
         json_file_extension = 'json'
+        png_file_extension = 'png'
 
         # add config file
         if name == name_model_file:
@@ -91,6 +93,16 @@ class Config(object):
                 self.configs[namespace][name_config_file] = add_file_extension(
                     os.path.splitext(value)[0],
                     json_file_extension
+                )
+
+        # add accuracy image file
+        if name == name_model_file:
+            if value is None:
+                self.configs[namespace][name_accuracy_file] = None
+            else:
+                self.configs[namespace][name_accuracy_file] = add_file_extension(
+                    os.path.splitext(value)[0],
+                    png_file_extension
                 )
 
         if name == name_transfer_learning_model and namespace == namespace_transfer_learning:
@@ -108,8 +120,15 @@ class Config(object):
                     True
                 )
 
+            if name_accuracy_file in self.configs[namespace_data]:
+                self.configs[namespace_data][name_accuracy_file] = add_file_extension(
+                    self.configs[namespace_data][name_accuracy_file],
+                    self.configs[namespace][name].lower(),
+                    True
+                )
+
         if namespace_transfer_learning in self.configs and name_transfer_learning_model in self.configs[namespace_transfer_learning]:
-            if name == name_model_file or name == name_config_file:
+            if name == name_model_file or name == name_config_file or name == name_accuracy_file:
                 self.configs[namespace][name] = add_file_extension(
                     self.configs[namespace][name],
                     self.configs[namespace_transfer_learning][name_transfer_learning_model]

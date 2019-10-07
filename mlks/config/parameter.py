@@ -112,10 +112,28 @@ option_learning_rate = click.option(
     '--learning-rate', '-l',
     expose_value=False,
     is_flag=False,
-    help='Sets the learning rate.',
+    help='Sets the learning rate value.',
     callback=option_callback,
     default=0.001,
     type=float
+)
+option_learning_rate_drop = click.option(
+    '--learning-rate-drop',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the learning rate drop value.',
+    callback=option_callback,
+    default=0.5,
+    type=click.FloatRange(min=0, max=1, clamp=False)
+)
+option_learning_rate_epochs_drop = click.option(
+    '--learning-rate-epochs-drop',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the number of epochs after which the learning rate should decrease.',
+    callback=option_callback,
+    default=7,
+    type=int
 )
 option_momentum = click.option(
     '--momentum',
@@ -268,6 +286,19 @@ option_config_file = click.option(
     required=True,
     type=str
 )
+option_accuracy_file = click.option(
+    '--accuracy-file',
+    cls=OptionHelper,
+    option_type='concat_parameters',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the accuracy image graph file.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=True,
+    type=str
+)
 option_data_path = click.option(
     '--data-path',
     cls=OptionHelper,
@@ -328,6 +359,8 @@ option_set_machine_learning = [
     option_loss_function,
     option_optimizer,
     option_learning_rate,
+    option_learning_rate_drop,
+    option_learning_rate_epochs_drop,
     option_momentum,
     option_decay,
     option_nesterov,
@@ -372,6 +405,8 @@ set_config_translator({
     'optimizer': machine_learning_config_writer,
     'metrics': machine_learning_config_writer,
     'learning_rate': machine_learning_config_writer,
+    'learning_rate_drop': machine_learning_config_writer,
+    'learning_rate_epochs_drop': machine_learning_config_writer,
     'momentum': machine_learning_config_writer,
     'decay': machine_learning_config_writer,
     'nesterov': machine_learning_config_writer,

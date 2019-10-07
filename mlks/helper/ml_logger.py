@@ -42,6 +42,6 @@ class MlLogger(keras.callbacks.Callback):
 
     def on_batch_end(self, batch, logs={}):
         self.validation_losses.append(logs.get('val_loss'))
-        self.validation_accuracies.append(logs.get('val_acc'))
+        self.validation_accuracies.append(logs.get('val_accuracy'))
         self.train_losses.append(logs.get('loss'))
-        self.train_accuracies.append(logs.get('acc'))
+        self.train_accuracies.append(logs.get('accuracy'))

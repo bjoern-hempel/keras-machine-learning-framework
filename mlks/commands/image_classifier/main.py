@@ -32,10 +32,10 @@
 
 import click
 import os
+import math
 
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
-from mlks.helper.ml_logger import MlLogger
 
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
@@ -55,6 +55,8 @@ from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 from keras.optimizers import SGD
+
+from keras.callbacks import LearningRateScheduler
 
 
 class ImageClassifier(Command):
@@ -191,12 +193,18 @@ class ImageClassifier(Command):
 
         return model
 
+    def step_decay(self, epoch):
+        initial_learning_rate = self.config.getml('learning_rate')
+        drop = self.config.getml('learning_rate_drop')
+        epochs_drop = self.config.getml('learning_rate_epochs_drop')
+        return initial_learning_rate * math.pow(drop, math.floor(epoch / epochs_drop))
+
     def compile_model(self, model):
         if self.config.getml('optimizer') == 'sgd':
             learning_rate = self.config.getml('learning_rate')
-            momentum = 0.9 # TODO
-            decay = 0.0 # TODO
-            nesterov = True # TODO
+            momentum = self.config.getml('momentum')
+            decay = self.config.getml('decay')
+            nesterov = self.config.getml('nesterov')
             optimizer = SGD(lr=learning_rate, momentum=momentum, decay=decay, nesterov=nesterov)
         else:
             optimizer = 'Adam'
@@ -239,7 +247,8 @@ class ImageClassifier(Command):
             color_mode='rgb',
             batch_size=32,
             class_mode='categorical',
-            subset='training'
+            subset='training',
+            shuffle=True
         )
 
     def get_validation_generator(self, image_generator):
@@ -252,7 +261,8 @@ class ImageClassifier(Command):
             color_mode='rgb',
             batch_size=32,
             class_mode='categorical',
-            subset='validation'
+            subset='validation',
+            shuffle=True
         )
 
     def train(self, model, train_generator, validation_generator):
@@ -261,18 +271,16 @@ class ImageClassifier(Command):
         epochs = self.config.getml('epochs')
         verbose = 1 if self.config.get('verbose') else 0
 
-        ml_logger = MlLogger()
-        model.fit_generator(
+        learning_rate_scheduler = LearningRateScheduler(self.step_decay, verbose=verbose)
+        return model.fit_generator(
             generator=train_generator,
             steps_per_epoch=step_size_train,
             validation_data=validation_generator,
             validation_steps=step_size_validation,
             epochs=epochs,
             verbose=verbose,
-            callbacks=[ml_logger]
+            callbacks=[learning_rate_scheduler]
         )
-
-        return ml_logger
 
     def get_categories(self):
         # get some needed configuration parameters
