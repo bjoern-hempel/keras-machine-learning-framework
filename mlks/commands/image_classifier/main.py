@@ -53,6 +53,10 @@ from keras.applications.inception_v3 import preprocess_input as InceptionV3Prepr
 from keras_applications.mobilenet import MobileNet
 from keras.applications.mobilenet import preprocess_input as MobileNetPreprocessInput
 
+# MobileNetV2
+from keras.applications.mobilenetv2 import MobileNetV2
+from keras.applications.mobilenetv2 import preprocess_input as MobileNetV2PreprocessInput
+
 # ResNet50
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
@@ -92,6 +96,10 @@ class ImageClassifier(Command):
             'mobilenet': {
                 'class': MobileNet,
                 'preprocess_input': MobileNetPreprocessInput
+            },
+            'mobilenetv2': {
+                'class': MobileNetV2,
+                'preprocess_input': MobileNetV2PreprocessInput
             },
             'inceptionresnetv2': {
                 'class': InceptionResNetV2,

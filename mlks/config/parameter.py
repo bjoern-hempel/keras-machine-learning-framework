@@ -197,6 +197,8 @@ option_transfer_learning_model = click.option(
         'DenseNet201',
         'InceptionResNetV2',
         'InceptionV3',
+        'MobileNet',
+        'MobileNetV2',it s
         'ResNet50',
         'VGG19'
     ])
