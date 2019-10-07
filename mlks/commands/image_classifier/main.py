@@ -72,7 +72,7 @@ from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 from keras.optimizers import SGD
 
-from keras.callbacks import LearningRateScheduler
+from keras.callbacks import LearningRateScheduler, TensorBoard, CSVLogger, ModelCheckpoint
 
 
 class ImageClassifier(Command):
@@ -244,12 +244,13 @@ class ImageClassifier(Command):
     def get_train_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
         data_path = self.config.get_data('data_path')
+        batch_size = self.config.getml('batch_size')
 
         return image_generator.flow_from_directory(
             data_path,
             target_size=(dim, dim),
             color_mode='rgb',
-            batch_size=16,
+            batch_size=batch_size,
             class_mode='categorical',
             subset='training',
             shuffle=True
@@ -258,12 +259,13 @@ class ImageClassifier(Command):
     def get_validation_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
         data_path = self.config.get_data('data_path')
+        batch_size = self.config.getml('batch_size')
 
         return image_generator.flow_from_directory(
             data_path,
             target_size=(dim, dim),
             color_mode='rgb',
-            batch_size=16,
+            batch_size=batch_size,
             class_mode='categorical',
             subset='validation',
             shuffle=True
@@ -273,9 +275,41 @@ class ImageClassifier(Command):
         step_size_train = train_generator.n // train_generator.batch_size
         step_size_validation = validation_generator.n // validation_generator.batch_size
         epochs = self.config.getml('epochs')
+        batch_size = self.config.getml('batch_size')
+        log_file = self.config.get_data('log_file')
+        csv_file = self.config.get_data('csv_file')
+        best_model_file = self.config.get_data('best_model_file')
         verbose = 1 if self.config.get('verbose') else 0
 
         learning_rate_scheduler = LearningRateScheduler(self.step_decay, verbose=verbose)
+        tensor_board = TensorBoard(
+            log_dir=log_file,
+            histogram_freq=0,
+            batch_size=batch_size,
+            write_graph=True,
+            write_grads=False,
+            write_images=False,
+            embeddings_freq=0,
+            embeddings_layer_names=None,
+            embeddings_metadata=None,
+            embeddings_data=None,
+            update_freq='epoch'
+        )
+        csv_logger = CSVLogger(
+            csv_file,
+            separator=',',
+            append=False
+        )
+        model_checkpoint = ModelCheckpoint(
+            best_model_file,
+            monitor='val_acc',
+            verbose=verbose,
+            save_best_only=True,
+            save_weights_only=False,
+            mode='max',
+            period=1
+        )
+
         return model.fit_generator(
             generator=train_generator,
             steps_per_epoch=step_size_train,
@@ -283,7 +317,12 @@ class ImageClassifier(Command):
             validation_steps=step_size_validation,
             epochs=epochs,
             verbose=verbose,
-            callbacks=[learning_rate_scheduler]
+            callbacks=[
+                learning_rate_scheduler,
+                #tensor_board,
+                csv_logger,
+                model_checkpoint
+            ]
         )
 
     def get_categories(self):

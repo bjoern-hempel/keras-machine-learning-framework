@@ -81,6 +81,18 @@ option_epochs = click.option(
     default=OptionHelper.get_default,
     type=int
 )
+option_batch_size = click.option(
+    '--batch-size',
+    cls=OptionHelper,
+    default_options={'default': 16},
+    option_type='default_by_command',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the batch size.',
+    callback=option_callback,
+    default=OptionHelper.get_default,
+    type=int
+)
 option_activation_function = click.option(
     '--activation-function', '-a',
     expose_value=False,
@@ -198,7 +210,7 @@ option_transfer_learning_model = click.option(
         'InceptionResNetV2',
         'InceptionV3',
         'MobileNet',
-        'MobileNetV2',it s
+        'MobileNetV2',
         'ResNet50',
         'VGG19'
     ])
@@ -255,6 +267,14 @@ option_weights = click.option(
     callback=option_callback,
     default='imagenet',
     type=click.Choice(['imagenet'])
+)
+option_continue = click.option(
+    '--continue',
+    expose_value=False,
+    is_flag=True,
+    help='Continue learning with given model file.',
+    callback=option_callback,
+    default=False
 )
 
 # Configure the data parameter here
@@ -322,13 +342,13 @@ option_log_file = click.option(
     required=True,
     type=str
 )
-option_json_file = click.option(
-    '--json-file',
+option_csv_file = click.option(
+    '--csv-file',
     cls=OptionHelper,
     option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
-    help='Sets the json log file.',
+    help='Sets the csv log file.',
     callback=option_callback,
     concat='environment_path',
     default=None,
@@ -391,6 +411,7 @@ option_set_general = [
 ]
 option_set_machine_learning = [
     option_epochs,
+    option_batch_size,
     option_activation_function,
     option_loss_function,
     option_optimizer,
@@ -410,6 +431,7 @@ option_set_transfer_learning = [
     option_dense_size,
     option_dropout,
     option_weights,
+    option_continue
 ]
 option_set_train_process = [
     option_environment_path,
@@ -436,6 +458,7 @@ set_config_translator({
 
     # machine learning config
     'epochs': machine_learning_config_writer,
+    'batch_size': machine_learning_config_writer,
     'activation_function': machine_learning_config_writer,
     'loss_function': machine_learning_config_writer,
     'optimizer': machine_learning_config_writer,
@@ -455,6 +478,7 @@ set_config_translator({
     'dense_size': transfer_learning_config_writer,
     'dropout': transfer_learning_config_writer,
     'weights': transfer_learning_config_writer,
+    'continue': transfer_learning_config_writer,
 
     # data (files and folders)
     'environment_path': data_config_writer,

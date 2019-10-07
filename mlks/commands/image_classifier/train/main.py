@@ -31,6 +31,7 @@
 # SOFTWARE.
 
 import click
+import sys
 from matplotlib import pyplot as plt
 
 from mlks.commands.image_classifier.main import ImageClassifier
@@ -46,6 +47,12 @@ class Train(ImageClassifier):
     def do(self):
 
         show_diagram = True
+
+        if self.config.gettl('continue'):
+            print('continue')
+            config = self.config.get_config()
+            print(config)
+            sys.exit()
 
         # preparations
         self.start_timer('preparations')

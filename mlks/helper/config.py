@@ -80,22 +80,24 @@ class Config(object):
         namespace_transfer_learning = 'transfer_learning'
         name_config_file = 'config_file'
         name_model_file = 'model_file'
+        name_best_model_file = 'best_model_file'
         name_accuracy_file = 'accuracy_file'
         name_log_file = 'log_file'
-        name_json_file = 'json_file'
+        name_csv_file = 'csv_file'
         name_transfer_learning_model = 'transfer_learning_model'
 
         extension_wrapper = {
             'config_file': 'json',
             'model_file': 'h5',
+            'best_model_file': 'best.h5',
             'accuracy_file': 'png',
             'log_file': 'log',
-            'json_file': 'json'
+            'csv_file': 'csv'
         }
 
         if name == name_model_file:
             # add config, accuracy, log and json file
-            file_list = [name_config_file, name_accuracy_file, name_log_file, name_json_file]
+            file_list = [name_config_file, name_accuracy_file, name_log_file, name_csv_file, name_best_model_file]
             for file_item in file_list:
                 if value is None:
                     self.configs[namespace][file_item] = None
@@ -106,7 +108,7 @@ class Config(object):
                     )
 
         if name == name_transfer_learning_model and namespace == namespace_transfer_learning:
-            file_list = [name_model_file, name_config_file, name_accuracy_file, name_log_file, name_json_file]
+            file_list = [name_model_file, name_best_model_file, name_config_file, name_accuracy_file, name_log_file, name_csv_file]
             for file_item in file_list:
                 if namespace_data in self.configs and file_item in self.configs[namespace_data]:
                     self.configs[namespace_data][file_item] = add_file_extension(
@@ -116,7 +118,7 @@ class Config(object):
                     )
 
         if namespace_transfer_learning in self.configs and name_transfer_learning_model in self.configs[namespace_transfer_learning]:
-            file_list = [name_model_file, name_config_file, name_accuracy_file, name_log_file, name_json_file]
+            file_list = [name_model_file, name_best_model_file, name_config_file, name_accuracy_file, name_log_file, name_csv_file]
             if name in file_list:
                 self.configs[namespace][name] = add_file_extension(
                     self.configs[namespace][name],
@@ -177,6 +179,21 @@ class Config(object):
             dictionary[config] = self.configs[config]
 
         return dictionary
+
+    def get_config(self):
+        config_file = self.get_data('config_file')
+
+        if config_file is None:
+            return {}
+
+        if not os.path.exists(config_file):
+            raise AssertionError('The config json file "%s" does not exist.' % config_file)
+
+        if self.get('verbose'):
+            click.echo('Read config file from %s' % config_file)
+
+        with open(config_file) as json_file:
+            return json.load(json_file)
 
     def save_json(self):
         config_file = self.get_data('config_file')
