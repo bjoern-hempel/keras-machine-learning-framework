@@ -90,7 +90,7 @@ class Train(ImageClassifier):
         plt.plot(history.history['acc'], label='train')
         plt.plot(history.history['val_acc'], label='test')
         plt.legend()
-        plt.savefig(self.get_data('accuracy_file'))
+        plt.savefig(self.config.get_data('accuracy_file'))
 
         # show accuracy diagram
         if show_diagram:
