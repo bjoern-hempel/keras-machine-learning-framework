@@ -43,6 +43,9 @@ from keras.applications.inception_v3 import preprocess_input as InceptionV3Prepr
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
 
+from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
+from keras.applications.densenet import preprocess_input as DenseNetPreprocessInput
+
 from keras.applications.vgg19 import VGG19
 from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
 
@@ -64,6 +67,37 @@ class ImageClassifier(Command):
     def __init__(self, config):
         self.config = config
 
+        self.transfer_learning_wrapper = {
+            'inceptionresnetv2': {
+                'class': InceptionResNetV2,
+                'preprocess_input': InceptionResNetV2PreprocessInput
+            },
+            'inceptionv3': {
+                'class': InceptionV3,
+                'preprocess_input': InceptionV3PreprocessInput
+            },
+            'resnet50': {
+                'class': ResNet50,
+                'preprocess_input': ResNet50PreprocessInput
+            },
+            'densenet121': {
+                'class': DenseNet121,
+                'preprocess_input': DenseNetPreprocessInput
+            },
+            'densenet169': {
+                'class': DenseNet169,
+                'preprocess_input': DenseNetPreprocessInput
+            },
+            'densenet201': {
+                'class': DenseNet201,
+                'preprocess_input': DenseNetPreprocessInput
+            },
+            'vgg19': {
+                'class': VGG19,
+                'preprocess_input': VGG19PreprocessInput
+            }
+        }
+
         # initialize the parent class
         super().__init__(config)
 
@@ -73,80 +107,29 @@ class ImageClassifier(Command):
         if self.config.get('verbose'):
             click.echo('Use tl model "%s".' % transfer_learning_model)
 
-        return getattr(self, 'get_tl_' + transfer_learning_model.lower())()
-
-    def get_tl_inceptionv3(self):
         dim = self.config.gettl('input_dimension')
         weights = self.config.gettl('weights')
-        return InceptionV3(weights=weights, include_top=False, input_shape=(dim, dim, 3))
 
-    def get_tl_resnet50(self):
-        dim = self.config.gettl('input_dimension')
-        weights = self.config.gettl('weights')
-        return ResNet50(weights=weights, include_top=False, input_shape=(dim, dim, 3))
-
-    def get_tl_vgg19(self):
-        dim = self.config.gettl('input_dimension')
-        weights = self.config.gettl('weights')
-        return VGG19(weights=weights, include_top=False, input_shape=(dim, dim, 3))
-
-    def get_tl_inceptionresnetv2(self):
-        dim = self.config.gettl('input_dimension')
-        weights = self.config.gettl('weights')
-        return InceptionResNetV2(weights=weights, include_top=False, input_shape=(dim, dim, 3))
+        return self.transfer_learning_wrapper[transfer_learning_model.lower()]['class'](
+            weights=weights,
+            include_top=False,
+            input_shape=(dim, dim, 3)
+        )
 
     def load_image(self, path):
+        transfer_learning_model = self.config.gettl('transfer_learning_model')
+
         if self.config.get('verbose'):
-            click.echo('load image: %s' % self.config.gettl('transfer_learning_model'))
-        return getattr(self, 'load_image_' + self.config.gettl('transfer_learning_model').lower())(path)
+            click.echo('load image: %s' % transfer_learning_model)
 
-    def load_image_inceptionv3(self, path):
         image = load_img(
             path,
             target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
         )
         image = img_to_array(image)
         image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-        return InceptionV3PreprocessInput(image)
 
-    def load_image_resnet50(self, path):
-        image = load_img(
-            path,
-            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
-        )
-        image = img_to_array(image)
-        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-        return ResNet50PreprocessInput(image)
-
-    def load_image_vgg19(self, path):
-        image = load_img(
-            path,
-            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
-        )
-        image = img_to_array(image)
-        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-        return VGG19PreprocessInput(image)
-
-    def load_image_inceptionresnetv2(self, path):
-        image = load_img(
-            path,
-            target_size=(self.config.gettl('input_dimension'), self.config.gettl('input_dimension'))
-        )
-        image = img_to_array(image)
-        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-        return InceptionResNetV2PreprocessInput(image)
-
-    def get_preprocessing_function_inceptionv3(self):
-        return InceptionV3PreprocessInput
-
-    def get_preprocessing_function_resnet50(self):
-        return ResNet50PreprocessInput
-
-    def get_preprocessing_function_vgg19(self):
-        return VGG19PreprocessInput
-
-    def get_preprocessing_function_inceptionresnetv2(self):
-        return InceptionResNetV2PreprocessInput
+        return self.transfer_learning_wrapper[transfer_learning_model.lower()]['preprocess_input'](image)
 
     def get_model(self):
         number_trainable = self.config.gettl('number_trainable_layers')
@@ -173,11 +156,12 @@ class ImageClassifier(Command):
         model = Model(inputs=base_model.input, outputs=predictions)
 
         # set the first number_trainable layers of the network to be non-trainable
-        number_not_trainable = len(model.layers) - number_trainable
-        for layer in model.layers[:number_not_trainable]:
-            layer.trainable = False
-        for layer in model.layers[number_not_trainable:]:
-            layer.trainable = True
+        if number_trainable >= 0:
+            number_not_trainable = len(model.layers) - number_trainable
+            for layer in model.layers[:number_not_trainable]:
+                layer.trainable = False
+            for layer in model.layers[number_not_trainable:]:
+                layer.trainable = True
 
         # compile model
         self.compile_model(model)
@@ -226,14 +210,13 @@ class ImageClassifier(Command):
 
     def get_image_generator(self):
         validation_split = self.config.getml('validation_split')
+        transfer_learning_model = self.config.gettl('transfer_learning_model')
 
         if self.config.get('verbose'):
             click.echo('Validation split: %s' % validation_split)
 
         return ImageDataGenerator(
-            preprocessing_function=getattr(
-                self, 'get_preprocessing_function_' + self.config.gettl('transfer_learning_model').lower()
-            )(),
+            preprocessing_function=self.transfer_learning_wrapper[transfer_learning_model.lower()]['preprocess_input'],
             validation_split=validation_split
         )
 
@@ -245,7 +228,7 @@ class ImageClassifier(Command):
             data_path,
             target_size=(dim, dim),
             color_mode='rgb',
-            batch_size=32,
+            batch_size=16,
             class_mode='categorical',
             subset='training',
             shuffle=True
@@ -259,7 +242,7 @@ class ImageClassifier(Command):
             data_path,
             target_size=(dim, dim),
             color_mode='rgb',
-            batch_size=32,
+            batch_size=16,
             class_mode='categorical',
             subset='validation',
             shuffle=True

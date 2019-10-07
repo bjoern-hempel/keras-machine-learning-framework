@@ -108,7 +108,7 @@ class Config(object):
         if name == name_transfer_learning_model and namespace == namespace_transfer_learning:
             file_list = [name_model_file, name_config_file, name_accuracy_file, name_log_file, name_json_file]
             for file_item in file_list:
-                if file_item in self.configs[namespace_data]:
+                if namespace_data in self.configs and file_item in self.configs[namespace_data]:
                     self.configs[namespace_data][file_item] = add_file_extension(
                         self.configs[namespace_data][file_item],
                         self.configs[namespace][name].lower(),
