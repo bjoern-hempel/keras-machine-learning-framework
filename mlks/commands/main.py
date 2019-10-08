@@ -128,6 +128,9 @@ class Command:
     def show_config(config):
         """Prints out all configuration settings of given config class."""
 
+        # build data config
+        config.build_data()
+
         if len(config.configs) > 0:
             click.echo('')
 

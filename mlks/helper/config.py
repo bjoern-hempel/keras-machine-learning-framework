@@ -76,55 +76,6 @@ class Config(object):
 
         self.configs[namespace][name] = value
 
-        namespace_data = 'data'
-        namespace_transfer_learning = 'transfer_learning'
-        name_config_file = 'config_file'
-        name_model_file = 'model_file'
-        name_best_model_file = 'best_model_file'
-        name_accuracy_file = 'accuracy_file'
-        name_log_file = 'log_file'
-        name_csv_file = 'csv_file'
-        name_transfer_learning_model = 'transfer_learning_model'
-
-        extension_wrapper = {
-            'config_file': 'json',
-            'model_file': 'h5',
-            'best_model_file': 'best.{epoch:02d}-{val_acc:.2f}.h5',
-            'accuracy_file': 'png',
-            'log_file': 'log',
-            'csv_file': 'csv'
-        }
-
-        if name == name_model_file:
-            # add config, accuracy, log and json file
-            file_list = [name_config_file, name_accuracy_file, name_log_file, name_csv_file, name_best_model_file]
-            for file_item in file_list:
-                if value is None:
-                    self.configs[namespace][file_item] = None
-                else:
-                    self.configs[namespace][file_item] = add_file_extension(
-                        os.path.splitext(value)[0],
-                        extension_wrapper[file_item]
-                    )
-
-        if name == name_transfer_learning_model and namespace == namespace_transfer_learning:
-            file_list = [name_model_file, name_best_model_file, name_config_file, name_accuracy_file, name_log_file, name_csv_file]
-            for file_item in file_list:
-                if namespace_data in self.configs and file_item in self.configs[namespace_data]:
-                    self.configs[namespace_data][file_item] = add_file_extension(
-                        self.configs[namespace_data][file_item],
-                        self.configs[namespace][name].lower(),
-                        True
-                    )
-
-        if namespace_transfer_learning in self.configs and name_transfer_learning_model in self.configs[namespace_transfer_learning]:
-            file_list = [name_model_file, name_best_model_file, name_config_file, name_accuracy_file, name_log_file, name_csv_file]
-            if name in file_list:
-                self.configs[namespace][name] = add_file_extension(
-                    self.configs[namespace][name],
-                    self.configs[namespace_transfer_learning][name_transfer_learning_model]
-                )
-
     def get(self, name, namespace='general', force=False):
         if namespace not in self.configs:
             if force:
@@ -142,6 +93,46 @@ class Config(object):
 
     def gettl(self, name):
         return self.get(name, 'transfer_learning')
+
+    def build_data(self):
+        transfer_learning_model = self.gettl('transfer_learning_model').lower()
+
+        data_files = [
+            'model_file',
+            'config_file',
+            'best_model_file',
+            'accuracy_file',
+            'log_file',
+            'csv_file'
+        ]
+
+        extension_wrapper = {
+            'config_file': 'json',
+            'model_file': 'h5',
+            'best_model_file': 'best.{epoch:02d}-{val_acc:.2f}.h5',
+            'accuracy_file': 'png',
+            'log_file': 'log',
+            'csv_file': 'csv'
+        }
+
+        for data_file_main in data_files:
+            if data_file_main in self.configs['data']:
+                self.set_data(
+                    data_files[0],
+                    add_file_extension(self.get_data(data_files[0]), transfer_learning_model, True)
+                )
+                data_files.remove(data_file_main)
+
+                for data_file in data_files:
+                    self.set_data(
+                        data_file,
+                        add_file_extension(self.get_data(data_file_main), extension_wrapper[data_file])
+                    )
+
+            return None
+
+    def set_data(self, name, value):
+        self.set(name, value, 'data')
 
     def get_data(self, name):
         return self.get(name, 'data')

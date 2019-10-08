@@ -54,6 +54,16 @@ class Train(ImageClassifier):
             print(config)
             sys.exit()
 
+        print(self.config.get_data('model_file'))
+        sys.exit()
+        # model_file: C: / Users / bjoern / data / flower_1.densenet169.h5
+        # config_file: C: / Users / bjoern / data / flower_1.json
+        # accuracy_file: C: / Users / bjoern / data / flower_1.png
+        # log_file: C: / Users / bjoern / data / flower_1.log
+        # csv_file: C: / Users / bjoern / data / flower_1.csv
+        # best_model_file: C: / Users / bjoern / data / flower_1.best.
+        # {epoch: 02d} - {val_acc: .2f}.h5
+
         # preparations
         self.start_timer('preparations')
         model = self.get_model()
