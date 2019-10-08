@@ -89,7 +89,7 @@ class Config(object):
         extension_wrapper = {
             'config_file': 'json',
             'model_file': 'h5',
-            'best_model_file': 'best.h5',
+            'best_model_file': 'best.{epoch:02d}-{val_acc:.2f}.h5',
             'accuracy_file': 'png',
             'log_file': 'log',
             'csv_file': 'csv'
