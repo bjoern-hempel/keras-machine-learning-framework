@@ -31,12 +31,12 @@
 # SOFTWARE.
 
 import click
+import os
 import sys
+from pathlib import Path
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
 from mlks.helper.graph import print_image
-from keras.preprocessing.image import load_img
-import matplotlib.pyplot as plt
 
 
 class Evaluate(ImageClassifier):
@@ -58,49 +58,61 @@ class Evaluate(ImageClassifier):
 
         # get some configs
         model_file = self.config.get_data('model_file')
-        evaluation_file = self.config.get_data('evaluation_file')
         classes = self.config.get_environment('classes')
+        evaluation_files = []
 
-        # check files
+        # check model file
         check_if_file_exists(model_file)
-        check_if_file_exists(evaluation_file)
+
+        # find given files
+        if os.path.isdir(self.config.get_data('evaluation_file')):
+            for evaluation_file in Path(self.config.get_data('evaluation_file')).glob('**/*.jpg'):
+                check_if_file_exists(evaluation_file)
+                evaluation_files.append(evaluation_file)
+        elif os.path.isfile(self.config.get_data('evaluation_file')):
+            check_if_file_exists(self.config.get_data('evaluation_file'))
+            evaluation_files.append(self.config.get_data('evaluation_file'))
+        else:
+            raise AssertionError('Unknown given path "%s"' % self.config.get_data('evaluation_file'))
 
         # load model
         self.start_timer('load model file')
         model = self.load_model(model_file)
         self.finish_timer('load model file')
 
-        # load image
-        self.start_timer('load image file')
-        image = self.load_image(evaluation_file)
-        self.finish_timer('load image file')
+        # evaluate given files
+        for evaluation_file in evaluation_files:
+            # load image
+            self.start_timer('load image file')
+            image = self.load_image(evaluation_file)
+            self.finish_timer('load image file')
 
-        # predict image
-        self.start_timer('predict image file')
-        predicted_array = model.predict(image)
-        predicted_values = predicted_array.argmax(axis=-1)
-        self.finish_timer('predict image file')
+            # predict image
+            self.start_timer('predict image file')
+            predicted_array = model.predict(image)
+            predicted_values = predicted_array.argmax(axis=-1)
+            self.finish_timer('predict image file')
 
-        # print some informations
-        text = ""
-        if self.config.get('verbose'):
-            click.echo('\n\nclasses')
-            click.echo('-------')
-            for i in range(len(predicted_array[0])):
-                className = classes[i] + ':'
-                print('%s %10.2f%%' % (className.ljust(15), predicted_array[0][i] * 100))
+            # print some informations
+            text = ""
+            if self.config.get('verbose'):
+                click.echo('\n\nclasses')
+                click.echo('-------')
+                for i in range(len(predicted_array[0])):
+                    className = classes[i] + ':'
+                    print('%s %10.2f%%' % (className.ljust(15), predicted_array[0][i] * 100))
 
-                text += "\n" if text != "" else ""
-                text += '%s %10.2f%%' % (className, predicted_array[0][i] * 100)
-            click.echo('-------')
+                    text += "\n" if text != "" else ""
+                    text += '%s %10.2f%%' % (className, predicted_array[0][i] * 100)
+                click.echo('-------')
 
-        # print predicted class
-        click.echo('\n\npredicted class:')
-        click.echo('----------------')
-        click.echo('predicted: %s (%10.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
-        click.echo('----------------')
+            # print predicted class
+            click.echo('\n\npredicted class:')
+            click.echo('----------------')
+            click.echo('predicted: %s (%10.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
+            click.echo('----------------')
 
-        # show image
-        if show_image:
-            title = 'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100)
-            print_image(evaluation_file, title, text, save_image)
+            # show image
+            if show_image:
+                title = 'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100)
+                print_image(evaluation_file, title, text, save_image)
