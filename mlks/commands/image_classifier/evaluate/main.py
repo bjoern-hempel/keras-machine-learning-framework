@@ -31,8 +31,10 @@
 # SOFTWARE.
 
 import click
+import sys
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
+from mlks.helper.graph import print_image
 from keras.preprocessing.image import load_img
 import matplotlib.pyplot as plt
 
@@ -47,6 +49,7 @@ class Evaluate(ImageClassifier):
     def do(self):
 
         show_image = True
+        save_image = True
 
         # load config file
         self.start_timer('load json config file')
@@ -79,23 +82,25 @@ class Evaluate(ImageClassifier):
         self.finish_timer('predict image file')
 
         # print some informations
+        text = ""
         if self.config.get('verbose'):
             click.echo('\n\nclasses')
             click.echo('-------')
             for i in range(len(predicted_array[0])):
                 className = classes[i] + ':'
                 print('%s %10.2f%%' % (className.ljust(15), predicted_array[0][i] * 100))
+
+                text += "\n" if text != "" else ""
+                text += '%s %10.2f%%' % (className, predicted_array[0][i] * 100)
             click.echo('-------')
 
         # print predicted class
         click.echo('\n\npredicted class:')
         click.echo('----------------')
-        click.echo('predicted: %s' % classes[predicted_values[0]])
+        click.echo('predicted: %s (%10.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
         click.echo('----------------')
 
         # show image
         if show_image:
-            img = load_img(evaluation_file)
-            plt.imshow(img)
-            plt.title(classes[predicted_values[0]])
-            plt.show()
+            title = 'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100)
+            print_image(evaluation_file, title, text, save_image)
