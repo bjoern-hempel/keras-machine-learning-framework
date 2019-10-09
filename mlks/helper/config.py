@@ -95,7 +95,10 @@ class Config(object):
         return self.get(name, 'transfer_learning')
 
     def build_data(self):
-        transfer_learning_model = self.gettl('transfer_learning_model').lower()
+        if 'transfer_learning' not in self.configs:
+            transfer_learning_model = None
+        else:
+            transfer_learning_model = self.gettl('transfer_learning_model').lower()
 
         data_files = [
             'model_file',
@@ -117,10 +120,11 @@ class Config(object):
 
         for data_file_main in data_files:
             if data_file_main in self.configs['data']:
-                self.set_data(
-                    data_files[0],
-                    add_file_extension(self.get_data(data_files[0]), transfer_learning_model, True)
-                )
+                if transfer_learning_model is not None:
+                    self.set_data(
+                        data_files[0],
+                        add_file_extension(self.get_data(data_files[0]), transfer_learning_model, True)
+                    )
                 data_files.remove(data_file_main)
 
                 for data_file in data_files:
