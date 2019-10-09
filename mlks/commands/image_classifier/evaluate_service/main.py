@@ -30,17 +30,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import click
 import os
-import sys
 import time
-from pathlib import Path
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
-from mlks.helper.graph import print_image
 
 
-class Evaluate(ImageClassifier):
+class EvaluateService(ImageClassifier):
 
     def __init__(self, config):
 

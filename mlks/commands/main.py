@@ -74,7 +74,8 @@ class Command:
         self.finish_time[name] = time.time()
 
         if self.config.get('verbose'):
-            print('<- Finished "%s".' % name)
+            click.echo('<- Finished "{}" ({:.4f}s).'.
+                       format(name, self.finish_time[name] - self.start_time[name]))
 
     def print_timer(self, name='default'):
         if name not in self.start_time:

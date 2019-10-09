@@ -154,7 +154,7 @@ class ImageClassifier(Command):
         click.echo('\n\npredicted class:')
         click.echo('----------------')
         click.echo(
-            'predicted: %s (%10.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
+            'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
         click.echo('----------------')
 
         # show image
