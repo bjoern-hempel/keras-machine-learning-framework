@@ -35,6 +35,7 @@ import click
 from mlks.commands.info.main import Info as CliInfo
 from mlks.commands.image_classifier.prepare.main import Prepare as CliImageClassifierPrepare
 from mlks.commands.image_classifier.evaluate.main import Evaluate as CliImageClassifierEvaluate
+from mlks.commands.image_classifier.evaluate_service.main import Evaluate as CliImageClassifierEvaluateService
 from mlks.commands.image_classifier.train.main import Train as CliImageClassifierTrain
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
@@ -92,8 +93,12 @@ def cli_train(config):
 def cli_evaluate(config):
     """This subcommand evaluate a classifier."""
 
-    prepare_class = CliImageClassifierEvaluate(config)
-    prepare_class.do()
+    if config.get('service'):
+        prepare_class = CliImageClassifierEvaluateService(config)
+        prepare_class.do()
+    else:
+        prepare_class = CliImageClassifierEvaluate(config)
+        prepare_class.do()
 
 
 @cli.group(name='demo')

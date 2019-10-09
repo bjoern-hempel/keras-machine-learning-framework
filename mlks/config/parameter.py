@@ -66,6 +66,14 @@ option_yes = click.option(
     callback=option_callback,
     default=False
 )
+option_service = click.option(
+    '--service',
+    expose_value=False,
+    is_flag=True,
+    help='Execute the given command as service.',
+    callback=option_callback,
+    default=False
+)
 
 
 # Configure the machine learning parameters here
@@ -407,7 +415,8 @@ option_y_0_1 = click.option(
 option_set_general = [
     option_verbose,
     option_debug,
-    option_yes
+    option_yes,
+    option_service
 ]
 option_set_machine_learning = [
     option_epochs,
@@ -455,6 +464,7 @@ set_config_translator({
     'verbose': general_config_writer,
     'debug': general_config_writer,
     'yes': general_config_writer,
+    'service': general_config_writer,
 
     # machine learning config
     'epochs': machine_learning_config_writer,

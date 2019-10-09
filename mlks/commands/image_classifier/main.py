@@ -36,6 +36,7 @@ import math
 
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
+from mlks.helper.graph import print_image
 
 # DenseNet121, DenseNet169, DenseNet201
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
@@ -121,6 +122,48 @@ class ImageClassifier(Command):
 
         # initialize the parent class
         super().__init__(config)
+
+    def evaluate_file(self, model, evaluation_file, show_image=True, save_image=False):
+        classes = self.config.get_environment('classes')
+
+        # load image
+        self.start_timer('load image file')
+        image = self.load_image(evaluation_file)
+        self.finish_timer('load image file')
+
+        # predict image
+        self.start_timer('predict image file')
+        predicted_array = model.predict(image)
+        predicted_values = predicted_array.argmax(axis=-1)
+        self.finish_timer('predict image file')
+
+        # print some informations
+        text = ""
+        if self.config.get('verbose'):
+            click.echo('\n\nclasses')
+            click.echo('-------')
+            for i in range(len(predicted_array[0])):
+                class_name = classes[i] + ':'
+                print('%s %10.2f%%' % (class_name.ljust(15), predicted_array[0][i] * 100))
+
+                text += "\n" if text != "" else ""
+                text += '%s %10.2f%%' % (class_name, predicted_array[0][i] * 100)
+            click.echo('-------')
+
+        # print predicted class
+        click.echo('\n\npredicted class:')
+        click.echo('----------------')
+        click.echo(
+            'predicted: %s (%10.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
+        click.echo('----------------')
+
+        # show image
+        if show_image:
+            title = 'predicted: %s (%.2f%%)' % (
+                classes[predicted_values[0]],
+                predicted_array[0][predicted_values[0]] * 100
+            )
+            print_image(evaluation_file, title, text, save_image)
 
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')
