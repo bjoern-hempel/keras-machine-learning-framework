@@ -65,15 +65,15 @@ class Evaluate(ImageClassifier):
         check_if_file_exists(model_file)
 
         # find given files
-        if os.path.isdir(self.config.get_data('evaluation_file')):
-            for evaluation_file in Path(self.config.get_data('evaluation_file')).glob('**/*.jpg'):
-                check_if_file_exists(evaluation_file)
-                evaluation_files.append(evaluation_file)
-        elif os.path.isfile(self.config.get_data('evaluation_file')):
-            check_if_file_exists(self.config.get_data('evaluation_file'))
-            evaluation_files.append(self.config.get_data('evaluation_file'))
+        if os.path.isdir(self.config.get_data('evaluation_path')):
+            for evaluation_path in Path(self.config.get_data('evaluation_path')).glob('**/*.jpg'):
+                check_if_file_exists(evaluation_path)
+                evaluation_files.append(evaluation_path)
+        elif os.path.isfile(self.config.get_data('evaluation_path')):
+            check_if_file_exists(self.config.get_data('evaluation_path'))
+            evaluation_files.append(self.config.get_data('evaluation_path'))
         else:
-            raise AssertionError('Unknown given path "%s"' % self.config.get_data('evaluation_file'))
+            raise AssertionError('Unknown given path "%s"' % self.config.get_data('evaluation_path'))
 
         # load model
         self.start_timer('load model file')
@@ -99,11 +99,11 @@ class Evaluate(ImageClassifier):
                 click.echo('\n\nclasses')
                 click.echo('-------')
                 for i in range(len(predicted_array[0])):
-                    className = classes[i] + ':'
-                    print('%s %10.2f%%' % (className.ljust(15), predicted_array[0][i] * 100))
+                    class_name = classes[i] + ':'
+                    print('%s %10.2f%%' % (class_name.ljust(15), predicted_array[0][i] * 100))
 
                     text += "\n" if text != "" else ""
-                    text += '%s %10.2f%%' % (className, predicted_array[0][i] * 100)
+                    text += '%s %10.2f%%' % (class_name, predicted_array[0][i] * 100)
                 click.echo('-------')
 
             # print predicted class

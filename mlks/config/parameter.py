@@ -284,7 +284,7 @@ option_environment_path = click.option(
     option_type='concat_parameters',
     expose_value=False,
     is_flag=False,
-    help='Sets the environment path (used for example by --model-file, --config-file, --evaluation-file or '
+    help='Sets the environment path (used for example by --model-file, --config-file, --evaluation-path or '
          '--data-path).',
     callback=option_callback,
     default=None,
@@ -368,8 +368,8 @@ option_data_path = click.option(
     required=True,
     type=str
 )
-option_evaluation_file = click.option(
-    '--evaluation-file',
+option_evaluation_path = click.option(
+    '--evaluation-path',
     cls=OptionHelper,
     option_type='concat_parameters',
     expose_value=False,
@@ -441,7 +441,7 @@ option_set_train_process = [
 option_set_evaluation_process = [
     option_environment_path,
     option_config_file,
-    option_evaluation_file
+    option_evaluation_path
 ]
 option_set_nine_points = [
     option_x_0_1,
@@ -485,7 +485,7 @@ set_config_translator({
     'model_file': data_config_writer,
     'config_file': data_config_writer,
     'data_path': data_config_writer,
-    'evaluation_file': data_config_writer,
+    'evaluation_path': data_config_writer,
 
     # some other configs
     'x': nine_points_config_writer,
