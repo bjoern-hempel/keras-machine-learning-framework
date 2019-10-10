@@ -57,7 +57,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 ### With GPU support
 
 ```bash
-(base) user$ conda create -n keras-gpu python=3.6 numpy scipy keras-gpu matplotlib
+(base) user$ conda create -n keras-gpu python=3.6 numpy scipy keras-gpu matplotlib pillow
 (base) user$ conda activate keras-gpu
 (keras-gpu) user$
 ```
@@ -65,7 +65,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 ### Without GPU support
 
 ```bash
-(base) user$ conda create -n keras python=3.6 numpy scipy keras matplotlib
+(base) user$ conda create -n keras python=3.6 numpy scipy keras matplotlib pillow
 (base) user$ conda activate keras
 (keras) user$
 ```
