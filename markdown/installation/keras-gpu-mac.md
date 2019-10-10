@@ -57,7 +57,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 ### With GPU support
 
 ```bash
-(base) user$ conda create -n keras-gpu python=3.6 numpy scipy keras-gpu
+(base) user$ conda create -n keras-gpu python=3.6 numpy scipy keras-gpu matplotlib
 (base) user$ conda activate keras-gpu
 (keras-gpu) user$
 ```
@@ -65,7 +65,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 ### Without GPU support
 
 ```bash
-(base) user$ conda create -n keras python=3.6 numpy scipy keras
+(base) user$ conda create -n keras python=3.6 numpy scipy keras matplotlib
 (base) user$ conda activate keras
 (keras) user$
 ```
@@ -114,7 +114,7 @@ GPU: /device:GPU:0 [GeForce GT 650M 512MB]
 Default device:
 ---------------
 Device mapping:
-/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GT 650M 512MB, ...
+/job:localhost/replica:0/task:0/device:GPU:0 -> device: 0, name: GeForce GT 750M 2048MB, ...
 ---------------
 
 Information: You are running this script with GPU support.
