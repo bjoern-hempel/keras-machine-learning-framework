@@ -2,7 +2,7 @@
 
 ...
 
-## Example
+## Train the model
 
 ```bash
 (keras-gpu) C:\Users> ml train --verbose --batch-size=8 -e 20 --learning-rate-epochs-drop=10 -m InceptionV3 \
@@ -125,6 +125,12 @@ Write config file to C:/data/food.inceptionv3.json
 --- time measurement for "save model": 5.8552s ---
 
 --- time measurement for "save config": 0.0070s ---
+```
+
+## Use the model for evaluation as a service
+
+```bash
+
 ```
 
 ## A. Further Tutorials
