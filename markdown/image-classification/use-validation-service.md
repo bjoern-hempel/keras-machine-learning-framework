@@ -6,7 +6,7 @@
 
 ```bash
 (keras-gpu) C:\Users> ml train --verbose --batch-size=8 -e 20 --learning-rate-epochs-drop=10 -m InceptionV3 \
-    --number-trainable-layers=-1 --environment-path=F:/data --model-file=food_3.h5 --data-path=raw/food
+    --number-trainable-layers=-1 --environment-path=C:/data --model-file=food.h5 --data-path=raw/food
 Using TensorFlow backend.
 
 general
@@ -42,14 +42,14 @@ continue:                 False
 
 data
 ----
-environment_path:         F:/data
-model_file:               F:/data/food_3.inceptionv3.h5
-data_path:                F:/data/raw/food
-config_file:              F:/data/food_3.inceptionv3.json
-best_model_file:          F:/data/food_3.inceptionv3.best.{epoch:02d}-{val_acc:.2f}.h5
-accuracy_file:            F:/data/food_3.inceptionv3.png
-log_file:                 F:/data/food_3.inceptionv3.log
-csv_file:                 F:/data/food_3.inceptionv3.csv
+environment_path:         C:/data
+model_file:               C:/data/food.inceptionv3.h5
+data_path:                C:/data/raw/food
+config_file:              C:/data/food.inceptionv3.json
+best_model_file:          C:/data/food.inceptionv3.best.{epoch:02d}-{val_acc:.2f}.h5
+accuracy_file:            C:/data/food.inceptionv3.png
+log_file:                 C:/data/food.inceptionv3.log
+csv_file:                 C:/data/food.inceptionv3.csv
 
 
 Are these configurations correct? Continue? [Y/n] y
@@ -112,7 +112,7 @@ Epoch 00020: val_acc did not improve from 0.80951
 
 
 -> Start "save config".
-Write config file to F:/data/food_3.inceptionv3.json
+Write config file to C:/data/food.inceptionv3.json
 <- Finished "save config" (0.0070s).
 <- Finished "overall" (132304.3207s).
 
