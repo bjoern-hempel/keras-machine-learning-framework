@@ -5,7 +5,8 @@
 ## Example
 
 ```bash
-(keras-gpu) C:\Users> ml train --verbose --batch-size=8 -e 20 --learning-rate-epochs-drop=10 -m InceptionV3 --number-trainable-layers=-1 --environment-path=F:/data --model-file=food_3.h5 --data-path=raw/food
+(keras-gpu) C:\Users> ml train --verbose --batch-size=8 -e 20 --learning-rate-epochs-drop=10 -m InceptionV3 \
+    --number-trainable-layers=-1 --environment-path=F:/data --model-file=food_3.h5 --data-path=raw/food
 Using TensorFlow backend.
 
 general
