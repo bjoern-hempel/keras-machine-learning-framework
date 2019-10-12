@@ -127,11 +127,20 @@ Write config file to C:/data/food.inceptionv3.json
 --- time measurement for "save config": 0.0070s ---
 ```
 
-## Use the model for evaluation as a service
+## Then validate the data using the service mode
 
 ```bash
-
+(keras-gpu) C:\Users> ml evaluate --verbose --service --yes --environment-path=C:/data \
+    --config-file=food.inceptionv3.json --evaluation-path=_evaluation
 ```
+
+The above command starts the service, loads the model and waits for new images in the folder `C:/data/_evaluation` to be validated. **Attention**: The images will be deleted immediately after the validation in the folder! Search for a picture for validation and wait for the result:
+
+
+
+Save the image in the folder `C:/data/_evaluation`. The result could look like this:
+
+
 
 ## A. Further Tutorials
 
