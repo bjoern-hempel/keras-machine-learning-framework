@@ -43,6 +43,10 @@ Here is an overview of the demos:
 * [Transfer learning](/markdown/image-classification/transfer-learning.md)
 * ...
 
+## Further attempts
+
+* [Use the validation service](/markdown/image-classification/use-validation-service.md)
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
