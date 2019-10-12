@@ -136,11 +136,11 @@ Write config file to C:/data/food.inceptionv3.json
 
 The above command starts the service, loads the model and waits for new images in the folder `C:/data/_evaluation` to be validated. **Attention**: The images will be deleted immediately after the validation in the folder! Search for a picture for validation and wait for the result. Example based on this image: [pancake from Flickr by itslynzee](https://www.flickr.com/photos/81106231@N00/192310519)
 
-<img src="/markdown/image-classification/pancake_predicted.png">
+<img src="/markdown/image-classification/pancake.jpg">
 
 Save the image in the folder `C:/data/_evaluation`. The result could look like this:
 
-
+<img src="/markdown/image-classification/pancake_predicted.png">
 
 ## A. Further Tutorials
 
