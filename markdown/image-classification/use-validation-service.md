@@ -14,32 +14,6 @@ general
 verbose:                   True
 debug:                     False
 
-machine_learning
-----------------
-batch_size:                8
-epochs:                    20
-learning_rate_epochs_drop: 10
-activation_function:       tanh
-loss_function:             categorical_crossentropy
-optimizer:                 sgd
-learning_rate:             0.001
-learning_rate_drop:        0.5
-momentum:                  0.9
-decay:                     0.0
-nesterov:                  True
-metrics:                   accuracy
-validation_split:          0.2
-
-transfer_learning
------------------
-transfer_learning_model:   InceptionV3
-number_trainable_layers:   -1
-input_dimension:           299
-dense_size:                512
-dropout:                   0.5
-weights:                   imagenet
-continue:                  False
-
 data
 ----
 environment_path:          C:/data
