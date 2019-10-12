@@ -134,7 +134,7 @@ Write config file to C:/data/food.inceptionv3.json
     --config-file=food.inceptionv3.json --evaluation-path=_evaluation
 ```
 
-The above command starts the service, loads the model and waits for new images in the folder `C:/data/_evaluation` to be validated. **Attention**: The images will be deleted immediately after the validation in the folder! Search for a picture for validation and wait for the result:
+The above command starts the service, loads the model and waits for new images in the folder `C:/data/_evaluation` to be validated. **Attention**: The images will be deleted immediately after the validation in the folder! Search for a picture for validation and wait for the result. Example based on this image: [pancake from Flickr by itslynzee](https://www.flickr.com/photos/81106231@N00/192310519)
 
 
 
