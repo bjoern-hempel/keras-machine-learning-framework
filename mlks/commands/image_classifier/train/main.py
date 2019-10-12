@@ -75,12 +75,18 @@ class Train(ImageClassifier):
             click.echo(train_generator.class_indices)
             click.echo('-------\n\n')
 
+        # save the model to import within dl4j
+        self.start_timer('save model')
+        self.config.save_model(model)
+        self.finish_timer('save model')
+
         # train the model
         self.start_timer('fit')
         history = self.train(model, train_generator, validation_generator)
         self.finish_timer('fit')
 
         # save the model to import within dl4j
+        self.config.rebuild_model_dict()
         self.start_timer('save model')
         self.config.save_model(model)
         self.finish_timer('save model')

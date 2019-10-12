@@ -33,6 +33,8 @@
 import click
 import json
 import os
+import glob
+import re
 from typing import Dict
 from mlks.helper.filesystem import add_file_extension
 
@@ -157,6 +159,40 @@ class Config(object):
 
         self.set_environment('measurement', measurements)
 
+    def rebuild_model_dict(self):
+        model_file = self.get_data('model_file')
+        model_path = os.path.dirname(model_file)
+        model_base = add_file_extension(os.path.basename(model_file), '*', True)
+        model_files = []
+        model_file_best = None
+        model_file_best_val_acc = 0
+
+        # search for all best models
+        os.chdir(model_path)
+        for file in glob.glob(model_base):
+            output = re.search('\.([0-9]{1,})-([0-9]{1,}\.[0-9]{1,})\.', file, flags=re.IGNORECASE)
+            if output is not None:
+                epoch = int(output.group(1))
+                val_acc = float(output.group(2))
+
+                # build current model dict
+                model_file_current = {
+                    'val_acc': val_acc,
+                    'epoch': epoch,
+                    'model_file': '%s/%s' % (model_path, file)
+                }
+
+                # remember the best model
+                if val_acc > model_file_best_val_acc:
+                    model_file_best_val_acc = val_acc
+                    model_file_best = model_file_current
+
+                model_files.append(model_file_current)
+
+        # set new model dict
+        self.set_data('model_files', model_files)
+        self.set_data('model_file_best', model_file_best)
+
     def set_dict(self, data):
         for config, values in data.items():
             if config in self.configs and isinstance(values, dict):
@@ -203,8 +239,11 @@ class Config(object):
         if model_file is not None:
             model.save(model_file)
 
-    def get_json(self):
-        return json.dumps(self.get_dict(), sort_keys=True, indent=4, separators=(',', ': '))
+    def get_json(self, beautified=False):
+        if beautified:
+            return json.dumps(self.get_dict(), sort_keys=True, indent=4, separators=(',', ': '))
+
+        return json.dumps(self.get_dict(), sort_keys=True)
 
     def load_json_from_config_file(self, config_file):
         if not os.path.exists(config_file) or not os.path.isfile(config_file):

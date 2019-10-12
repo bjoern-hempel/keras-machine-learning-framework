@@ -31,11 +31,13 @@
 # SOFTWARE.
 
 import os
+import glob
 import time
 import click
 import sys
+import re
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists, clear_folder
+from mlks.helper.filesystem import check_if_file_exists, clear_folder, add_file_extension
 
 
 class EvaluateService(ImageClassifier):
@@ -54,8 +56,14 @@ class EvaluateService(ImageClassifier):
         self.config.load_json_from_config_file(self.config.get_data('config_file'))
         self.finish_timer('load json config file')
 
+        # rebuild model dict
+        self.config.rebuild_model_dict()
+        self.start_timer('save json config file')
+        self.config.save_json()
+        self.finish_timer('save json config file')
+
         # get some configs
-        model_file = self.config.get_data('model_file')
+        model_file = self.config.get_data('model_file_best')['model_file']
         evaluation_path = self.config.get_data('evaluation_path')
 
         # check model file
@@ -98,9 +106,9 @@ class EvaluateService(ImageClassifier):
                 raise AssertionError('The given evaluation path "%s" must be empty.' % evaluation_path)
 
         # load model
-        self.start_timer('load model file')
+        self.start_timer('load model file %s' % model_file)
         model = self.load_model(model_file)
-        self.finish_timer('load model file')
+        self.finish_timer('load model file %s' % model_file)
 
         click.echo('')
         click.echo('Ready for evaluation. Now add the images to be evaluated to the folder "%s"...' % self.config.get_data('evaluation_path'))
