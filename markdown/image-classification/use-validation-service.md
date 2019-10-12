@@ -116,6 +116,16 @@ Save the image in the folder `C:/data/_evaluation`. The result could look like t
 
 <img src="/markdown/image-classification/pancake_predicted.png">
 
+```bash
+classes
+-------
+01) pancakes:                      99.96%
+02) quesadilla:                     0.03%
+03) guacamole:                      0.00%
+...
+-------
+```
+
 ## A. Further Tutorials
 
 * [An introduction to artificial intelligence](https://github.com/friends-of-ai/an-introduction-to-artificial-intelligence)
