@@ -135,10 +135,15 @@ class ImageClassifier(Command):
         self.start_timer('predict image file')
         predicted_array = model.predict(image)
         predicted_values = predicted_array.argmax(axis=-1)
+        top_values_index = sorted(
+            sorted(range(len(predicted_array[0])), key=lambda i: predicted_array[0][i])[-5:],
+            reverse=True
+        )
+        print(top_values_index)
         self.finish_timer('predict image file')
 
         # print some informations
-        text = ""
+        #text = ""
         if self.config.get('verbose'):
             click.echo('\n\nclasses')
             click.echo('-------')
@@ -146,9 +151,16 @@ class ImageClassifier(Command):
                 class_name = classes[i] + ':'
                 print('%s %10.2f%%' % (class_name.ljust(15), predicted_array[0][i] * 100))
 
-                text += "\n" if text != "" else ""
-                text += '%s %10.2f%%' % (class_name, predicted_array[0][i] * 100)
+                #text += "\n" if text != "" else ""
+                #text += '%s %10.2f%%' % (class_name, predicted_array[0][i] * 100)
             click.echo('-------')
+
+        # print picture text
+        text = ""
+        for top_value_index in top_values_index:
+            class_name = classes[top_value_index] + ':'
+            text += "\n" if text != "" else ""
+            text += '%s %10.2f%%' % (class_name, predicted_array[0][top_value_index] * 100)
 
         # print predicted class
         click.echo('\n\npredicted class:')

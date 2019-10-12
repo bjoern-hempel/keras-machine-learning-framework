@@ -32,6 +32,7 @@
 
 import os
 import time
+import sys
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
 
