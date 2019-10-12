@@ -135,42 +135,43 @@ class ImageClassifier(Command):
         self.start_timer('predict image file')
         predicted_array = model.predict(image)
         predicted_values = predicted_array.argmax(axis=-1)
-        top_values_index = sorted(
-            sorted(range(len(predicted_array[0])), key=lambda i: predicted_array[0][i])[-5:],
+        predicted_array_sorted = sorted(
+            range(len(predicted_array[0])), key=lambda i: predicted_array[0][i],
             reverse=True
         )
-        print(top_values_index)
+        predicted_array_sorted_top_5 = predicted_array_sorted[0:5]
         self.finish_timer('predict image file')
 
         # print some informations
-        #text = ""
         if self.config.get('verbose'):
             click.echo('\n\nclasses')
             click.echo('-------')
-            for i in range(len(predicted_array[0])):
-                class_name = classes[i] + ':'
-                print('%s %10.2f%%' % (class_name.ljust(15), predicted_array[0][i] * 100))
-
-                #text += "\n" if text != "" else ""
-                #text += '%s %10.2f%%' % (class_name, predicted_array[0][i] * 100)
+            counter = 0
+            for index in predicted_array_sorted:
+                counter += 1
+                class_name = classes[index] + ':'
+                print('%02d) %-25s %10.2f%%' % (counter, class_name, predicted_array[0][index] * 100))
             click.echo('-------')
-
-        # print picture text
-        text = ""
-        for top_value_index in top_values_index:
-            class_name = classes[top_value_index] + ':'
-            text += "\n" if text != "" else ""
-            text += '%s %10.2f%%' % (class_name, predicted_array[0][top_value_index] * 100)
 
         # print predicted class
         click.echo('\n\npredicted class:')
         click.echo('----------------')
         click.echo(
-            'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100))
+            'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100)
+        )
         click.echo('----------------')
 
         # show image
         if show_image:
+            # build the top 5 text for the image
+            text = ""
+            counter = 0
+            for index in predicted_array_sorted_top_5:
+                counter += 1
+                class_name = classes[index] + ':'
+                text += "\n" if text != "" else ""
+                text += '%02d) %s %10.2f%%' % (counter, class_name, predicted_array[0][index] * 100)
+
             title = 'predicted: %s (%.2f%%)' % (
                 classes[predicted_values[0]],
                 predicted_array[0][predicted_values[0]] * 100

@@ -32,9 +32,10 @@
 
 import os
 import time
+import click
 import sys
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists
+from mlks.helper.filesystem import check_if_file_exists, clear_folder
 
 
 class EvaluateService(ImageClassifier):
@@ -67,12 +68,43 @@ class EvaluateService(ImageClassifier):
         # check given evaluation path
         number_of_files = sum([len(files) for r, d, files in os.walk(evaluation_path)])
         if number_of_files > 0:
-            raise AssertionError('The given evaluation path "%s" must be empty.' % evaluation_path)
+            question = 'The directory is not empty and contains %d files. Should I empty it?' % number_of_files
+            negative = 'Cancelled by user.'
+
+            # print files
+            click.echo('\ncontent')
+            click.echo('-------')
+            for r, _, files in os.walk(evaluation_path):
+                for file in files:
+                    click.echo('- %s/%s' % (r, file))
+            click.echo('-------')
+
+            # ask to delete these files
+            positive = self.query_yes_no('\n%s' % question)
+
+            # cancel if the files should not be deleted
+            if not positive:
+                if negative is not None:
+                    click.echo(negative)
+                sys.exit()
+
+            # clear folder
+            clear_folder(evaluation_path)
+            click.echo('Folder "%s" cleared.' % evaluation_path)
+
+            # check given evaluation path again
+            number_of_files = sum([len(files) for r, d, files in os.walk(evaluation_path)])
+            if number_of_files > 0:
+                raise AssertionError('The given evaluation path "%s" must be empty.' % evaluation_path)
 
         # load model
         self.start_timer('load model file')
         model = self.load_model(model_file)
         self.finish_timer('load model file')
+
+        click.echo('')
+        click.echo('Ready for evaluation. Now add the images to be evaluated to the folder "%s"...' % self.config.get_data('evaluation_path'))
+        click.echo('')
 
         # start service
         while True:
