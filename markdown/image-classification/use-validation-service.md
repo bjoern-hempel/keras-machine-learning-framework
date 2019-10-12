@@ -86,7 +86,7 @@ Epoch 1/20
 Epoch 00001: LearningRateScheduler setting learning rate to 0.001.
 1489/1489 [==============================] - 403s 271ms/step - loss: 2.1907 - acc: 0.4269 - val_loss: 1.2153 - val_acc: 0.6728
 
-Epoch 00001: val_acc improved from -inf to 0.67276, saving model to F:/data/food_3.inceptionv3.best.01-0.67.h5
+Epoch 00001: val_acc improved from -inf to 0.67276, saving model to C:/data/food_3.inceptionv3.best.01-0.67.h5
 Epoch 2/20
 
 Epoch 00002: LearningRateScheduler setting learning rate to 0.001.
