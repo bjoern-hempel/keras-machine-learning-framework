@@ -69,6 +69,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ```bash
 (base) C:\Users> conda create -n keras-gpu python=3.6 numpy scipy keras-gpu matplotlib pillow
+(base) C:\Users> pip install python-magic-bin==0.4.14
 (base) C:\Users> conda activate keras-gpu
 (keras-gpu) C:\Users>
 ```
@@ -77,6 +78,7 @@ Open Anaconda Prompt and create a GPU environment and if necessary an environmen
 
 ```bash
 (base) C:\Users> conda create -n keras python=3.6 numpy scipy keras matplotlib pillow
+(base) C:\Users> pip install python-magic-bin==0.4.14
 (base) C:\Users> conda activate keras
 (keras) C:\Users>
 ```
