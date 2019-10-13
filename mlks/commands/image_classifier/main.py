@@ -143,21 +143,27 @@ class ImageClassifier(Command):
         self.finish_timer('predict image file')
 
         # print some informations
+        prediction_overview = ''
+
+        prediction_overview += 'classes\n'
+        prediction_overview += '-------\n'
+        counter = 0
+        for index in predicted_array_sorted:
+            counter += 1
+            class_name = classes[index] + ':'
+            prediction_overview += '%02d) %-25s %10.2f%%\n' % (counter, class_name, predicted_array[0][index] * 100)
+        prediction_overview += '-------\n'
+
         if self.config.get('verbose'):
-            click.echo('\n\nclasses')
-            click.echo('-------')
-            counter = 0
-            for index in predicted_array_sorted:
-                counter += 1
-                class_name = classes[index] + ':'
-                print('%02d) %-25s %10.2f%%' % (counter, class_name, predicted_array[0][index] * 100))
-            click.echo('-------')
+            click.echo('\n\n' + prediction_overview)
 
         # print predicted class
+        prediction_class = classes[predicted_values[0]]
+        prediction_accuracy = predicted_array[0][predicted_values[0]] * 100
         click.echo('\n\npredicted class:')
         click.echo('----------------')
         click.echo(
-            'predicted: %s (%.2f%%)' % (classes[predicted_values[0]], predicted_array[0][predicted_values[0]] * 100)
+            'predicted: %s (%.2f%%)' % (prediction_class, prediction_accuracy)
         )
         click.echo('----------------')
 
@@ -175,6 +181,12 @@ class ImageClassifier(Command):
             predicted_array[0][predicted_values[0]] * 100
         )
         print_image(evaluation_file, title, text, show_image, save_image)
+
+        return {
+            'prediction_overview': prediction_overview,
+            'prediction_class': prediction_class,
+            'prediction_accuracy': prediction_accuracy
+        }
 
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')

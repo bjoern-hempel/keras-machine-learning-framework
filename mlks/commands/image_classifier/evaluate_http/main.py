@@ -54,24 +54,11 @@ class EvaluateHttp(ImageClassifier):
         evaluation_file_web = upload_data['upload_path_web']
         graph_file_web = add_file_extension(add_file_extension(evaluation_file_web, 'graph', True), PNG_EXTENSION)
 
-        self.evaluate_file(model, evaluation_file, show_image, save_image)
+        evaluation_data = self.evaluate_file(model, evaluation_file, show_image, save_image)
 
-        prediction_overview = """classes
--------
-01) dahlia:                        94.21%
-02) sunflower:                      3.09%
-03) rose:                           1.62%
-04) coneflower:                     0.84%
-05) daisy:                          0.10%
-06) poppy:                          0.04%
-07) middayflower:                   0.04%
-08) tulip:                          0.02%
-09) dandelion:                      0.02%
-10) ranunculus:                     0.01%
--------"""
-
-        prediction_class = 'dahlia'
-        prediction_accuracy = 94.21
+        prediction_overview = evaluation_data['prediction_overview']
+        prediction_class = evaluation_data['prediction_class']
+        prediction_accuracy = evaluation_data['prediction_accuracy']
 
         return_value = {
             'evaluated_file': evaluation_file,
