@@ -25,6 +25,8 @@ accuracy_file:             C:/data/food.inceptionv3.png
 log_file:                  C:/data/food.inceptionv3.log
 csv_file:                  C:/data/food.inceptionv3.csv
 
+...
+
 
 Are these configurations correct? Continue? [Y/n] y
 
