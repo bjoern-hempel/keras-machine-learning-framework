@@ -36,6 +36,7 @@ from mlks.commands.info.main import Info as CliInfo
 from mlks.commands.image_classifier.prepare.main import Prepare as CliImageClassifierPrepare
 from mlks.commands.image_classifier.evaluate.main import Evaluate as CliImageClassifierEvaluate
 from mlks.commands.image_classifier.evaluate_service.main import EvaluateService as CliImageClassifierEvaluateService
+from mlks.commands.image_classifier.evaluate_http.main import EvaluateHttp as CliImageClassifierEvaluateHttp
 from mlks.commands.image_classifier.train.main import Train as CliImageClassifierTrain
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
@@ -95,6 +96,9 @@ def cli_evaluate(config):
 
     if config.get('service'):
         prepare_class = CliImageClassifierEvaluateService(config)
+        prepare_class.do()
+    elif config.get('http'):
+        prepare_class = CliImageClassifierEvaluateHttp(config)
         prepare_class.do()
     else:
         prepare_class = CliImageClassifierEvaluate(config)

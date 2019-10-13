@@ -74,6 +74,14 @@ option_service = click.option(
     callback=option_callback,
     default=False
 )
+option_http = click.option(
+    '--http',
+    expose_value=False,
+    is_flag=True,
+    help='Execute the given command as http service.',
+    callback=option_callback,
+    default=False
+)
 
 
 # Configure the machine learning parameters here
@@ -416,7 +424,8 @@ option_set_general = [
     option_verbose,
     option_debug,
     option_yes,
-    option_service
+    option_service,
+    option_http
 ]
 option_set_machine_learning = [
     option_epochs,
@@ -465,6 +474,7 @@ set_config_translator({
     'debug': general_config_writer,
     'yes': general_config_writer,
     'service': general_config_writer,
+    'http': general_config_writer,
 
     # machine learning config
     'epochs': machine_learning_config_writer,

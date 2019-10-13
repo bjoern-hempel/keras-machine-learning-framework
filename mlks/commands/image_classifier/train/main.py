@@ -76,9 +76,9 @@ class Train(ImageClassifier):
             click.echo('-------\n\n')
 
         # save the model to import within dl4j
-        self.start_timer('save model')
-        self.config.save_model(model)
-        self.finish_timer('save model')
+        self.start_timer('save config')
+        self.config.save_json()
+        self.finish_timer('save config')
 
         # train the model
         self.start_timer('fit')
@@ -86,12 +86,12 @@ class Train(ImageClassifier):
         self.finish_timer('fit')
 
         # save the model to import within dl4j
-        self.config.rebuild_model_dict()
         self.start_timer('save model')
         self.config.save_model(model)
         self.finish_timer('save model')
 
         # save config data from model to import within dl4j
+        self.config.rebuild_model_dict()
         self.start_timer('save config')
         self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
         self.config.set_environment('accuracies_trained', history.history['acc'], flip=True, flip_as_array=True)
