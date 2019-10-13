@@ -10,5 +10,6 @@ setup(
     entry_points='''
         [console_scripts]
         ml=mlks.main:cli
+        run_http=mlks.runner.run_http:run
     ''',
 )

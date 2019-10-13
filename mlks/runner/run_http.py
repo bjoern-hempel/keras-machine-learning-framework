@@ -3,7 +3,7 @@
 # The base http server for debugging purposes
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   15.09.2019
+# Date:   13.10.2019
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
@@ -35,23 +35,24 @@ from http.server import HTTPServer
 from mlks.helper.simple_http_request_handler import SimpleHTTPRequestHandler
 
 
-try:
-    use_ssl = False
-    port = 4443 if use_ssl else 8000
-    httpd = HTTPServer(('localhost', port), SimpleHTTPRequestHandler)
-    print('Webserver started on port %d..' % port)
+def run():
+    try:
+        use_ssl = False
+        port = 4443 if use_ssl else 8000
+        httpd = HTTPServer(('localhost', port), SimpleHTTPRequestHandler)
+        print('Webserver started on port %d..' % port)
 
-    # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)
-    if use_ssl:
-        httpd.socket = ssl.wrap_socket(
-            httpd.socket,
-            keyfile='./key.pem',
-            certfile='./csr.pem',
-            server_side=True
-        )
+        # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)
+        if use_ssl:
+            httpd.socket = ssl.wrap_socket(
+                httpd.socket,
+                keyfile='./key.pem',
+                certfile='./csr.pem',
+                server_side=True
+            )
 
-    httpd.serve_forever()
+        httpd.serve_forever()
 
-except KeyboardInterrupt:
-    print('^C received, shutting down the web server')
-    httpd.socket.close()
+    except KeyboardInterrupt:
+        print('^C received, shutting down the web server')
+        httpd.socket.close()
