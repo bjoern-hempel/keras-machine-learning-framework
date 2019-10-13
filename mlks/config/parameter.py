@@ -393,8 +393,8 @@ option_evaluation_path = click.option(
     help='The evaluation file which should be predicted.',
     callback=option_callback,
     concat='environment_path',
-    default=None,
-    required=True,
+    default='_evaluation',
+    required=False,
     type=str
 )
 
