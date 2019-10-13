@@ -45,7 +45,7 @@ Here is an overview of the demos:
 
 ## Further attempts
 
-* [Use the validation service](/markdown/image-classification/use-validation-service.md)
+* [Use the evaluation service](/markdown/image-classification/use-evaluation-service.md)
 * [Use the http webservice for evaluation](/markdown/image-classification/use-http-webservice.md)
 
 ## A. Further Tutorials
