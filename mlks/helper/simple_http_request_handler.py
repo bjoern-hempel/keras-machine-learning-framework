@@ -38,7 +38,14 @@ from urllib.parse import urlparse
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    HTML_BODY = "<html><head><title>Title goes here.</title></head><body>%s</body></html>"
+    HTML_BODY = """<html>
+        <head>
+            <title>Keras Machine Learning Framework - Evaluation Form</title>
+        </head>
+        <body>
+            %s
+        </body>
+    </html>"""
 
     HTML_FORM = """<div>
         <form action="" method="post" enctype="multipart/form-data">
