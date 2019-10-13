@@ -33,6 +33,8 @@
 import cgi
 import re
 import os
+import magic
+import collections
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse
 
@@ -62,11 +64,57 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         <p><img src="%s" style="width: 500px;"></p>
     </div>"""
 
+    HTML_ERROR = """<div>
+        <p style="padding: 5px; background-color: red;">%s</p>
+    </div>"""
+
+    ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
+
+    hooks = {}
+
     def __init__(self, request, client_address, server):
         self.upload_path = 'F:/data/upload'
         self.upload_path_web = '/upload'
 
         super().__init__(request, client_address, server)
+
+    @staticmethod
+    def set_GET_hook(hook):
+        SimpleHTTPRequestHandler.set_hook('GET', hook)
+
+    @staticmethod
+    def set_POST_hook(hook):
+        SimpleHTTPRequestHandler.set_hook('POST', hook)
+
+    @staticmethod
+    def set_hook(name, hook):
+        if 'lambda' not in hook:
+            raise AssertionError('The given hook is invalid (no lambda function given).')
+
+        if not isinstance(hook['lambda'], collections.Callable):
+            raise AssertionError('The given hook is invalid (lambda function is not callable).')
+
+        if 'arguments' not in hook:
+            hook['arguments'] = []
+
+        if not isinstance(hook['arguments'], list):
+            raise AssertionError('The given hook is invalid (parameter argument must be a list).')
+
+        SimpleHTTPRequestHandler.hooks[name] = hook
+
+    @staticmethod
+    def call_hook(*args):
+        name = args[0]
+
+        # check namespace
+        if name not in SimpleHTTPRequestHandler.hooks:
+            return None
+
+        # merge arguments
+        arguments = list(args[1:]) + SimpleHTTPRequestHandler.hooks[name]['arguments']
+
+        # execute lambda function
+        return SimpleHTTPRequestHandler.hooks[name]['lambda'](*arguments)
 
     def respond_html(self, response, status=200):
         self.send_response(status)
@@ -99,14 +147,36 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         )
 
         filename = form['file'].filename
+
+        if filename == '':
+            return {
+                'error': True,
+                'message': 'No file was uploaded.'
+            }
+
         data = form['file'].file.read()
         upload_path = '%s/%s' % (self.upload_path, filename)
         upload_path_web = '%s/%s' % (self.upload_path_web, filename)
         open(upload_path, 'wb').write(data)
 
+        mime = magic.Magic(mime=True)
+        mime_type = mime.from_file(upload_path)
+
+        if mime_type not in self.ALLOWED_MIME_TYPES:
+            return {
+                'error': True,
+                'message': 'The mime type "%s" of uploaded file "%s" is not allowed.' % (
+                    mime_type,
+                    filename
+                )
+            }
+
         return {
             'upload_path': upload_path,
-            'upload_path_web': upload_path_web
+            'upload_path_web': upload_path_web,
+            'mime_type': mime_type,
+            'error': False,
+            'message': None
         }
 
     def do_GET(self):
@@ -120,6 +190,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.respond_picture(upload_image_path)
             return
 
+        # call hook
+        GET_result = self.call_hook('GET')
+        if GET_result is not None:
+            print(GET_result)
+
         html_body = self.HTML_BODY % self.HTML_FORM
         self.respond_html(html_body)
         return
@@ -127,10 +202,19 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         upload_data = self.write_upload_file()
 
-        html_content = self.HTML_PREDICTION % (
-            upload_data['upload_path_web'],
-            upload_data['upload_path_web']
-        )
-        html_body = self.HTML_BODY % html_content
+        if upload_data['error']:
+            html_content = self.HTML_ERROR % upload_data['message']
+            html_content += self.HTML_FORM
+            html_body = self.HTML_BODY % html_content
+        else:
+            # call post hook
+            evaluation_data = self.call_hook('POST', upload_data)
+
+            html_content = self.HTML_PREDICTION % (
+                upload_data['upload_path_web'],
+                upload_data['upload_path_web']
+            )
+            html_content += self.HTML_FORM
+            html_body = self.HTML_BODY % html_content
 
         self.respond_html(html_body)

@@ -41,13 +41,23 @@ from mlks.helper.filesystem import check_if_file_exists
 class EvaluateHttp(ImageClassifier):
 
     def __init__(self, config):
+        self.test_name = 123
 
         # initialize the parent class
         super().__init__(config)
 
+    def post_hook(self, a, b, c):
+        return self.test_name
+
     def do(self):
         # some configs
         show_image = True
+
+        # set hooks
+        SimpleHTTPRequestHandler.set_POST_hook({
+            'lambda': self.post_hook,
+            'arguments': [2, 3]
+        })
 
         # load config file
         self.start_timer('load json config file')

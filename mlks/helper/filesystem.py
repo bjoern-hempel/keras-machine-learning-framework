@@ -33,6 +33,9 @@
 import os
 import shutil
 
+PNG_EXTENSION = 'png'
+JPG_EXTENSION = 'jpg'
+
 
 def clear_folder(path):
     for the_file in os.listdir(path):

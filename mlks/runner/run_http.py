@@ -33,26 +33,52 @@
 import ssl
 from http.server import HTTPServer
 from mlks.helper.simple_http_request_handler import SimpleHTTPRequestHandler
+from mlks.helper.filesystem import add_file_extension, PNG_EXTENSION
 
+
+class HttpRunner:
+    def __init__(self):
+        self.name = 'xyz'
+
+    def POST_hook(self, upload_data):
+        # get file to evaluate
+        evaluation_file = upload_data['upload_path']
+        graph_file = add_file_extension(add_file_extension(evaluation_file, PNG_EXTENSION), 'graph', True)
+
+        print(upload_data)
+
+        return {
+            'evaluated_file': evaluation_file,
+            'graph_file': graph_file
+        }
+
+    def run(self):
+        try:
+            SimpleHTTPRequestHandler.set_POST_hook({
+                'lambda': self.POST_hook,
+                'arguments': []
+            })
+
+            use_ssl = False
+            port = 4443 if use_ssl else 8000
+            httpd = HTTPServer(('localhost', port), SimpleHTTPRequestHandler)
+            print('Webserver started on port %d..' % port)
+
+            # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)
+            if use_ssl:
+                httpd.socket = ssl.wrap_socket(
+                    httpd.socket,
+                    keyfile='./key.pem',
+                    certfile='./csr.pem',
+                    server_side=True
+                )
+
+            httpd.serve_forever()
+
+        except KeyboardInterrupt:
+            print('^C received, shutting down the web server')
+            httpd.socket.close()
 
 def run():
-    try:
-        use_ssl = False
-        port = 4443 if use_ssl else 8000
-        httpd = HTTPServer(('localhost', port), SimpleHTTPRequestHandler)
-        print('Webserver started on port %d..' % port)
-
-        # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)
-        if use_ssl:
-            httpd.socket = ssl.wrap_socket(
-                httpd.socket,
-                keyfile='./key.pem',
-                certfile='./csr.pem',
-                server_side=True
-            )
-
-        httpd.serve_forever()
-
-    except KeyboardInterrupt:
-        print('^C received, shutting down the web server')
-        httpd.socket.close()
+    http_runner = HttpRunner()
+    http_runner.run()
