@@ -1,4 +1,4 @@
-# Use the validation service
+# Use the evaluation service
 
 The problem with validating models is the time it takes to load the model, especially if it needs to be loaded into the graphics card memory first. 30 seconds is not uncommon. The validation itself takes only a few milliseconds. To solve the problem, the model must be loaded and kept in memory. The program then waits for the data to be validated. This process is also called service. This framework offers this functionality out of the box. The procedure for using this functionality is explained and shown below.
 
