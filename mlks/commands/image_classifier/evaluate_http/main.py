@@ -69,7 +69,7 @@ class EvaluateHttp(ImageClassifier):
 
         # load model
         self.start_timer('load model file %s' % model_file)
-        model = self.load_model(model_file)
+        #model = self.load_model(model_file)
         self.finish_timer('load model file %s' % model_file)
 
         click.echo('')
