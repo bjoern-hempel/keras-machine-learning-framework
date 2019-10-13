@@ -1,4 +1,4 @@
-# Keras Machine Learning Suite
+# Keras Machine Learning Framework
 
 This machine learning framework prepares, trains and validates an image classifier.
 
