@@ -161,22 +161,20 @@ class ImageClassifier(Command):
         )
         click.echo('----------------')
 
-        # show image
-        if show_image:
-            # build the top 5 text for the image
-            text = ""
-            counter = 0
-            for index in predicted_array_sorted_top_5:
-                counter += 1
-                class_name = classes[index] + ':'
-                text += "\n" if text != "" else ""
-                text += '%02d) %s %10.2f%%' % (counter, class_name, predicted_array[0][index] * 100)
+        # build the top 5 text for the image
+        text = ""
+        counter = 0
+        for index in predicted_array_sorted_top_5:
+            counter += 1
+            class_name = classes[index] + ':'
+            text += "\n" if text != "" else ""
+            text += '%02d) %s %10.2f%%' % (counter, class_name, predicted_array[0][index] * 100)
 
-            title = 'predicted: %s (%.2f%%)' % (
-                classes[predicted_values[0]],
-                predicted_array[0][predicted_values[0]] * 100
-            )
-            print_image(evaluation_file, title, text, save_image)
+        title = 'predicted: %s (%.2f%%)' % (
+            classes[predicted_values[0]],
+            predicted_array[0][predicted_values[0]] * 100
+        )
+        print_image(evaluation_file, title, text, show_image, save_image)
 
     def get_tl_model(self):
         transfer_learning_model = self.config.gettl('transfer_learning_model')

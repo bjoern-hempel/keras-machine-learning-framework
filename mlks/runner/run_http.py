@@ -43,14 +43,36 @@ class HttpRunner:
     def POST_hook(self, upload_data):
         # get file to evaluate
         evaluation_file = upload_data['upload_path']
-        graph_file = add_file_extension(add_file_extension(evaluation_file, PNG_EXTENSION), 'graph', True)
+        evaluation_file_web = upload_data['upload_path_web']
 
-        print(upload_data)
+        prediction_overview = """classes
+-------
+01) dahlia:                        94.21%
+02) sunflower:                      3.09%
+03) rose:                           1.62%
+04) coneflower:                     0.84%
+05) daisy:                          0.10%
+06) poppy:                          0.04%
+07) middayflower:                   0.04%
+08) tulip:                          0.02%
+09) dandelion:                      0.02%
+10) ranunculus:                     0.01%
+-------"""
 
-        return {
+        prediction_class = 'dahlia'
+        prediction_accuracy = 94.21
+
+        return_value = {
             'evaluated_file': evaluation_file,
-            'graph_file': graph_file
+            'graph_file': evaluation_file,
+            'evaluated_file_web': evaluation_file_web,
+            'graph_file_web': evaluation_file_web,
+            'prediction_overview': prediction_overview,
+            'prediction_class': prediction_class,
+            'prediction_accuracy': prediction_accuracy
         }
+
+        return return_value
 
     def run(self):
         try:

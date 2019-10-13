@@ -35,29 +35,59 @@ import ssl
 from http.server import HTTPServer
 from mlks.helper.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists
+from mlks.helper.filesystem import check_if_file_exists, add_file_extension, PNG_EXTENSION
 
 
 class EvaluateHttp(ImageClassifier):
 
     def __init__(self, config):
-        self.test_name = 123
-
         # initialize the parent class
         super().__init__(config)
 
-    def post_hook(self, a, b, c):
-        return self.test_name
+    def POST_hook(self, upload_data, model):
+        show_image = False
+        save_image = True
+
+        # get file to evaluate
+        evaluation_file = upload_data['upload_path']
+        graph_file = add_file_extension(add_file_extension(evaluation_file, 'graph', True), PNG_EXTENSION)
+        evaluation_file_web = upload_data['upload_path_web']
+        graph_file_web = add_file_extension(add_file_extension(evaluation_file_web, 'graph', True), PNG_EXTENSION)
+
+        self.evaluate_file(model, evaluation_file, show_image, save_image)
+
+        prediction_overview = """classes
+-------
+01) dahlia:                        94.21%
+02) sunflower:                      3.09%
+03) rose:                           1.62%
+04) coneflower:                     0.84%
+05) daisy:                          0.10%
+06) poppy:                          0.04%
+07) middayflower:                   0.04%
+08) tulip:                          0.02%
+09) dandelion:                      0.02%
+10) ranunculus:                     0.01%
+-------"""
+
+        prediction_class = 'dahlia'
+        prediction_accuracy = 94.21
+
+        return_value = {
+            'evaluated_file': evaluation_file,
+            'graph_file': graph_file,
+            'evaluated_file_web': evaluation_file_web,
+            'graph_file_web': graph_file_web,
+            'prediction_overview': prediction_overview,
+            'prediction_class': prediction_class,
+            'prediction_accuracy': prediction_accuracy
+        }
+
+        return return_value
 
     def do(self):
         # some configs
         show_image = True
-
-        # set hooks
-        SimpleHTTPRequestHandler.set_POST_hook({
-            'lambda': self.post_hook,
-            'arguments': [2, 3]
-        })
 
         # load config file
         self.start_timer('load json config file')
@@ -72,18 +102,23 @@ class EvaluateHttp(ImageClassifier):
 
         # get some configs
         model_file = self.config.get_data('model_file_best')['model_file']
-        evaluation_path = self.config.get_data('evaluation_path')
 
         # check model file
         check_if_file_exists(model_file)
 
         # load model
         self.start_timer('load model file %s' % model_file)
-        #model = self.load_model(model_file)
+        model = self.load_model(model_file)
         self.finish_timer('load model file %s' % model_file)
 
+        # set hooks
+        SimpleHTTPRequestHandler.set_POST_hook({
+            'lambda': self.POST_hook,
+            'arguments': [model]
+        })
+
         click.echo('')
-        click.echo('Ready for evaluation. Now add the images to be evaluated to the folder "%s"...' % self.config.get_data('evaluation_path'))
+        click.echo('Ready for evaluation. Now upload some images...')
         click.echo('')
 
         try:
@@ -106,22 +141,3 @@ class EvaluateHttp(ImageClassifier):
         except KeyboardInterrupt:
             print('^C received, shutting down the web server')
             httpd.socket.close()
-
-        # # start service
-        # while True:
-        #     # wait some time
-        #     time.sleep(0.5)
-        #
-        #     # get evaluation files
-        #     files = os.listdir(evaluation_path)
-        #
-        #     # predict if we found some images
-        #     if len(files) > 0:
-        #         evaluation_file = '%s/%s' % (evaluation_path, files[0])
-        #
-        #         # check that the file is ready
-        #         if 'crdownload' in evaluation_file:
-        #             continue
-        #
-        #         self.evaluate_file(model, evaluation_file, show_image)
-        #         os.remove(evaluation_file)

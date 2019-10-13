@@ -35,7 +35,7 @@ from mlks.helper.filesystem import add_file_extension
 import matplotlib.pyplot as plt
 
 
-def print_image(image_file, title, text, save_graph = False):
+def print_image(image_file, title, text, show_image=False, save_graph=False):
     img = load_img(image_file)
     format = img.format
     mode = img.mode
@@ -63,6 +63,7 @@ def print_image(image_file, title, text, save_graph = False):
         plt.savefig(graph_file)
 
     # show graph
-    plt.show()
+    if show_image:
+        plt.show()
 
 

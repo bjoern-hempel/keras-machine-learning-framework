@@ -43,8 +43,25 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     HTML_BODY = """<html>
         <head>
             <title>Keras Machine Learning Framework - Evaluation Form</title>
+            <style>
+                .waitdiv {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%%;
+                    height: 100%%;
+                    background-color: #fff;
+                    display: none;
+                }
+            </style>
+            <script>
+                window.pleaseWait = function () {
+                    document.getElementById("waitdiv").style.display = "block";
+                }
+            </script> 
         </head>
         <body>
+            <div class="waitdiv" id="waitdiv">%s</div>
             %s
         </body>
     </html>"""
@@ -54,19 +71,29 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             <p>Select image to upload:</p>
             <p>
                 <input type="file" name="file">
-                <input type="submit" value="Upload Image">
+                <input
+                    type="submit"
+                    value="Upload Image"
+                    onclick="window.pleaseWait()"
+                >
             </p>
         </form>
     </div>"""
 
     HTML_PREDICTION = """<div>
-        <p>%s</p>
+        <h3>Source image</h3>
         <p><img src="%s" style="width: 500px;"></p>
+        <h3>Predicted image (%s - %.2f%%)</h3>
+        <p><img src="%s"></p>
+        <h3>Prediction overview</h3>
+        <pre>%s</pre>
     </div>"""
 
     HTML_ERROR = """<div>
         <p style="padding: 5px; background-color: red;">%s</p>
     </div>"""
+
+    TEXT_UPLOAD = 'Your image is currently being uploaded and evaluated. Please wait...'
 
     ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
 
@@ -195,7 +222,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if GET_result is not None:
             print(GET_result)
 
-        html_body = self.HTML_BODY % self.HTML_FORM
+        html_form = self.HTML_FORM
+        html_body = self.HTML_BODY % (self.TEXT_UPLOAD, html_form)
         self.respond_html(html_body)
         return
 
@@ -205,16 +233,24 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if upload_data['error']:
             html_content = self.HTML_ERROR % upload_data['message']
             html_content += self.HTML_FORM
-            html_body = self.HTML_BODY % html_content
+            html_body = self.HTML_BODY % (self.TEXT_UPLOAD, html_content)
         else:
             # call post hook
             evaluation_data = self.call_hook('POST', upload_data)
+            evaluated_file_web = evaluation_data['evaluated_file_web']
+            graph_file_web = evaluation_data['graph_file_web']
+            prediction_overview = evaluation_data['prediction_overview']
+            prediction_class = evaluation_data['prediction_class']
+            prediction_accuracy = evaluation_data['prediction_accuracy']
 
             html_content = self.HTML_PREDICTION % (
-                upload_data['upload_path_web'],
-                upload_data['upload_path_web']
+                evaluated_file_web,
+                prediction_class,
+                prediction_accuracy,
+                graph_file_web,
+                prediction_overview
             )
             html_content += self.HTML_FORM
-            html_body = self.HTML_BODY % html_content
+            html_body = self.HTML_BODY % (self.TEXT_UPLOAD, html_content)
 
         self.respond_html(html_body)
