@@ -41,6 +41,8 @@ from urllib.parse import urlparse
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     TEXT_UPLOAD = 'Your image is currently being uploaded and evaluated. Please wait...'
+    TEXT_EMPTY_IMAGE = 'No picture was given...'
+    TEXT_IMAGE_WAS_NOT_FOUND = 'The given image "%s" was not found...'
 
     ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
 
@@ -176,26 +178,77 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'message': None
         }
 
-    def do_GET(self):
-        parsed = urlparse(self.path)
-        url_path = parsed.path
+    def do_GET_index(self):
+        html_form = self.get_template('index')
+        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
+        self.respond_html(html_body)
 
-        output = re.search('/upload/(.+)', url_path, flags=re.IGNORECASE)
-        if output is not None:
-            upload_image = output.group(1)
-            upload_image_path = '%s/%s' % (self.upload_path, upload_image)
-            self.respond_picture(upload_image_path)
+    def do_GET_upload(self, argument):
+        """ route GET /upload """
+        if argument == '' or argument is None:
+            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_EMPTY_IMAGE)
+            self.respond_html(html_body)
             return
 
-        # call hook
-        GET_result = self.call_hook('GET')
-        if GET_result is not None:
-            print(GET_result)
+        upload_image_path = '%s/%s' % (self.upload_path, argument)
 
+        if not os.path.isfile(upload_image_path):
+            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_IMAGE_WAS_NOT_FOUND % upload_image_path)
+            self.respond_html(html_body)
+            return
+
+        self.respond_picture(upload_image_path)
+        return
+
+    def do_GET_upload_form(self, argument):
+        """ route GET /upload-form """
         html_form = self.get_template('form')
         html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
         self.respond_html(html_body)
         return
+
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        url_path = parsed.path
+
+        # Routes to check
+        routes = ['upload-form', 'upload']
+
+        # call index page
+        if url_path == '/':
+            # call hook
+            GET_result = self.call_hook('GET')
+            if GET_result is not None:
+                print(GET_result)
+
+            # call index page
+            self.do_GET_index()
+            return
+
+        # Try to find a special route
+        for route in routes:
+            output = re.search('^/%s(/(.+)?)?$' % route, url_path, flags=re.IGNORECASE)
+            if output is not None:
+                route_function_name = 'do_GET_%s' % route.replace('-', '_')
+
+                if not hasattr(self, route_function_name):
+                    raise AssertionError('Please add method "SimpleHTTPRequestHandler.%s()"' % route_function_name)
+
+                # call hook
+                GET_result = self.call_hook('GET_%s' % route.replace('-', '_'))
+                if GET_result is not None:
+                    print(GET_result)
+
+                # Call special GET function
+                getattr(self, route_function_name)(output.group(2))
+                return
+
+        # ignore /favicon.ico
+        if url_path == '/favicon.ico':
+            return
+
+        # Unknown page
+        self.respond_html('', 404)
 
     def do_POST(self):
         upload_data = self.write_upload_file()

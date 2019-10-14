@@ -71,11 +71,18 @@ class HttpRunner:
 
         return return_value
 
+    def GET_upload_hook(self, test):
+        print(test)
+
     def run(self):
         try:
             SimpleHTTPRequestHandler.set_POST_hook({
                 'lambda': self.POST_hook,
                 'arguments': []
+            })
+            SimpleHTTPRequestHandler.set_hook('GET_upload', {
+                'lambda': self.GET_upload_hook,
+                'arguments': ['my string']
             })
             SimpleHTTPRequestHandler.set_property('upload_path', 'C:/Users/bjoern/data/upload')
             SimpleHTTPRequestHandler.set_property('upload_path_web', '/upload')
