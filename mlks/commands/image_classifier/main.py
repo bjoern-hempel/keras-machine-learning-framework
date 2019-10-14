@@ -78,6 +78,11 @@ from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessIn
 from keras.applications.vgg19 import VGG19
 from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
 
+# Xception
+from keras.applications.xception import Xception
+from keras.applications.xception import preprocess_input as XceptionPreprocessInput
+
+
 # some other keras imports
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.preprocessing.image import ImageDataGenerator
@@ -141,7 +146,11 @@ class ImageClassifier(Command):
             'vgg19': {
                 'class': VGG19,
                 'preprocess_input': VGG19PreprocessInput
-            }
+            },
+            'xception': {
+                'class': Xception,
+                'preprocess_input': XceptionPreprocessInput
+            },
         }
 
         # initialize the parent class

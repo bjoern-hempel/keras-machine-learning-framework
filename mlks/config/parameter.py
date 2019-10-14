@@ -231,7 +231,8 @@ option_transfer_learning_model = click.option(
         'MobileNet',
         'MobileNetV2',
         'ResNet50',
-        'VGG19'
+        'VGG19',
+        'Xception'
     ])
 )
 option_number_trainable_layers = click.option(
