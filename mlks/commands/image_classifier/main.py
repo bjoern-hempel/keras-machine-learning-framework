@@ -50,6 +50,18 @@ from keras.applications.inception_resnet_v2 import preprocess_input as Inception
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input as InceptionV3PreprocessInput
 
+# NASNet
+from keras_applications.nasnet import NASNet
+from keras.applications.nasnet import preprocess_input as NASNetPreprocessInput
+
+# NASNetLarge
+from keras.applications.nasnet import NASNetLarge
+from keras.applications.nasnet import preprocess_input as NASNetLargePreprocessInput
+
+# NASNetMobile
+from keras_applications.nasnet import NASNetMobile
+from keras.applications.nasnet import preprocess_input as NASNetMobilePreprocessInput
+
 # MobileNet
 from keras_applications.mobilenet import MobileNet
 from keras.applications.mobilenet import preprocess_input as MobileNetPreprocessInput
@@ -66,13 +78,13 @@ from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessIn
 from keras.applications.vgg19 import VGG19
 from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
 
+# some other keras imports
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 from keras.optimizers import SGD
-
 from keras.callbacks import LearningRateScheduler, TensorBoard, CSVLogger, ModelCheckpoint
 
 
@@ -109,6 +121,18 @@ class ImageClassifier(Command):
             'inceptionv3': {
                 'class': InceptionV3,
                 'preprocess_input': InceptionV3PreprocessInput
+            },
+            'nasnet': {
+                'class': NASNet,
+                'preprocess_input': NASNetPreprocessInput
+            },
+            'nasnetlarge': {
+                'class': NASNetLarge,
+                'preprocess_input': NASNetLargePreprocessInput
+            },
+            'nasnetmobile': {
+                'class': NASNetMobile,
+                'preprocess_input': NASNetMobilePreprocessInput
             },
             'resnet50': {
                 'class': ResNet50,
