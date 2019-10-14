@@ -32,13 +32,10 @@
 
 import ssl
 from http.server import HTTPServer
-from mlks.helper.simple_http_request_handler import SimpleHTTPRequestHandler
-from mlks.helper.filesystem import add_file_extension, PNG_EXTENSION
+from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 
 
 class HttpRunner:
-    def __init__(self):
-        self.name = 'xyz'
 
     def POST_hook(self, upload_data):
         # get file to evaluate
@@ -80,6 +77,8 @@ class HttpRunner:
                 'lambda': self.POST_hook,
                 'arguments': []
             })
+            SimpleHTTPRequestHandler.set_property('upload_path', 'C:/Users/bjoern/data/upload')
+            SimpleHTTPRequestHandler.set_property('upload_path_web', '/upload')
 
             use_ssl = False
             port = 4443 if use_ssl else 8000

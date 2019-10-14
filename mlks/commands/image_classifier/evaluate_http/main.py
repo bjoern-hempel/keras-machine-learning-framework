@@ -33,7 +33,7 @@
 import click
 import ssl
 from http.server import HTTPServer
-from mlks.helper.simple_http_request_handler import SimpleHTTPRequestHandler
+from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists, add_file_extension, PNG_EXTENSION
 

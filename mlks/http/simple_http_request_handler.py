@@ -40,70 +40,29 @@ from urllib.parse import urlparse
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    HTML_BODY = """<html>
-        <head>
-            <title>Keras Machine Learning Framework - Evaluation Form</title>
-            <style>
-                .waitdiv {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%%;
-                    height: 100%%;
-                    background-color: #fff;
-                    display: none;
-                }
-            </style>
-            <script>
-                window.pleaseWait = function () {
-                    document.getElementById("waitdiv").style.display = "block";
-                }
-            </script> 
-        </head>
-        <body>
-            <div class="waitdiv" id="waitdiv">%s</div>
-            %s
-        </body>
-    </html>"""
-
-    HTML_FORM = """<div>
-        <form action="" method="post" enctype="multipart/form-data">
-            <p>Select image to upload:</p>
-            <p>
-                <input type="file" name="file">
-                <input
-                    type="submit"
-                    value="Upload Image"
-                    onclick="window.pleaseWait()"
-                >
-            </p>
-        </form>
-    </div>"""
-
-    HTML_PREDICTION = """<div>
-        <h3>Source image</h3>
-        <p><img src="%s" style="max-width: 800px;"></p>
-        <h3>Predicted image (%s - %.2f%%)</h3>
-        <p><img src="%s"></p>
-        <h3>Prediction overview</h3>
-        <pre>%s</pre>
-    </div>"""
-
-    HTML_ERROR = """<div>
-        <p style="padding: 5px; background-color: red;">%s</p>
-    </div>"""
-
     TEXT_UPLOAD = 'Your image is currently being uploaded and evaluated. Please wait...'
 
     ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
 
+    TEMPLATE_FILE_EXTENSION = 'tpl'
+
     hooks = {}
 
+    properties = {}
+
+    html_template_path = 'mlks/http/templates'
+
     def __init__(self, request, client_address, server):
-        self.upload_path = 'F:/data/upload'
-        self.upload_path_web = '/upload'
+        self.upload_path = self.get_property('upload_path')
+        self.upload_path_web = self.get_property('upload_path_web')
 
         super().__init__(request, client_address, server)
+
+    def get_template(self, template_path):
+        full_template_path = '%s/%s.%s' % (self.html_template_path, template_path, self.TEMPLATE_FILE_EXTENSION)
+
+        with open(full_template_path, 'r') as file:
+            return file.read()
 
     @staticmethod
     def set_GET_hook(hook):
@@ -128,6 +87,17 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             raise AssertionError('The given hook is invalid (parameter argument must be a list).')
 
         SimpleHTTPRequestHandler.hooks[name] = hook
+
+    @staticmethod
+    def set_property(name, value):
+        SimpleHTTPRequestHandler.properties[name] = value
+
+    @staticmethod
+    def get_property(name):
+        if name not in SimpleHTTPRequestHandler.properties:
+            return None
+
+        return SimpleHTTPRequestHandler.properties[name]
 
     @staticmethod
     def call_hook(*args):
@@ -222,8 +192,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if GET_result is not None:
             print(GET_result)
 
-        html_form = self.HTML_FORM
-        html_body = self.HTML_BODY % (self.TEXT_UPLOAD, html_form)
+        html_form = self.get_template('form')
+        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
         self.respond_html(html_body)
         return
 
@@ -231,9 +201,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         upload_data = self.write_upload_file()
 
         if upload_data['error']:
-            html_content = self.HTML_ERROR % upload_data['message']
-            html_content += self.HTML_FORM
-            html_body = self.HTML_BODY % (self.TEXT_UPLOAD, html_content)
+            html_content = self.get_template('error') % upload_data['message']
+            html_content += self.get_template('form')
+            html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_content)
         else:
             # call post hook
             evaluation_data = self.call_hook('POST', upload_data)
@@ -243,14 +213,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             prediction_class = evaluation_data['prediction_class']
             prediction_accuracy = evaluation_data['prediction_accuracy']
 
-            html_content = self.HTML_PREDICTION % (
+            html_content = self.get_template('prediction') % (
                 evaluated_file_web,
                 prediction_class,
                 prediction_accuracy,
                 graph_file_web,
                 prediction_overview
             )
-            html_content += self.HTML_FORM
-            html_body = self.HTML_BODY % (self.TEXT_UPLOAD, html_content)
+            html_content += self.get_template('form')
+            html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_content)
 
         self.respond_html(html_body)
