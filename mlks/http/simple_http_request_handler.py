@@ -37,6 +37,7 @@ import magic
 import collections
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse
+from mlks.helper.filesystem import PNG_EXTENSION
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -55,8 +56,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     html_template_path = 'mlks/http/templates'
 
     def __init__(self, request, client_address, server):
-        self.upload_path = self.get_property('upload_path')
-        self.upload_path_web = self.get_property('upload_path_web')
+        self.root_path = self.get_property('root_path')
+        self.root_path_web = self.get_property('root_path_web')
 
         super().__init__(request, client_address, server)
 
@@ -122,8 +123,20 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(bytes(response, 'utf-8'))
 
-    def respond_picture(self, picture_path, status=200):
-        picture_info = os.stat(picture_path)
+    def respond_picture(self, picture_path, path, status=200):
+        if picture_path == '' or picture_path is None:
+            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_EMPTY_IMAGE)
+            self.respond_html(html_body)
+            return
+
+        upload_image_path = '%s/%s/%s' % (self.root_path, path, picture_path)
+
+        if not os.path.isfile(upload_image_path):
+            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_IMAGE_WAS_NOT_FOUND % upload_image_path)
+            self.respond_html(html_body)
+            return
+
+        picture_info = os.stat(upload_image_path)
         img_size = picture_info.st_size
 
         self.send_response(status)
@@ -131,7 +144,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Content-length', img_size)
         self.end_headers()
 
-        f = open(picture_path, 'rb')
+        f = open(upload_image_path, 'rb')
         self.wfile.write(f.read())
         f.close()
 
@@ -154,8 +167,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             }
 
         data = form['file'].file.read()
-        upload_path = '%s/%s' % (self.upload_path, filename)
-        upload_path_web = '%s/%s' % (self.upload_path_web, filename)
+        upload_path = '%s/%s/%s' % (self.root_path, 'upload', filename)
+        upload_path_web = '%s%s/%s' % (self.root_path_web, 'upload', filename)
         open(upload_path, 'wb').write(data)
 
         mime = magic.Magic(mime=True)
@@ -183,21 +196,36 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
         self.respond_html(html_body)
 
+    def do_GET_learning_overview(self, argument):
+        learning_overview_items = [
+            'flower_10_1.inceptionv3',
+            'flower_10_2.densenet169',
+            'flower_10_3.resnet50',
+            'flower_10_4.densenet201',
+            'flower_10_5.nasnetlarge',
+            'flower_10_6.xception',
+            'flower_10_7.mobilenetv2'
+        ]
+
+        learning_overview_content = ''
+        for learning_overview_item in learning_overview_items:
+            learning_overview_content += self.get_template('learning_overview_item') % (
+                learning_overview_item,
+                '%s.%s' % (learning_overview_item, PNG_EXTENSION)
+            )
+
+        html_form = self.get_template('learning_overview') % learning_overview_content
+        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
+        self.respond_html(html_body)
+
+    def do_GET_tmp(self, argument):
+        """ route GET /tmp """
+        self.respond_picture(argument, 'tmp')
+        return
+
     def do_GET_upload(self, argument):
         """ route GET /upload """
-        if argument == '' or argument is None:
-            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_EMPTY_IMAGE)
-            self.respond_html(html_body)
-            return
-
-        upload_image_path = '%s/%s' % (self.upload_path, argument)
-
-        if not os.path.isfile(upload_image_path):
-            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_IMAGE_WAS_NOT_FOUND % upload_image_path)
-            self.respond_html(html_body)
-            return
-
-        self.respond_picture(upload_image_path)
+        self.respond_picture(argument, 'upload')
         return
 
     def do_GET_upload_form(self, argument):
@@ -212,7 +240,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         url_path = parsed.path
 
         # Routes to check
-        routes = ['upload-form', 'upload']
+        routes = ['learning-overview', 'tmp', 'upload-form', 'upload']
 
         # call index page
         if url_path == '/':

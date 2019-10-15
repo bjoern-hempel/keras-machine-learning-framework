@@ -84,8 +84,8 @@ class HttpRunner:
                 'lambda': self.GET_upload_hook,
                 'arguments': ['my string']
             })
-            SimpleHTTPRequestHandler.set_property('upload_path', 'C:/Users/bjoern/data/upload')
-            SimpleHTTPRequestHandler.set_property('upload_path_web', '/upload')
+            SimpleHTTPRequestHandler.set_property('root_path', 'C:/Users/bjoern/data')
+            SimpleHTTPRequestHandler.set_property('root_path_web', '/')
 
             use_ssl = False
             port = 4443 if use_ssl else 8000
