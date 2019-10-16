@@ -94,17 +94,19 @@ option_bind_ip = click.option(
     default='0.0.0.0',
     required=False,
     show_default=True,
-    type=str
+    type=str,
+    callback=option_callback
 )
 option_port = click.option(
     '--port',
     expose_value=False,
     is_flag=False,
     help='Sets the non ssl port.',
-    default=8000,
+    default=8080,
     required=False,
     show_default=True,
-    type=int
+    type=int,
+    callback=option_callback
 )
 option_port_ssl = click.option(
     '--port-ssl',
@@ -114,7 +116,8 @@ option_port_ssl = click.option(
     default=4443,
     required=False,
     show_default=True,
-    type=int
+    type=int,
+    callback=option_callback
 )
 
 

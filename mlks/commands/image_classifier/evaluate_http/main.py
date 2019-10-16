@@ -32,7 +32,6 @@
 
 import click
 import ssl
-import sys
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier
@@ -94,7 +93,6 @@ class EvaluateHttp(ImageClassifier):
         # load model
         self.start_timer('load model file %s' % model_file)
         model = self.load_model(model_file)
-        #model = True
         self.finish_timer('load model file %s' % model_file)
 
         # set hooks
@@ -112,8 +110,8 @@ class EvaluateHttp(ImageClassifier):
 
         try:
             use_ssl = False
-            port = 443 if use_ssl else 8080
-            ip = '0.0.0.0'
+            port = self.config.get('port_ssl', 'http') if use_ssl else self.config.get('port', 'http')
+            ip = self.config.get('bind_ip', 'http')
             httpd = HTTPServer((ip, port), SimpleHTTPRequestHandler)
             print('Webserver started on port %s:%d..' % (ip, port))
 
