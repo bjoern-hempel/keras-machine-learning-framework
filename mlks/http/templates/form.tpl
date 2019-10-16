@@ -1,4 +1,5 @@
 <div>
+    <h3>Image uploader</h3>
     <form action="" method="post" enctype="multipart/form-data">
         <p>Select image to upload:</p>
         <p>

@@ -84,12 +84,12 @@ class HttpRunner:
                 'lambda': self.GET_upload_hook,
                 'arguments': ['my string']
             })
-            SimpleHTTPRequestHandler.set_property('root_path', 'C:/Users/bjoern/data')
+            SimpleHTTPRequestHandler.set_property('root_path', '/home/bjoern/data')
             SimpleHTTPRequestHandler.set_property('root_path_web', '/')
 
             use_ssl = False
-            port = 4443 if use_ssl else 8000
-            httpd = HTTPServer(('localhost', port), SimpleHTTPRequestHandler)
+            port = 443 if use_ssl else 80
+            httpd = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
             print('Webserver started on port %d..' % port)
 
             # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)

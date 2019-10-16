@@ -53,7 +53,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     properties = {}
 
-    html_template_path = 'mlks/http/templates'
+    html_template_path = '/home/bjoern/python/keras-machine-learning-framework/mlks/http/templates'
 
     def __init__(self, request, client_address, server):
         self.root_path = self.get_property('root_path')
@@ -223,6 +223,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.respond_picture(argument, 'tmp')
         return
 
+    def do_GET_food(self, argument):
+        """ route GET /food """
+        html_content = "The model for food is not yet available. Use flowers instead."
+        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_content)
+        self.respond_html(html_body)
+        return
+
     def do_GET_upload(self, argument):
         """ route GET /upload """
         self.respond_picture(argument, 'upload')
@@ -240,7 +247,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         url_path = parsed.path
 
         # Routes to check
-        routes = ['learning-overview', 'tmp', 'upload-form', 'upload']
+        routes = ['learning-overview', 'tmp', 'upload-form', 'upload', 'food']
 
         # call index page
         if url_path == '/':
@@ -294,7 +301,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             prediction_class = evaluation_data['prediction_class']
             prediction_accuracy = evaluation_data['prediction_accuracy']
 
-            html_content = self.get_template('prediction') % (
+            html_content = self.get_template('form')
+            html_content += self.get_template('prediction') % (
                 evaluated_file_web,
                 prediction_class,
                 prediction_accuracy,
