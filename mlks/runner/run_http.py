@@ -31,13 +31,17 @@
 # SOFTWARE.
 
 import ssl
+import sys
+import click
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
+from mlks.helper.filesystem import get_root_project_path
 
 
 class HttpRunner:
 
-    def POST_hook(self, upload_data):
+    @staticmethod
+    def POST_hook(upload_data):
         # get file to evaluate
         evaluation_file = upload_data['upload_path']
         evaluation_file_web = upload_data['upload_path_web']
@@ -71,26 +75,35 @@ class HttpRunner:
 
         return return_value
 
-    def GET_upload_hook(self, test):
+    @staticmethod
+    def GET_upload_hook(test):
         print(test)
 
-    def run(self):
+    @staticmethod
+    @click.command()
+    @click.option('--data-path', '-d', required=True, type=str)
+    @click.option('--port', '-p', required=False, type=int, default=8080, show_default=True)
+    @click.option('--port-ssl', '-p', required=False, type=int, default=4443, show_default=True)
+    @click.option('--bind_ip', '-i', required=False, type=str, default='0.0.0.0', show_default=True)
+    def run(data_path, port, port_ssl, bind_ip):
+        """This scripts starts a simple demo http service for testing purpose."""
         try:
             SimpleHTTPRequestHandler.set_POST_hook({
-                'lambda': self.POST_hook,
+                'lambda': HttpRunner.POST_hook,
                 'arguments': []
             })
             SimpleHTTPRequestHandler.set_hook('GET_upload', {
-                'lambda': self.GET_upload_hook,
+                'lambda': HttpRunner.GET_upload_hook,
                 'arguments': ['my string']
             })
-            SimpleHTTPRequestHandler.set_property('root_path', '/home/bjoern/data')
-            SimpleHTTPRequestHandler.set_property('root_path_web', '/')
+            SimpleHTTPRequestHandler.set_property('root_data_path', data_path)
+            SimpleHTTPRequestHandler.set_property('root_data_path_web', '/')
+            SimpleHTTPRequestHandler.set_property('root_project_path', get_root_project_path())
 
             use_ssl = False
-            port = 443 if use_ssl else 80
-            httpd = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
-            print('Webserver started on port %d..' % port)
+            port = port_ssl if use_ssl else port
+            httpd = HTTPServer((bind_ip, port), SimpleHTTPRequestHandler)
+            print('Webserver started on port %s:%d..' % (bind_ip, port))
 
             # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)
             if use_ssl:

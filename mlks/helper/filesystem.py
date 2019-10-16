@@ -32,6 +32,8 @@
 
 import os
 import shutil
+import re
+from pathlib import Path
 
 PNG_EXTENSION = 'png'
 JPG_EXTENSION = 'jpg'
@@ -47,6 +49,18 @@ def clear_folder(path):
                 shutil.rmtree(file_path)
         except Exception as e:
             print(e)
+
+
+def get_root_project_path():
+    split_string = '/%s/' % __package__
+    parts = re.split(split_string, str(Path(__file__)).replace('\\', '/'))
+    return parts[0]
+
+
+def get_root_data_path(path):
+    split_string = '/data/'
+    parts = re.split(split_string, str(path).replace('\\', '/'))
+    return '%s/data' % parts[0]
 
 
 def get_number_of_folders_and_files(path):

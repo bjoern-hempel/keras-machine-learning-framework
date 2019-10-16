@@ -46,12 +46,12 @@ from mlks.commands.demo.nine_points.execute.main import Execute as CliDemoNinePo
 from mlks.helper.config import add_options
 from mlks.config.parameter import pass_config
 from mlks.config.parameter import option_set_general, \
+    option_set_http, \
     option_set_machine_learning, \
     option_set_transfer_learning, \
     option_set_train_process, \
     option_set_evaluation_process, \
     option_set_nine_points
-
 
 @click.group(name='cli')
 @add_options(option_set_general)
@@ -90,6 +90,7 @@ def cli_train(config):
 @cli.command(name='evaluate')
 @add_options(option_set_evaluation_process)
 @add_options(option_set_general)
+@add_options(option_set_http)
 @pass_config
 def cli_evaluate(config):
     """This subcommand evaluate a classifier."""

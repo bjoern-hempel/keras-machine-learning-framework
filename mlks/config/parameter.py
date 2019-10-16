@@ -37,7 +37,8 @@ from mlks.helper.config import general_config_writer, \
     machine_learning_config_writer, \
     transfer_learning_config_writer, \
     data_config_writer, \
-    nine_points_config_writer
+    nine_points_config_writer, \
+    http_config_writer
 from mlks.helper.option import OptionHelper
 from mlks.helper.config import option_callback
 from mlks.helper.config import set_config_translator
@@ -81,6 +82,39 @@ option_http = click.option(
     help='Execute the given command as http service.',
     callback=option_callback,
     default=False
+)
+
+
+# Configure the http parameters here
+option_bind_ip = click.option(
+    '--bind-ip',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the bind ip.',
+    default='0.0.0.0',
+    required=False,
+    show_default=True,
+    type=str
+)
+option_port = click.option(
+    '--port',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the non ssl port.',
+    default=8000,
+    required=False,
+    show_default=True,
+    type=int
+)
+option_port_ssl = click.option(
+    '--port-ssl',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the ssl port.',
+    default=4443,
+    required=False,
+    show_default=True,
+    type=int
 )
 
 
@@ -431,6 +465,11 @@ option_set_general = [
     option_service,
     option_http
 ]
+option_set_http = [
+    option_bind_ip,
+    option_port,
+    option_port_ssl
+]
 option_set_machine_learning = [
     option_epochs,
     option_batch_size,
@@ -479,6 +518,11 @@ set_config_translator({
     'yes': general_config_writer,
     'service': general_config_writer,
     'http': general_config_writer,
+
+    # http config
+    'bind_ip': http_config_writer,
+    'port': http_config_writer,
+    'port_ssl': http_config_writer,
 
     # machine learning config
     'epochs': machine_learning_config_writer,

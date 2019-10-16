@@ -53,11 +53,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     properties = {}
 
-    html_template_path = '/home/bjoern/python/keras-machine-learning-framework/mlks/http/templates'
+    html_template_path = '%s/mlks/http/templates'
 
     def __init__(self, request, client_address, server):
-        self.root_path = self.get_property('root_path')
-        self.root_path_web = self.get_property('root_path_web')
+        self.root_data_path = self.get_property('root_data_path')
+        self.root_data_path_web = self.get_property('root_data_path_web')
+        self.root_project_path = self.get_property('root_project_path')
+        self.html_template_path = self.html_template_path % self.root_project_path
 
         super().__init__(request, client_address, server)
 
@@ -113,6 +115,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         # merge arguments
         arguments = list(args[1:]) + SimpleHTTPRequestHandler.hooks[name]['arguments']
 
+        print(arguments)
+
         # execute lambda function
         return SimpleHTTPRequestHandler.hooks[name]['lambda'](*arguments)
 
@@ -129,7 +133,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.respond_html(html_body)
             return
 
-        upload_image_path = '%s/%s/%s' % (self.root_path, path, picture_path)
+        upload_image_path = '%s/%s/%s' % (self.root_data_path, path, picture_path)
 
         if not os.path.isfile(upload_image_path):
             html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_IMAGE_WAS_NOT_FOUND % upload_image_path)
@@ -167,8 +171,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             }
 
         data = form['file'].file.read()
-        upload_path = '%s/%s/%s' % (self.root_path, 'upload', filename)
-        upload_path_web = '%s%s/%s' % (self.root_path_web, 'upload', filename)
+        upload_path = '%s/%s/%s' % (self.root_data_path, 'upload', filename)
+        upload_path_web = '%s%s/%s' % (self.root_data_path_web, 'upload', filename)
         open(upload_path, 'wb').write(data)
 
         mime = magic.Magic(mime=True)

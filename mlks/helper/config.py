@@ -270,6 +270,17 @@ def general_config_writer(ctx, param, value):
     return value
 
 
+def http_config_writer(ctx, param, value):
+    config = ctx.ensure_object(Config)
+
+    if debug:
+        click.echo('{object: <30}: {name: <30} {value: <30}'.format(object='Config.http', name=param.name,
+                                                                    value=value))
+    if value:
+        config.set(param.name, value, 'http')
+    return value
+
+
 def machine_learning_config_writer(ctx, param, value):
     config = ctx.ensure_object(Config)
 

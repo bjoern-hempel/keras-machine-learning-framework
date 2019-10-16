@@ -32,10 +32,11 @@
 
 import click
 import ssl
+import sys
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists, add_file_extension, PNG_EXTENSION
+from mlks.helper.filesystem import check_if_file_exists, add_file_extension, get_root_project_path, get_root_data_path, PNG_EXTENSION
 
 
 class EvaluateHttp(ImageClassifier):
@@ -73,9 +74,6 @@ class EvaluateHttp(ImageClassifier):
         return return_value
 
     def do(self):
-        # some configs
-        show_image = True
-
         # load config file
         self.start_timer('load json config file')
         self.config.load_json_from_config_file(self.config.get_data('config_file'))
@@ -96,6 +94,7 @@ class EvaluateHttp(ImageClassifier):
         # load model
         self.start_timer('load model file %s' % model_file)
         model = self.load_model(model_file)
+        #model = True
         self.finish_timer('load model file %s' % model_file)
 
         # set hooks
@@ -103,8 +102,9 @@ class EvaluateHttp(ImageClassifier):
             'lambda': self.POST_hook,
             'arguments': [model]
         })
-        SimpleHTTPRequestHandler.set_property('root_path', '/home/bjoern/data')
-        SimpleHTTPRequestHandler.set_property('root_path_web', '/')
+        SimpleHTTPRequestHandler.set_property('root_data_path', get_root_data_path(self.config.get_data('config_file')))
+        SimpleHTTPRequestHandler.set_property('root_data_path_web', '/')
+        SimpleHTTPRequestHandler.set_property('root_project_path', get_root_project_path())
 
         click.echo('')
         click.echo('Ready for evaluation. Now upload some images...')
@@ -112,9 +112,10 @@ class EvaluateHttp(ImageClassifier):
 
         try:
             use_ssl = False
-            port = 443 if use_ssl else 80
-            httpd = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
-            print('Webserver started on port %d..' % port)
+            port = 443 if use_ssl else 8080
+            ip = '0.0.0.0'
+            httpd = HTTPServer((ip, port), SimpleHTTPRequestHandler)
+            print('Webserver started on port %s:%d..' % (ip, port))
 
             # activate ssl (openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem)
             if use_ssl:
