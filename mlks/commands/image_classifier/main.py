@@ -177,14 +177,18 @@ class ImageClassifier(Command):
 
         # print some informations
         prediction_overview = ''
-
         prediction_overview += 'classes\n'
         prediction_overview += '-------\n'
+        prediction_overview_array = []
         counter = 0
         for index in predicted_array_sorted:
             counter += 1
             class_name = classes[index] + ':'
             prediction_overview += '%02d) %-25s %10.2f%%\n' % (counter, class_name, predicted_array[0][index] * 100)
+            prediction_overview_array.append({
+                'class_name': class_name,
+                'predicted_value': predicted_array[0][index]
+            })
         prediction_overview += '-------\n'
 
         if self.config.get('verbose'):
@@ -217,6 +221,7 @@ class ImageClassifier(Command):
 
         return {
             'prediction_overview': prediction_overview,
+            'prediction_overview_array': prediction_overview_array,
             'prediction_class': prediction_class,
             'prediction_accuracy': prediction_accuracy
         }

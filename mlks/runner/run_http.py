@@ -62,12 +62,36 @@ class HttpRunner:
         prediction_class = 'dahlia'
         prediction_accuracy = 94.21
 
+        prediction_overview_array = [
+            {
+                'class_name': 'dahlia',
+                'predicted_value': 0.9421
+            },
+            {
+                'class_name': 'sunflower',
+                'predicted_value': 0.0309
+            },
+            {
+                'class_name': 'rose',
+                'predicted_value': 0.0162
+            },
+            {
+                'class_name': 'coneflower',
+                'predicted_value': 0.0084
+            },
+            {
+                'class_name': 'daisy',
+                'predicted_value': 0.0010
+            }
+        ]
+
         return_value = {
             'evaluated_file': evaluation_file,
             'graph_file': evaluation_file,
             'evaluated_file_web': evaluation_file_web,
             'graph_file_web': evaluation_file_web,
             'prediction_overview': prediction_overview,
+            'prediction_overview_array': prediction_overview_array,
             'prediction_class': prediction_class,
             'prediction_accuracy': prediction_accuracy,
             'prediction_time': 0.1

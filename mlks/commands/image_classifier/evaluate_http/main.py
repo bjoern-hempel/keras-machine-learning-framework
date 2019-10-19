@@ -59,6 +59,7 @@ class EvaluateHttp(ImageClassifier):
         self.finish_timer('prediction')
 
         prediction_overview = evaluation_data['prediction_overview']
+        prediction_overview_array = evaluation_data['prediction_overview_array']
         prediction_class = evaluation_data['prediction_class']
         prediction_accuracy = evaluation_data['prediction_accuracy']
 
@@ -68,6 +69,7 @@ class EvaluateHttp(ImageClassifier):
             'evaluated_file_web': evaluation_file_web,
             'graph_file_web': graph_file_web,
             'prediction_overview': prediction_overview,
+            'prediction_overview_array': prediction_overview_array,
             'prediction_class': prediction_class,
             'prediction_accuracy': prediction_accuracy,
             'prediction_time': '%.4f' % self.get_timer('prediction')

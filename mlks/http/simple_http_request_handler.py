@@ -446,6 +446,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             prediction_accuracy = evaluation_data['prediction_accuracy']
             upload_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
             prediction_time = evaluation_data['prediction_time']
+            prediction_overview_array = evaluation_data['prediction_overview_array']
+            prediction_overview_html = '<tr><th>Class</th><th>Prediction</th></tr>'
+
+            i = 0
+            while i < len(prediction_overview_array):
+                prediction_overview_html += '<tr><td><b>%s</b></td><td>%.2f %%</td></tr>' % (
+                    prediction_overview_array[i]['class_name'],
+                    prediction_overview_array[i]['predicted_value'] * 100
+                )
+                i += 1
 
             html_content = self.get_template('prediction') % {
                 'EVALUATED_FILE_WEB_SIZE': evaluated_file_web_size,
@@ -453,7 +463,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 'PREDICTION_CLASS': prediction_class,
                 'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
                 'GRAPH_FILE_WEB': graph_file_web,
-                'PREDICTION_OVERVIEW': prediction_overview,
+                'PREDICTION_OVERVIEW': prediction_overview_html,
                 'UPLOAD_FORM': upload_form,
                 'PREDICTION_TIME': prediction_time
             }

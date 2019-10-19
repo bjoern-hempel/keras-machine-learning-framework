@@ -16,8 +16,11 @@
     <h3 class="subtitle">Predicted image (%(PREDICTION_CLASS)s - %(PREDICTION_ACCURACY)s%% - %(PREDICTION_TIME)ss)</h3>
     <p><img src="%(GRAPH_FILE_WEB)s" style="max-width: 100%%;"></p>
     <h3 class="subtitle">Prediction classes</h3>
-    <pre class="code">%(PREDICTION_OVERVIEW)s</pre>
-    <p>&nbsp;</p>
+    <div class="table-container">
+        <table class="table is-fullwidth is-hoverable">
+            %(PREDICTION_OVERVIEW)s
+        </table>
+    </div>
 
     %(UPLOAD_FORM)s
 </div>
