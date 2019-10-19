@@ -10,7 +10,7 @@
 </div>
 
 <div class="container">
-    <h1 class="title"><span class="pictogram">&#127803;</span> Legal Notice</h1>
+    <h1 class="title"><span class="pictogram">&#127968;</span> Legal Notice</h1>
     <h2 class="subtitle">The legal things... ;).</h2>
     <p>
         Bj&ouml;rn Hempel<br />
