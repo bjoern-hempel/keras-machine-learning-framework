@@ -31,7 +31,6 @@
 # SOFTWARE.
 
 import ssl
-import sys
 import click
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler

@@ -44,6 +44,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     TEXT_UPLOAD = 'Your image is currently being uploaded and evaluated. Please wait...'
     TEXT_EMPTY_IMAGE = 'No picture was given...'
     TEXT_IMAGE_WAS_NOT_FOUND = 'The given image "%s" was not found...'
+    TEXT_FILE_WAS_NOT_FOUND = 'The given file "%s" was not found...'
 
     ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
 
@@ -54,20 +55,27 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     properties = {}
 
     html_template_path = '%s/mlks/http/templates'
+    css_template_path = '%s/mlks/http/css'
+    file_template_path = '%s/mlks/http'
 
     def __init__(self, request, client_address, server):
         self.root_data_path = self.get_property('root_data_path')
         self.root_data_path_web = self.get_property('root_data_path_web')
         self.root_project_path = self.get_property('root_project_path')
         self.html_template_path = self.html_template_path % self.root_project_path
+        self.css_template_path = self.css_template_path % self.root_project_path
+        self.file_template_path = self.file_template_path % self.root_project_path
 
         super().__init__(request, client_address, server)
 
-    def get_template(self, template_path):
-        full_template_path = '%s/%s.%s' % (self.html_template_path, template_path, self.TEMPLATE_FILE_EXTENSION)
+    def get_template(self, template_name):
+        full_template_path = '%s/%s.%s' % (self.html_template_path, template_name, self.TEMPLATE_FILE_EXTENSION)
 
         with open(full_template_path, 'r') as file:
-            return file.read()
+            if template_name == 'body':
+                return file.read() % {'TEXT_UPLOAD': self.TEXT_UPLOAD, 'CONTENT': '%(CONTENT)s'}
+            else:
+                return file.read()
 
     @staticmethod
     def set_GET_hook(hook):
@@ -115,28 +123,50 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         # merge arguments
         arguments = list(args[1:]) + SimpleHTTPRequestHandler.hooks[name]['arguments']
 
-        print(arguments)
-
         # execute lambda function
         return SimpleHTTPRequestHandler.hooks[name]['lambda'](*arguments)
 
     def respond_html(self, response, status=200):
         self.send_response(status)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/html; charset=utf-8')
         self.send_header('Content-length', len(response))
         self.end_headers()
         self.wfile.write(bytes(response, 'utf-8'))
 
-    def respond_picture(self, picture_path, path, status=200):
+    def respond_file(self, folder, path, content_type='text/plain; charset=utf-8', status=200):
+        if path == '' or path is None:
+            html_body = self.get_template('404') % ('%s/%s' % (folder, path))
+            self.respond_html(html_body, 404)
+            return
+
+        file_path = '%s/%s/%s' % (self.file_template_path, folder, path)
+
+        if not os.path.isfile(file_path):
+            html_body = self.get_template('404') % ('%s/%s' % (folder, path))
+            self.respond_html(html_body, 404)
+            return
+
+        # read file content
+        file_content = ''
+        with open(file_path, 'r') as file:
+            file_content = file.read()
+
+        self.send_response(status)
+        self.send_header('Content-type', content_type)
+        self.send_header('Content-length', len(file_content))
+        self.end_headers()
+        self.wfile.write(bytes(file_content, 'utf-8'))
+
+    def respond_picture(self, picture_path, path, content_type='image/jpg', status=200):
         if picture_path == '' or picture_path is None:
-            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_EMPTY_IMAGE)
+            html_body = self.get_template('body') % {'CONTENT': self.TEXT_EMPTY_IMAGE}
             self.respond_html(html_body)
             return
 
         upload_image_path = '%s/%s/%s' % (self.root_data_path, path, picture_path)
 
         if not os.path.isfile(upload_image_path):
-            html_body = self.get_template('body') % (self.TEXT_UPLOAD, self.TEXT_IMAGE_WAS_NOT_FOUND % upload_image_path)
+            html_body = self.get_template('body') % {'CONTENT': self.TEXT_IMAGE_WAS_NOT_FOUND % upload_image_path}
             self.respond_html(html_body)
             return
 
@@ -144,11 +174,40 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         img_size = picture_info.st_size
 
         self.send_response(status)
-        self.send_header('Content-type', 'image/jpg')
+        self.send_header('Content-type', content_type)
         self.send_header('Content-length', img_size)
         self.end_headers()
 
         f = open(upload_image_path, 'rb')
+        self.wfile.write(f.read())
+        f.close()
+
+    def respond_picture_raw(self, picture_path, content_type='auto', status=200):
+        if picture_path == '' or picture_path is None:
+            html_body = self.get_template('body') % {'CONTENT': self.TEXT_EMPTY_IMAGE}
+            self.respond_html(html_body)
+            return
+
+        full_image_path = '%s/%s' % (self.file_template_path, picture_path)
+
+        if content_type == 'auto':
+            mime = magic.Magic(mime=True)
+            content_type = mime.from_file(full_image_path)
+
+        if not os.path.isfile(full_image_path):
+            html_body = self.get_template('body') % {'CONTENT': self.TEXT_IMAGE_WAS_NOT_FOUND % full_image_path}
+            self.respond_html(html_body)
+            return
+
+        picture_info = os.stat(full_image_path)
+        img_size = picture_info.st_size
+
+        self.send_response(status)
+        self.send_header('Content-type', content_type)
+        self.send_header('Content-length', img_size)
+        self.end_headers()
+
+        f = open(full_image_path, 'rb')
         self.wfile.write(f.read())
         f.close()
 
@@ -197,8 +256,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET_index(self):
         html_form = self.get_template('index')
-        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
+        html_body = self.get_template('body') % {'CONTENT': html_form}
         self.respond_html(html_body)
+
+        return True
 
     def do_GET_learning_overview(self, argument):
         learning_overview_items = [
@@ -219,39 +280,88 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             )
 
         html_form = self.get_template('learning_overview') % learning_overview_content
-        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
+        html_body = self.get_template('body') % {'CONTENT': html_form}
         self.respond_html(html_body)
+
+        return True
+
+    def do_GET_file(self, path, argument):
+        """ route GET /default """
+
+        # some configs and type tables
+        image_types = ['image/png', 'image/x-icon']
+        text_types = ['text/plain', 'text/xml']
+
+        # create full file path
+        full_file_path = '%s/%s' % (self.file_template_path, '%s/%s' % (path, argument))
+
+        # file was not found -> 404
+        if not os.path.isfile(full_file_path):
+            return False
+
+        # get mime type
+        mime = magic.Magic(mime=True)
+        mime_type = mime.from_file(full_file_path)
+
+        # image was found
+        if mime_type in image_types:
+            self.respond_picture_raw('%s/%s' % (path, argument), mime_type)
+            return True
+
+        # text was found
+        if mime_type in text_types:
+            self.respond_file(path, argument, '%s; charset=utf-8' % mime_type)
+            return True
+
+        # unknown file type was found
+        print('unknown file type "%s"' % mime_type)
+        return False
+
+    def do_GET_favicon(self, argument):
+        """ route GET /favicon """
+        print('favicon')
+        return self.do_GET_file('favicon', argument)
+
+    def do_GET_css(self, argument):
+        """ route GET /css """
+        self.respond_file('css', argument, 'text/css; charset=utf-8')
+        return True
+
+    def do_GET_js(self, argument):
+        """ route GET /js """
+        self.respond_file('js', argument, 'application/javascript; charset=utf-8')
+        return True
 
     def do_GET_tmp(self, argument):
         """ route GET /tmp """
         self.respond_picture(argument, 'tmp')
-        return
+        return True
 
     def do_GET_food(self, argument):
         """ route GET /food """
         html_content = "The model for food is not yet available. Use flowers instead."
-        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_content)
+        html_body = self.get_template('body') % {'CONTENT': html_content}
         self.respond_html(html_body)
-        return
+        return True
 
     def do_GET_upload(self, argument):
         """ route GET /upload """
         self.respond_picture(argument, 'upload')
-        return
+        return True
 
     def do_GET_upload_form(self, argument):
         """ route GET /upload-form """
         html_form = self.get_template('form')
-        html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_form)
+        html_body = self.get_template('body') % {'CONTENT': html_form}
         self.respond_html(html_body)
-        return
+        return True
 
     def do_GET(self):
         parsed = urlparse(self.path)
         url_path = parsed.path
 
         # Routes to check
-        routes = ['learning-overview', 'tmp', 'upload-form', 'upload', 'food']
+        routes = ['learning-overview', 'tmp', 'upload-form', 'upload', 'food', 'css', 'js', 'favicon']
 
         # call index page
         if url_path == '/':
@@ -263,6 +373,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             # call index page
             self.do_GET_index()
             return
+
+        # ignore /favicon.ico
+        if url_path == '/favicon.ico':
+            url_path = '/favicon/favicon.ico'
 
         # Try to find a special route
         for route in routes:
@@ -279,12 +393,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     print(GET_result)
 
                 # Call special GET function
-                getattr(self, route_function_name)(output.group(2))
-                return
+                success = getattr(self, route_function_name)(output.group(2))
+                if not success:
+                    self.respond_html('', 404)
+                    return
 
-        # ignore /favicon.ico
-        if url_path == '/favicon.ico':
-            return
+                return
 
         # Unknown page
         self.respond_html('', 404)
@@ -295,7 +409,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if upload_data['error']:
             html_content = self.get_template('error') % upload_data['message']
             html_content += self.get_template('form')
-            html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_content)
+            html_body = self.get_template('body') % {'CONTENT': html_content}
         else:
             # call post hook
             evaluation_data = self.call_hook('POST', upload_data)
@@ -314,6 +428,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 prediction_overview
             )
             html_content += self.get_template('form')
-            html_body = self.get_template('body') % (self.TEXT_UPLOAD, html_content)
+            html_body = self.get_template('body') % {'CONTENT': html_content}
 
         self.respond_html(html_body)
