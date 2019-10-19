@@ -255,34 +255,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         }
 
     def do_GET_index(self):
-        html_form = self.get_template('index')
-        html_body = self.get_template('body') % {'CONTENT': html_form}
+        html_content = self.get_template('index')
+        html_body = self.get_template('body') % {'CONTENT': html_content}
         self.respond_html(html_body)
-
-        return True
-
-    def do_GET_learning_overview(self, argument):
-        learning_overview_items = [
-            'flower_10_1.inceptionv3',
-            'flower_10_2.densenet169',
-            'flower_10_3.resnet50',
-            'flower_10_4.densenet201',
-            'flower_10_5.nasnetlarge',
-            'flower_10_6.xception',
-            'flower_10_7.mobilenetv2'
-        ]
-
-        learning_overview_content = ''
-        for learning_overview_item in learning_overview_items:
-            learning_overview_content += self.get_template('learning_overview_item') % (
-                learning_overview_item,
-                '%s.%s' % (learning_overview_item, PNG_EXTENSION)
-            )
-
-        html_form = self.get_template('learning_overview') % learning_overview_content
-        html_body = self.get_template('body') % {'CONTENT': html_form}
-        self.respond_html(html_body)
-
         return True
 
     def do_GET_file(self, path, argument):
@@ -337,11 +312,46 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.respond_picture(argument, 'tmp')
         return True
 
-    def do_GET_food(self, argument):
-        """ route GET /food """
-        html_content = "The model for food is not yet available. Use flowers instead."
+    def do_GET_prediction(self, argument):
+        """ route GET /prediction """
+
+        if argument == 'flower':
+            html_form = self.get_template('form') % ''
+            html_content = self.get_template('flower') % html_form
+            html_body = self.get_template('body') % {'CONTENT': html_content}
+            self.respond_html(html_body)
+            return True
+
+        if argument == 'food':
+            html_content = self.get_template('food')
+            html_body = self.get_template('body') % {'CONTENT': html_content}
+            self.respond_html(html_body)
+            return True
+
+        return False
+
+    def do_GET_learning_overview(self, argument):
+        learning_overview_items = [
+            'flower_10_1.inceptionv3',
+            'flower_10_2.densenet169',
+            'flower_10_3.resnet50',
+            'flower_10_4.densenet201',
+            'flower_10_5.nasnetlarge',
+            'flower_10_6.xception',
+            'flower_10_7.mobilenetv2'
+        ]
+
+        learning_overview_content = ''
+        for learning_overview_item in learning_overview_items:
+            learning_overview_content += self.get_template('learning_overview_item') % (
+                learning_overview_item,
+                '%s.%s' % (learning_overview_item, PNG_EXTENSION)
+            )
+
+        html_content = self.get_template('learning_overview') % learning_overview_content
         html_body = self.get_template('body') % {'CONTENT': html_content}
         self.respond_html(html_body)
+
         return True
 
     def do_GET_upload(self, argument):
@@ -349,19 +359,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.respond_picture(argument, 'upload')
         return True
 
-    def do_GET_upload_form(self, argument):
-        """ route GET /upload-form """
-        html_form = self.get_template('form')
-        html_body = self.get_template('body') % {'CONTENT': html_form}
-        self.respond_html(html_body)
-        return True
-
     def do_GET(self):
         parsed = urlparse(self.path)
         url_path = parsed.path
 
         # Routes to check
-        routes = ['learning-overview', 'tmp', 'upload-form', 'upload', 'food', 'css', 'js', 'favicon']
+        routes = ['learning-overview', 'tmp', 'prediction', 'upload', 'css', 'js', 'favicon']
 
         # call index page
         if url_path == '/':
@@ -382,6 +385,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         for route in routes:
             output = re.search('^/%s(/(.+)?)?$' % route, url_path, flags=re.IGNORECASE)
             if output is not None:
+                print('Found route: %s = ' % route, output.group(2))
+
                 route_function_name = 'do_GET_%s' % route.replace('-', '_')
 
                 if not hasattr(self, route_function_name):
@@ -407,8 +412,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         upload_data = self.write_upload_file()
 
         if upload_data['error']:
-            html_content = self.get_template('error') % upload_data['message']
-            html_content += self.get_template('form')
+            html_error = self.get_template('error') % upload_data['message']
+            html_content = self.get_template('flower') % (self.get_template('form') % html_error)
             html_body = self.get_template('body') % {'CONTENT': html_content}
         else:
             # call post hook
@@ -418,16 +423,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             prediction_overview = evaluation_data['prediction_overview']
             prediction_class = evaluation_data['prediction_class']
             prediction_accuracy = evaluation_data['prediction_accuracy']
+            upload_form = self.get_template('form') % ''
 
-            html_content = self.get_template('form')
-            html_content += self.get_template('prediction') % (
-                evaluated_file_web,
-                prediction_class,
-                prediction_accuracy,
-                graph_file_web,
-                prediction_overview
-            )
-            html_content += self.get_template('form')
+            html_content = self.get_template('prediction') % {
+                'evaluated_file_web': evaluated_file_web,
+                'prediction_class': prediction_class,
+                'prediction_accuracy': '%.2f' % prediction_accuracy,
+                'graph_file_web': graph_file_web,
+                'prediction_overview': prediction_overview,
+                'upload_form': upload_form
+            }
             html_body = self.get_template('body') % {'CONTENT': html_content}
 
         self.respond_html(html_body)
