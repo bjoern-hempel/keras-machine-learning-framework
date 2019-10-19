@@ -1,10 +1,12 @@
 <div class="container">
     <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li><a href="/">Overview</a></li>
+            <li><a href="/">Home</a></li>
             <li class="is-active"><a href="#" aria-current="page">Food prediction</a></li>
         </ul>
     </nav>
+
+    <p>&nbsp;</p>
 </div>
 
 <div class="container">

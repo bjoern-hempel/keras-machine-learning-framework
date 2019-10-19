@@ -54,7 +54,9 @@ class EvaluateHttp(ImageClassifier):
         evaluation_file_web = upload_data['upload_path_web']
         graph_file_web = add_file_extension(add_file_extension(evaluation_file_web, 'graph', True), PNG_EXTENSION)
 
+        self.start_timer('prediction')
         evaluation_data = self.evaluate_file(model, evaluation_file, show_image, save_image)
+        self.finish_timer('prediction')
 
         prediction_overview = evaluation_data['prediction_overview']
         prediction_class = evaluation_data['prediction_class']
@@ -67,7 +69,8 @@ class EvaluateHttp(ImageClassifier):
             'graph_file_web': graph_file_web,
             'prediction_overview': prediction_overview,
             'prediction_class': prediction_class,
-            'prediction_accuracy': prediction_accuracy
+            'prediction_accuracy': prediction_accuracy,
+            'prediction_time': '%.4f' % self.get_timer('prediction')
         }
 
         return return_value

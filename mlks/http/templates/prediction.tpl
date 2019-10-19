@@ -13,7 +13,7 @@
 
     <h3 class="subtitle">Source image (%(EVALUATED_FILE_WEB_SIZE)s)</h3>
     <p><img src="%(EVALUATED_FILE_WEB)s" style="max-width: 100%%;"></p>
-    <h3 class="subtitle">Predicted image (%(PREDICTION_CLASS)s - %(PREDICTION_ACCURACY)s%%)</h3>
+    <h3 class="subtitle">Predicted image (%(PREDICTION_CLASS)s - %(PREDICTION_ACCURACY)s%% - %(PREDICTION_TIME)ss)</h3>
     <p><img src="%(GRAPH_FILE_WEB)s" style="max-width: 100%%;"></p>
     <h3 class="subtitle">Prediction classes</h3>
     <pre class="code">%(PREDICTION_OVERVIEW)s</pre>

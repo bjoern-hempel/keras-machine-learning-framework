@@ -77,16 +77,21 @@ class Command:
             click.echo('<- Finished "{}" ({:.4f}s).'.
                        format(name, self.finish_time[name] - self.start_time[name]))
 
-    def print_timer(self, name='default'):
+    def get_timer(self, name='default'):
         if name not in self.start_time:
             raise AssertionError('You have not started the timer "%s" yet.' % name)
 
         if self.finish_time[name] == 0:
             self.finish_timer(name)
 
+        return self.finish_time[name] - self.start_time[name]
+
+    def print_timer(self, name='default'):
+        time_needed = self.get_timer(name)
+
         click.echo('')
         click.echo('--- time measurement for "{}": {:.4f}s ---'.
-                   format(name, self.finish_time[name] - self.start_time[name]))
+                   format(name, time_needed))
 
     @staticmethod
     def query_yes_no(question, default="yes"):

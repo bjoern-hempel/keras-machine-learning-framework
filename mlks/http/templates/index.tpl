@@ -1,13 +1,15 @@
 <div class="container">
     <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li class="is-active"><a href="#" aria-current="page">Overview</a></li>
+            <li class="is-active"><a href="#" aria-current="page">Home</a></li>
         </ul>
     </nav>
+
+    <p>&nbsp;</p>
 </div>
 
 <div class="container">
-    <h1 class="title">Overview</h1>
+    <h1 class="title">Picture Classifier</h1>
     <h2 class="title"><span class="pictogram">&#127891;</span> Prediction demos</h2>
     <p class="subtitle">An overview of all prediction demos ready to use.</p>
 

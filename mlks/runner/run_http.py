@@ -69,7 +69,8 @@ class HttpRunner:
             'graph_file_web': evaluation_file_web,
             'prediction_overview': prediction_overview,
             'prediction_class': prediction_class,
-            'prediction_accuracy': prediction_accuracy
+            'prediction_accuracy': prediction_accuracy,
+            'prediction_time': 0.1
         }
 
         return return_value

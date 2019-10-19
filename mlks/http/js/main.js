@@ -70,5 +70,9 @@ window.fileChange = function (e) {
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    document.getElementById('predict-file-source').addEventListener('change', window.fileChange, false);
+    let predictFileSource = document.getElementById('predict-file-source');
+
+    if (predictFileSource !== null) {
+        predictFileSource.addEventListener('change', window.fileChange, false);
+    }
 });

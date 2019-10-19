@@ -13,6 +13,8 @@
     <p></p>
 </div>
 
+<p>&nbsp;</p>
+
 <div class="file">
     <label class="file-label">
         <input class="file-input" type="file" name="file" id="predict-file-source">

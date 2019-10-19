@@ -380,7 +380,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         url_path = parsed.path
 
         # Routes to check
-        routes = ['learning-overview', 'tmp', 'prediction', 'upload', 'css', 'js', 'favicon']
+        routes = ['learning-overview', 'tmp', 'prediction', 'upload', 'css', 'js', 'favicon', 'manifest']
 
         # call index page
         if url_path == '/':
@@ -445,6 +445,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             prediction_class = evaluation_data['prediction_class']
             prediction_accuracy = evaluation_data['prediction_accuracy']
             upload_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
+            prediction_time = evaluation_data['prediction_time']
 
             html_content = self.get_template('prediction') % {
                 'EVALUATED_FILE_WEB_SIZE': evaluated_file_web_size,
@@ -453,7 +454,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
                 'GRAPH_FILE_WEB': graph_file_web,
                 'PREDICTION_OVERVIEW': prediction_overview,
-                'UPLOAD_FORM': upload_form
+                'UPLOAD_FORM': upload_form,
+                'PREDICTION_TIME': prediction_time
             }
             html_body = self.get_template('body') % {'CONTENT': html_content}
 
