@@ -276,6 +276,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.respond_html(html_body)
         return True
 
+    def do_GET_imprint(self, argument):
+        html_content = self.get_template('imprint')
+        html_body = self.get_template('body') % {'CONTENT': html_content}
+        self.respond_html(html_body)
+        return True
+
     def do_GET_file(self, path, argument):
         """ route GET /default """
 
@@ -380,7 +386,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         url_path = parsed.path
 
         # Routes to check
-        routes = ['learning-overview', 'tmp', 'prediction', 'upload', 'css', 'js', 'favicon', 'manifest']
+        routes = ['learning-overview', 'tmp', 'prediction', 'upload', 'css', 'js', 'favicon', 'manifest', 'imprint']
 
         # call index page
         if url_path == '/':
@@ -441,7 +447,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             evaluated_file_web_size = get_formatted_file_size(evaluation_data['evaluated_file'])
             evaluated_file_web = evaluation_data['evaluated_file_web']
             graph_file_web = evaluation_data['graph_file_web']
-            prediction_overview = evaluation_data['prediction_overview']
             prediction_class = evaluation_data['prediction_class']
             prediction_accuracy = evaluation_data['prediction_accuracy']
             upload_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}

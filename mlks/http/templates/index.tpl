@@ -39,4 +39,13 @@
             <span class="pictogram-small"><small><small>&#128190;</small></small></span> Keras Machine Learning Framework
         </a>
     </div>
+
+    <h2 class="title"><span class="pictogram"><small><small>&#127968;</small></small></span> Legal Notice</h2>
+    <p class="subtitle">The legal things... ;).</p>
+
+    <div class="list is-hoverable">
+        <a class="list-item" href="/imprint">
+            <span class="pictogram-small"><small><small>&#127968;</small></small></span> Legal Notice
+        </a>
+    </div>
 </div>

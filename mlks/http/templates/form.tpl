@@ -23,7 +23,7 @@
                 <i class="fas fa-upload"></i>
             </span>
             <span class="file-label">
-                Choose a file...
+                Choose a file to predict...
             </span>
         </span>
     </label>
