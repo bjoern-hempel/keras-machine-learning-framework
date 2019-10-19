@@ -16,3 +16,9 @@ span.pictogram {
     float: left;
     width: 56px;
 }
+
+span.pictogram-small {
+    display: block;
+    float: left;
+    width: 30px;
+}

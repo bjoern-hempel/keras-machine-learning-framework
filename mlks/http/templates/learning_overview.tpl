@@ -8,7 +8,7 @@
 </div>
 
 <div class="container">
-    <h1 class="title">Overview</h1>
+    <h1 class="title"><span class="pictogram"><small><small>&#128200;</small></small></span> Overview</h1>
     <p class="subtitle">A graphical overview of the learning models used.</p>
     <p></p>
 </div>
