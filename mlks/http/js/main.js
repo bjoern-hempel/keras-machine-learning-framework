@@ -1,5 +1,5 @@
 /** some configs */
-window.max_size = 800;
+window.max_size = 1024;
 
 window.submitPicture = function () {
     /* show uploading info */
