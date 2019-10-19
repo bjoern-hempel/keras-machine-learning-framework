@@ -63,6 +63,22 @@ def get_root_data_path(path):
     return '%s/data' % parts[0]
 
 
+def get_formatted_file_size(path):
+    if os.path.isfile(path):
+        file_size = os.path.getsize(path)
+    else:
+        file_size = 0
+
+    if file_size < 1024:
+        return '%d Byte' % file_size
+
+    file_size /= 1024
+    if file_size < 1024:
+        return '%.1f kB' % file_size
+
+    file_size /= 1024
+    return '%.2f MB' % file_size
+
 def get_number_of_folders_and_files(path):
     files = 0
     folders = 0

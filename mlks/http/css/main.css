@@ -2,6 +2,17 @@ body {
 
 }
 
-#waitdiv {
+#info-uploading {
     display: none;
+}
+
+.file .file-label.file-label-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+span.pictogram {
+    display: block;
+    float: left;
+    width: 56px;
 }

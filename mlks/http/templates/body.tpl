@@ -27,12 +27,6 @@
     </head>
     <body>
         <section class="section">
-            <div class="container" id="waitdiv">
-                <div class="notification is-info">
-                    <button class="delete" onclick="this.parentElement.style.display = 'none';"></button>
-                    %(TEXT_UPLOAD)s
-                </div>
-            </div>
             %(CONTENT)s
         </section>
     </body>

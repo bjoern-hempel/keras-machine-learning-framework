@@ -34,10 +34,11 @@ import cgi
 import re
 import os
 import magic
+import base64
 import collections
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse
-from mlks.helper.filesystem import PNG_EXTENSION
+from mlks.helper.filesystem import get_formatted_file_size, PNG_EXTENSION
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -73,7 +74,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         with open(full_template_path, 'r') as file:
             if template_name == 'body':
-                return file.read() % {'TEXT_UPLOAD': self.TEXT_UPLOAD, 'CONTENT': '%(CONTENT)s'}
+                return file.read() % {'CONTENT': '%(CONTENT)s'}
             else:
                 return file.read()
 
@@ -135,15 +136,15 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def respond_file(self, folder, path, content_type='text/plain; charset=utf-8', status=200):
         if path == '' or path is None:
-            html_body = self.get_template('404') % ('%s/%s' % (folder, path))
-            self.respond_html(html_body, 404)
+            html_content = self.get_template('404') % ('%s/%s' % (folder, path))
+            self.respond_html(html_content, 404)
             return
 
         file_path = '%s/%s/%s' % (self.file_template_path, folder, path)
 
         if not os.path.isfile(file_path):
-            html_body = self.get_template('404') % ('%s/%s' % (folder, path))
-            self.respond_html(html_body, 404)
+            html_content = self.get_template('404') % ('%s/%s' % (folder, path))
+            self.respond_html(html_content, 404)
             return
 
         # read file content
@@ -221,19 +222,34 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             }
         )
 
-        filename = form['file'].filename
+        predict_file_raw = form['predict-file-raw'].value
+        predict_file_name = form['predict-file-name'].value
 
-        if filename == '':
+        if predict_file_raw == '' or predict_file_name == '':
             return {
                 'error': True,
                 'message': 'No file was uploaded.'
             }
 
-        data = form['file'].file.read()
-        upload_path = '%s/%s/%s' % (self.root_data_path, 'upload', filename)
-        upload_path_web = '%s%s/%s' % (self.root_data_path_web, 'upload', filename)
-        open(upload_path, 'wb').write(data)
+        # check file
+        output = re.search('^data:image/([a-z]+);base64,', predict_file_raw, flags=re.IGNORECASE)
+        if output is None:
+            return {
+                'error': True,
+                'message': 'Unknown file format from file "%s".' % predict_file_name
+            }
 
+        # remove header
+        predict_file_raw = re.sub('^data:image/([a-z]+);base64,', '', predict_file_raw)
+        predict_file_raw = predict_file_raw.replace(' ', '+')
+        predict_file_raw = base64.b64decode(predict_file_raw)
+
+        # save file to upload folder
+        upload_path = '%s/%s/%s' % (self.root_data_path, 'upload', predict_file_name)
+        upload_path_web = '%s%s/%s' % (self.root_data_path_web, 'upload', predict_file_name)
+        open(upload_path, 'wb').write(predict_file_raw)
+
+        # check mime type of given image
         mime = magic.Magic(mime=True)
         mime_type = mime.from_file(upload_path)
 
@@ -242,7 +258,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 'error': True,
                 'message': 'The mime type "%s" of uploaded file "%s" is not allowed.' % (
                     mime_type,
-                    filename
+                    predict_file_name
                 )
             }
 
@@ -316,7 +332,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         """ route GET /prediction """
 
         if argument == 'flower':
-            html_form = self.get_template('form') % ''
+            html_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
             html_content = self.get_template('flower') % html_form
             html_body = self.get_template('body') % {'CONTENT': html_content}
             self.respond_html(html_body)
@@ -409,29 +425,35 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.respond_html('', 404)
 
     def do_POST(self):
+        add_path = 'C:/Users/bjoern/data/evaluate/%s'
+
         upload_data = self.write_upload_file()
 
         if upload_data['error']:
             html_error = self.get_template('error') % upload_data['message']
-            html_content = self.get_template('flower') % (self.get_template('form') % html_error)
+            html_content = self.get_template('flower') % (
+                self.get_template('form') % {'ERROR_MESSAGE': html_error, 'TEXT_UPLOAD': self.TEXT_UPLOAD}
+            )
             html_body = self.get_template('body') % {'CONTENT': html_content}
         else:
             # call post hook
             evaluation_data = self.call_hook('POST', upload_data)
+            evaluated_file_web_size = get_formatted_file_size(evaluation_data['evaluated_file'])
             evaluated_file_web = evaluation_data['evaluated_file_web']
             graph_file_web = evaluation_data['graph_file_web']
             prediction_overview = evaluation_data['prediction_overview']
             prediction_class = evaluation_data['prediction_class']
             prediction_accuracy = evaluation_data['prediction_accuracy']
-            upload_form = self.get_template('form') % ''
+            upload_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
 
             html_content = self.get_template('prediction') % {
-                'evaluated_file_web': evaluated_file_web,
-                'prediction_class': prediction_class,
-                'prediction_accuracy': '%.2f' % prediction_accuracy,
-                'graph_file_web': graph_file_web,
-                'prediction_overview': prediction_overview,
-                'upload_form': upload_form
+                'EVALUATED_FILE_WEB_SIZE': evaluated_file_web_size,
+                'EVALUATED_FILE_WEB': evaluated_file_web,
+                'PREDICTION_CLASS': prediction_class,
+                'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
+                'GRAPH_FILE_WEB': graph_file_web,
+                'PREDICTION_OVERVIEW': prediction_overview,
+                'UPLOAD_FORM': upload_form
             }
             html_body = self.get_template('body') % {'CONTENT': html_content}
 
