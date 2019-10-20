@@ -1,17 +1,13 @@
-%(ERROR_MESSAGE)s
-
 <p>Choose the picture of %(MODEL_TYPE)s you want to evaluate and press "Upload picture".</p>
 
-<div class="container" id="info-uploading">
-    <div class="notification is-info">
-        <button class="delete" data-ignore-disabling onclick="this.parentElement.style.display = 'none';"></button>
-        %(TEXT_UPLOAD)s
-    </div>
-
-    <p></p>
-</div>
-
 <p>&nbsp;</p>
+
+%(ERROR_MESSAGE)s
+
+<div class="notification is-info" id="info-uploading">
+    <button class="delete" data-ignore-disabling onclick="this.parentElement.style.display = 'none';"></button>
+    %(TEXT_UPLOAD)s
+</div>
 
 <div class="file">
     <label class="file-label">
