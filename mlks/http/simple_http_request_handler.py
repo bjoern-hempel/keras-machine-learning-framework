@@ -73,8 +73,19 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         full_template_path = '%s/%s.%s' % (self.html_template_path, template_name, self.TEMPLATE_FILE_EXTENSION)
 
         with open(full_template_path, 'r') as file:
+            # add google analytics
             if template_name == 'body':
-                return file.read() % {'CONTENT': '%(CONTENT)s'}
+                gaaccess_file = '%s/.gaaccess' % self.root_project_path
+                gaaccess_content = ''
+
+                if os.path.isfile(gaaccess_file):
+                    with open(gaaccess_file, 'r') as ga_file:
+                        gaaccess_content = ga_file.read()
+
+                return file.read() % {
+                    'CONTENT': '%(CONTENT)s',
+                    'GOOGLE_ANALYTICS': gaaccess_content
+                }
             else:
                 return file.read()
 

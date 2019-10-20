@@ -24,6 +24,7 @@
         <meta name="msapplication-TileColor" content="#3273dc">
         <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
         <meta name="theme-color" content="#3273dc">
+        %(GOOGLE_ANALYTICS)s
     </head>
     <body>
         <section class="section">

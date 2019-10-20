@@ -7,3 +7,5 @@ __pycache__
 # Project
 /machineLearning.egg-info
 
+# Configs
+/.gaaccess
