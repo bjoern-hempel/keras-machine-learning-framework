@@ -545,7 +545,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         i = 0
         while i < len(prediction_overview_array):
             prediction_overview_html += '<tr><td><b>%s</b></td><td>%.2f %%</td></tr>' % (
-                prediction_overview_array[i]['class_name'].replace('_', ' ').capitalize(),
+                prediction_overview_array[i]['class_name'].replace('_', ' ').title(),
                 prediction_overview_array[i]['predicted_value'] * 100
             )
             i += 1
@@ -557,10 +557,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         html_content = self.get_template('prediction') % {
             'ICON': icons[argument],
-            'MODEL_TYPE': argument.capitalize(),
+            'MODEL_TYPE': argument,
+            'MODEL_TYPE_TITLE': argument.title(),
             'EVALUATED_FILE_WEB_SIZE': evaluated_file_web_size,
             'EVALUATED_FILE_WEB': evaluated_file_web,
-            'PREDICTION_CLASS': prediction_class.replace('_', ' ').capitalize(),
+            'PREDICTION_CLASS': prediction_class.replace('_', ' ').title(),
             'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
             'GRAPH_FILE_WEB': graph_file_web,
             'PREDICTION_OVERVIEW': prediction_overview_html,

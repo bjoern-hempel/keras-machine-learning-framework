@@ -195,7 +195,7 @@ class HttpRunner:
                         'predicted_value': 0.0084
                     },
                     {
-                        'class_name': 'martini',
+                        'class_name': 'martini_on_the_rock',
                         'predicted_value': 0.0010
                     }
                 ]
@@ -206,6 +206,7 @@ class HttpRunner:
             return []
 
         return prediction_array[model_type]
+
 
 def run():
     http_runner = HttpRunner()
