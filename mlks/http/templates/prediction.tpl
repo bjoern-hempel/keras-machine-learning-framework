@@ -23,6 +23,7 @@
 
     <h3 class="subtitle">Prediction classes</h3>
     <p>In the order in which the model would classify the image.</p>
+    <p>&nbsp;</p>
     <div class="table-container">
         <table class="table is-fullwidth is-hoverable">
             %(PREDICTION_OVERVIEW)s
