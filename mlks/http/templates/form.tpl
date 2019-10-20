@@ -2,7 +2,7 @@
 
 <h3 class="subtitle">Picture upload form</h3>
 
-<p>Choose the picture of flower you want to evaluate and press "Upload picture".</p>
+<p>Choose the picture of %(MODEL_TYPE)s you want to evaluate and press "Upload picture".</p>
 
 <div class="container" id="info-uploading">
     <div class="notification is-info">
