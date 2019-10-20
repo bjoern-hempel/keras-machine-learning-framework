@@ -5,6 +5,8 @@
   "display": "standalone",
   "start_url": "/",
   "orientation": "portrait-primary",
+  "theme_color": "#3273dc",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "/favicon/android-icon-36x36.png",
