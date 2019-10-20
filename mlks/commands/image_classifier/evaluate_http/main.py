@@ -128,14 +128,13 @@ class EvaluateHttp(ImageClassifier):
         }
 
     def loadConfig(self, config_file):
-
         # load config file
         self.start_timer('load json config file')
         self.config.load_json_from_config_file(config_file, True)
         self.finish_timer('load json config file')
 
         # rebuild model dict
-        self.config.rebuild_model_dict()
+        self.config.rebuild_model_dict(config_file)
         self.start_timer('save json config file')
         self.config.save_json()
         self.finish_timer('save json config file')

@@ -160,8 +160,20 @@ class Config(object):
 
         self.set_environment('measurement', measurements)
 
-    def rebuild_model_dict(self):
+    def rebuild_model_dict(self, config_file=None):
         model_file = self.get_data('model_file')
+
+        # convert model file if needed (from other training system)
+        if not os.path.isfile(model_file) and config_file is not None and os.path.isfile(config_file):
+            self.set_data('config_file', config_file)
+            model_file_tmp = add_file_extension(config_file, 'h5')
+            if os.path.isfile(model_file_tmp):
+                model_file = model_file_tmp
+                self.set_data('config_file', config_file)
+
+        if not os.path.isfile(model_file):
+            raise AssertionError('model file "%s" was not found' % model_file)
+
         model_path = os.path.dirname(model_file)
         model_base = add_file_extension(os.path.basename(model_file), '*', True)
         model_files = []
@@ -196,15 +208,11 @@ class Config(object):
 
     def set_dict(self, data, force=False):
         for config, values in data.items():
-            #print('   -->', config, values)
             if config in self.configs and isinstance(values, dict):
                 # merge config
                 for key, value in values.items():
                     if key not in self.configs[config] or force:
                         self.configs[config][key] = value
-                    else:
-                        #print('XXXXXX Ignored', config)
-                        pass
             else:
                 self.configs[config] = values
 
