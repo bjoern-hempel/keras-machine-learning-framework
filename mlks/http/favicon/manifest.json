@@ -1,5 +1,5 @@
 {
-  "short_name": "Picture Classifier",
+  "short_name": "PictureClassifier",
   "name": "Picture Classifier",
   "description": "The frontend of the Keras Machine Learning Framework. Ready to classify individual images.",
   "display": "standalone",
