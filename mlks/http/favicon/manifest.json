@@ -1,6 +1,10 @@
 {
   "short_name": "Maps",
   "name": "Picture Classifier",
+  "description": "The frontend of the Keras Machine Learning Framework. Ready to classify individual images.",
+  "display": "standalone",
+  "start_url": "/",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/favicon/android-icon-36x36.png",
