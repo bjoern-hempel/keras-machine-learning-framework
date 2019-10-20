@@ -281,19 +281,34 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'message': None
         }
 
+    def get_empty_model_data(self):
+        model_name = 'NONE'
+        classes = 0
+        learning_epochs = 0
+        model_date = 'NONE'
+        version = '0.00'
+
+        return {
+            'model_name': model_name,
+            'model_classes': classes,
+            'model_learning_epochs': learning_epochs,
+            'model_date': model_date,
+            'model_version': version
+        }
+
     def do_GET_index(self):
         html_content = self.get_template('index')
         html_body = self.get_template('body') % {'CONTENT': html_content}
         self.respond_html(html_body)
         return True
 
-    def do_GET_imprint(self, argument):
+    def do_GET_imprint(self, argument, hook_results):
         html_content = self.get_template('imprint')
         html_body = self.get_template('body') % {'CONTENT': html_content}
         self.respond_html(html_body)
         return True
 
-    def do_GET_file(self, path, argument):
+    def do_GET_file(self, path, argument, hook_results):
         """ route GET /default """
 
         # some configs and type tables
@@ -325,32 +340,45 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print('unknown file type "%s"' % mime_type)
         return False
 
-    def do_GET_favicon(self, argument):
+    def do_GET_favicon(self, argument, hook_results):
         """ route GET /favicon """
         print('favicon')
-        return self.do_GET_file('favicon', argument)
+        return self.do_GET_file('favicon', argument, hook_results)
 
-    def do_GET_css(self, argument):
+    def do_GET_css(self, argument, hook_results):
         """ route GET /css """
         self.respond_file('css', argument, 'text/css; charset=utf-8')
         return True
 
-    def do_GET_js(self, argument):
+    def do_GET_js(self, argument, hook_results):
         """ route GET /js """
         self.respond_file('js', argument, 'application/javascript; charset=utf-8')
         return True
 
-    def do_GET_tmp(self, argument):
+    def do_GET_tmp(self, argument, hook_results):
         """ route GET /tmp """
         self.respond_picture(argument, 'tmp')
         return True
 
-    def do_GET_prediction(self, argument):
+    def do_GET_prediction(self, argument, hook_results):
         """ route GET /prediction """
+        model_data = self.get_empty_model_data()
+        if 'GET_prediction' in hook_results:
+            model_data = hook_results['GET_prediction']
 
         if argument == 'flower':
             html_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
-            html_content = self.get_template('flower') % html_form
+            used_model = self.get_template('used_model') % {
+                'MODEL_NAME': model_data['model_name'],
+                'CLASSES': model_data['model_classes'],
+                'LEARNING_EPOCHS': model_data['model_learning_epochs'],
+                'MODEL_DATE': model_data['model_date'],
+                'VERSION': model_data['model_version']
+            }
+            html_content = self.get_template('flower') % {
+                'PREDICTION_FORM': html_form,
+                'USED_MODEL': used_model
+            }
             html_body = self.get_template('body') % {'CONTENT': html_content}
             self.respond_html(html_body)
             return True
@@ -363,7 +391,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         return False
 
-    def do_GET_learning_overview(self, argument):
+    def do_GET_learning_overview(self, argument, hook_results):
         learning_overview_items = [
             'flower_10_1.inceptionv3',
             'flower_10_2.densenet169',
@@ -387,7 +415,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         return True
 
-    def do_GET_upload(self, argument):
+    def do_GET_upload(self, argument, hook_results):
         """ route GET /upload """
         self.respond_picture(argument, 'upload')
         return True
@@ -398,6 +426,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         # Routes to check
         routes = ['learning-overview', 'tmp', 'prediction', 'upload', 'css', 'js', 'favicon', 'manifest', 'imprint']
+
+        # hook results
+        hook_results = {}
 
         # call index page
         if url_path == '/':
@@ -418,20 +449,20 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         for route in routes:
             output = re.search('^/%s(/(.+)?)?$' % route, url_path, flags=re.IGNORECASE)
             if output is not None:
-                print('Found route: %s = ' % route, output.group(2))
-
+                #print('Found route: %s = ' % route, output.group(2))
                 route_function_name = 'do_GET_%s' % route.replace('-', '_')
+                hook_name = 'GET_%s' % route.replace('-', '_')
 
                 if not hasattr(self, route_function_name):
                     raise AssertionError('Please add method "SimpleHTTPRequestHandler.%s()"' % route_function_name)
 
                 # call hook
-                GET_result = self.call_hook('GET_%s' % route.replace('-', '_'))
+                GET_result = self.call_hook(hook_name)
                 if GET_result is not None:
-                    print(GET_result)
+                    hook_results[hook_name] = GET_result
 
                 # Call special GET function
-                success = getattr(self, route_function_name)(output.group(2))
+                success = getattr(self, route_function_name)(output.group(2), hook_results)
                 if not success:
                     self.respond_html('', 404)
                     return
@@ -441,16 +472,28 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         # Unknown page
         self.respond_html('', 404)
 
-    def do_POST(self):
-        add_path = 'C:/Users/bjoern/data/evaluate/%s'
-
+    def do_POST_prediction(self, argument, hook_results):
         upload_data = self.write_upload_file()
+        model_data = self.get_empty_model_data()
+
+        if 'POST_prediction' in hook_results:
+            model_data = hook_results['POST_prediction']
+
+        used_model = self.get_template('used_model') % {
+            'MODEL_NAME': model_data['model_name'],
+            'CLASSES': model_data['model_classes'],
+            'LEARNING_EPOCHS': model_data['model_learning_epochs'],
+            'MODEL_DATE': model_data['model_date'],
+            'VERSION': model_data['model_version']
+        }
 
         if upload_data['error']:
             html_error = self.get_template('error') % upload_data['message']
-            html_content = self.get_template('flower') % (
-                self.get_template('form') % {'ERROR_MESSAGE': html_error, 'TEXT_UPLOAD': self.TEXT_UPLOAD}
-            )
+            html_form = self.get_template('form') % {'ERROR_MESSAGE': html_error, 'TEXT_UPLOAD': self.TEXT_UPLOAD}
+            html_content = self.get_template('flower') % {
+                'PREDICTION_FORM': html_form,
+                'USED_MODEL': used_model
+            }
             html_body = self.get_template('body') % {'CONTENT': html_content}
         else:
             # call post hook
@@ -481,8 +524,31 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 'GRAPH_FILE_WEB': graph_file_web,
                 'PREDICTION_OVERVIEW': prediction_overview_html,
                 'UPLOAD_FORM': upload_form,
-                'PREDICTION_TIME': prediction_time
+                'PREDICTION_TIME': prediction_time,
+                'USED_MODEL': used_model
             }
             html_body = self.get_template('body') % {'CONTENT': html_content}
 
         self.respond_html(html_body)
+        return True
+
+    def do_POST(self):
+        argument = 'flower'
+        hook_results = {}
+
+        route_function_name = 'do_POST_%s' % 'prediction'
+        hook_name = 'POST_%s' % 'prediction'
+
+        if not hasattr(self, route_function_name):
+            raise AssertionError('Please add method "SimpleHTTPRequestHandler.%s()"' % route_function_name)
+
+        # call hook
+        POST_result = self.call_hook(hook_name)
+        if POST_result is not None:
+            hook_results[hook_name] = POST_result
+
+        # Call special GET function
+        success = getattr(self, route_function_name)(argument, hook_results)
+        if not success:
+            self.respond_html('', 404)
+            return

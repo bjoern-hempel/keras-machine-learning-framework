@@ -22,3 +22,9 @@ span.pictogram-small {
     float: left;
     width: 30px;
 }
+
+hr.info {
+    margin-bottom: 0;
+    height: 1px;
+    background-color: #dbdbdb;
+}

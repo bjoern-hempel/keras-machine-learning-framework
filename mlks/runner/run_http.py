@@ -100,8 +100,28 @@ class HttpRunner:
         return return_value
 
     @staticmethod
-    def GET_upload_hook(test):
-        print(test)
+    def GET_prediction_hook():
+        return HttpRunner.get_model_data()
+
+    @staticmethod
+    def POST_prediction_hook():
+        return HttpRunner.get_model_data()
+
+    @staticmethod
+    def get_model_data():
+        model_name = 'inceptionv3.best.18-0.95.h5'
+        model_classes = 12
+        model_learning_epochs = 20
+        model_date = '2019-10-18T18:21Z'
+        model_version = '1.02'
+
+        return {
+            'model_name': model_name,
+            'model_classes': model_classes,
+            'model_learning_epochs': model_learning_epochs,
+            'model_date': model_date,
+            'model_version': model_version
+        }
 
     @staticmethod
     @click.command()
@@ -116,9 +136,13 @@ class HttpRunner:
                 'lambda': HttpRunner.POST_hook,
                 'arguments': []
             })
-            SimpleHTTPRequestHandler.set_hook('GET_upload', {
-                'lambda': HttpRunner.GET_upload_hook,
-                'arguments': ['my string']
+            SimpleHTTPRequestHandler.set_hook('POST_prediction', {
+                'lambda': HttpRunner.POST_prediction_hook,
+                'arguments': []
+            })
+            SimpleHTTPRequestHandler.set_hook('GET_prediction', {
+                'lambda': HttpRunner.GET_prediction_hook,
+                'arguments': []
             })
             SimpleHTTPRequestHandler.set_property('root_data_path', data_path)
             SimpleHTTPRequestHandler.set_property('root_data_path_web', '/')

@@ -12,5 +12,6 @@
 <div class="container">
     <h1 class="title"><span class="pictogram">&#127803;</span> Flower prediction</h1>
     <h2 class="subtitle">Ready-to-use flower classification</h2>
-    %s
+    %(PREDICTION_FORM)s
+    %(USED_MODEL)s
 </div>

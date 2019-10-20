@@ -23,5 +23,6 @@
     </div>
 
     %(UPLOAD_FORM)s
+    %(USED_MODEL)s
 </div>
 
