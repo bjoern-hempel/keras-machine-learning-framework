@@ -13,4 +13,5 @@
     <h1 class="title"><span class="pictogram">&#127828;</span> Food prediction</h1>
     <h2 class="subtitle">Ready-to-use food classification</h2>
     <p>The model for food is not yet available. Use <a href="/prediction/flower">flower prediction</a> instead.</p>
+    %(USED_MODEL)s
 </div>

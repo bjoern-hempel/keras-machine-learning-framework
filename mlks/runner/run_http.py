@@ -32,15 +32,20 @@
 
 import ssl
 import click
+import os
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
-from mlks.helper.filesystem import get_root_project_path
+from mlks.helper.filesystem import get_root_project_path, get_formatted_file_size, get_changed_date
 
 
 class HttpRunner:
 
     @staticmethod
-    def POST_hook(upload_data):
+    def POST_prediction_get_model_hook(argument, upload_data):
+        # only the flower model is allowed in that moment
+        if argument is not 'flower':
+            raise AssertionError('Unsupported model type "%s".' % argument)
+
         # get file to evaluate
         evaluation_file = upload_data['upload_path']
         evaluation_file_web = upload_data['upload_path_web']
@@ -100,23 +105,35 @@ class HttpRunner:
         return return_value
 
     @staticmethod
-    def GET_prediction_hook():
-        return HttpRunner.get_model_data()
+    def GET_prediction_hook(argument):
+        return HttpRunner.get_model_data(argument)
 
     @staticmethod
-    def POST_prediction_hook():
-        return HttpRunner.get_model_data()
+    def POST_prediction_hook(argument):
+        return HttpRunner.get_model_data(argument)
 
     @staticmethod
-    def get_model_data():
-        model_name = 'inceptionv3.best.18-0.95.h5'
+    def get_model_data(argument):
+        print('----> MODEL: %s' % argument)
+
+        if argument == 'flower':
+            model_path = 'C:/Users/bjoern/data/processed/flower_10/flower_10_1.inceptionv3.best.17-0.95.h5'
+        elif argument == 'food':
+            return None
+        else:
+            raise AssertionError('Unknown model type "%s"' % argument)
+
+        # '2019-10-18T18:21Z'
+        model_name = os.path.basename(model_path)
+        model_size = get_formatted_file_size(model_path)
         model_classes = 12
         model_learning_epochs = 20
-        model_date = '2019-10-18T18:21Z'
+        model_date = get_changed_date(model_path)
         model_version = '1.02'
 
         return {
             'model_name': model_name,
+            'model_size': model_size,
             'model_classes': model_classes,
             'model_learning_epochs': model_learning_epochs,
             'model_date': model_date,
@@ -132,8 +149,8 @@ class HttpRunner:
     def run(data_path, port, port_ssl, bind_ip):
         """This scripts starts a simple demo http service for testing purpose."""
         try:
-            SimpleHTTPRequestHandler.set_POST_hook({
-                'lambda': HttpRunner.POST_hook,
+            SimpleHTTPRequestHandler.set_hook('POST_prediction_get_model', {
+                'lambda': HttpRunner.POST_prediction_get_model_hook,
                 'arguments': []
             })
             SimpleHTTPRequestHandler.set_hook('POST_prediction', {

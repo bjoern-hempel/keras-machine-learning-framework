@@ -34,6 +34,8 @@ import os
 import shutil
 import re
 from pathlib import Path
+from datetime import datetime
+from mlks.helper.time import SimpleUtc
 
 PNG_EXTENSION = 'png'
 JPG_EXTENSION = 'jpg'
@@ -62,6 +64,10 @@ def get_root_data_path(path):
     parts = re.split(split_string, str(path).replace('\\', '/'))
     return '%s/data' % parts[0]
 
+
+def get_changed_date(path):
+    timestamp = os.path.getmtime(path)
+    return str(datetime.fromtimestamp(timestamp).utcnow().replace(tzinfo=SimpleUtc()).isoformat())
 
 def get_formatted_file_size(path):
     if os.path.isfile(path):

@@ -283,6 +283,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def get_empty_model_data(self):
         model_name = 'NONE'
+        model_size = '0 Bytes'
         classes = 0
         learning_epochs = 0
         model_date = 'NONE'
@@ -290,6 +291,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         return {
             'model_name': model_name,
+            'model_size': model_size,
             'model_classes': classes,
             'model_learning_epochs': learning_epochs,
             'model_date': model_date,
@@ -362,19 +364,25 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET_prediction(self, argument, hook_results):
         """ route GET /prediction """
-        model_data = self.get_empty_model_data()
+        model_data = None
+
         if 'GET_prediction' in hook_results:
             model_data = hook_results['GET_prediction']
 
+        if model_data is None:
+            model_data = self.get_empty_model_data()
+
+        used_model = self.get_template('used_model') % {
+            'MODEL_NAME': model_data['model_name'],
+            'MODEL_SIZE': model_data['model_size'],
+            'CLASSES': model_data['model_classes'],
+            'LEARNING_EPOCHS': model_data['model_learning_epochs'],
+            'MODEL_DATE': model_data['model_date'],
+            'VERSION': model_data['model_version']
+        }
+
         if argument == 'flower':
             html_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
-            used_model = self.get_template('used_model') % {
-                'MODEL_NAME': model_data['model_name'],
-                'CLASSES': model_data['model_classes'],
-                'LEARNING_EPOCHS': model_data['model_learning_epochs'],
-                'MODEL_DATE': model_data['model_date'],
-                'VERSION': model_data['model_version']
-            }
             html_content = self.get_template('flower') % {
                 'PREDICTION_FORM': html_form,
                 'USED_MODEL': used_model
@@ -384,7 +392,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return True
 
         if argument == 'food':
-            html_content = self.get_template('food')
+            html_content = self.get_template('food') % {
+                'USED_MODEL': used_model
+            }
             html_body = self.get_template('body') % {'CONTENT': html_content}
             self.respond_html(html_body)
             return True
@@ -449,20 +459,25 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         for route in routes:
             output = re.search('^/%s(/(.+)?)?$' % route, url_path, flags=re.IGNORECASE)
             if output is not None:
-                #print('Found route: %s = ' % route, output.group(2))
                 route_function_name = 'do_GET_%s' % route.replace('-', '_')
                 hook_name = 'GET_%s' % route.replace('-', '_')
+                argument = output.group(2)
 
                 if not hasattr(self, route_function_name):
                     raise AssertionError('Please add method "SimpleHTTPRequestHandler.%s()"' % route_function_name)
 
                 # call hook
-                GET_result = self.call_hook(hook_name)
+                if route == 'prediction':
+                    GET_result = self.call_hook(hook_name, argument)
+                else:
+                    GET_result = self.call_hook(hook_name)
+
+                # add hook result
                 if GET_result is not None:
                     hook_results[hook_name] = GET_result
 
                 # Call special GET function
-                success = getattr(self, route_function_name)(output.group(2), hook_results)
+                success = getattr(self, route_function_name)(argument, hook_results)
                 if not success:
                     self.respond_html('', 404)
                     return
@@ -474,13 +489,17 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST_prediction(self, argument, hook_results):
         upload_data = self.write_upload_file()
-        model_data = self.get_empty_model_data()
+        model_data = None
 
         if 'POST_prediction' in hook_results:
             model_data = hook_results['POST_prediction']
 
+        if model_data is None:
+            model_data = self.get_empty_model_data()
+
         used_model = self.get_template('used_model') % {
             'MODEL_NAME': model_data['model_name'],
+            'MODEL_SIZE': model_data['model_size'],
             'CLASSES': model_data['model_classes'],
             'LEARNING_EPOCHS': model_data['model_learning_epochs'],
             'MODEL_DATE': model_data['model_date'],
@@ -497,7 +516,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             html_body = self.get_template('body') % {'CONTENT': html_content}
         else:
             # call post hook
-            evaluation_data = self.call_hook('POST', upload_data)
+            hook_name = 'POST_%s_%s' % ('prediction', 'get_model')
+            evaluation_data = self.call_hook(hook_name, argument, upload_data)
+
+            # get data from post hook
             evaluated_file_web_size = get_formatted_file_size(evaluation_data['evaluated_file'])
             evaluated_file_web = evaluation_data['evaluated_file_web']
             graph_file_web = evaluation_data['graph_file_web']
@@ -535,7 +557,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         argument = 'flower'
         hook_results = {}
-
         route_function_name = 'do_POST_%s' % 'prediction'
         hook_name = 'POST_%s' % 'prediction'
 
@@ -543,7 +564,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             raise AssertionError('Please add method "SimpleHTTPRequestHandler.%s()"' % route_function_name)
 
         # call hook
-        POST_result = self.call_hook(hook_name)
+        POST_result = self.call_hook(hook_name, argument)
         if POST_result is not None:
             hook_results[hook_name] = POST_result
 
