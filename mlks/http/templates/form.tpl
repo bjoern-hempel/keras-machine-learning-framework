@@ -31,7 +31,7 @@
 
 <p>&nbsp;</p>
 
-<form action="" method="post" enctype="multipart/form-data" id="prediction-form" onsubmit="return window.submitPicture();">
+<form action="" method="post" id="prediction-form" onsubmit="return window.submitPicture();">
     <div class="field is-grouped">
         <div class="control">
             <button class="button is-link">Upload picture</button>
@@ -41,6 +41,7 @@
         </div>
     </div>
 
+    <input type="hidden" name="model-type" value="%(MODEL_TYPE)s" id="model-type">
     <input type="hidden" name="predict-file-raw" value="" id="predict-file-raw">
     <input type="hidden" name="predict-file-name" value="" id="predict-file-name">
 </form>

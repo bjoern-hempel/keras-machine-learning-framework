@@ -59,6 +59,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     css_template_path = '%s/mlks/http/css'
     file_template_path = '%s/mlks/http'
 
+    allowed_model_types = ['flower', 'food']
+
+    cgi_form = None
+
     def __init__(self, request, client_address, server):
         self.root_data_path = self.get_property('root_data_path')
         self.root_data_path_web = self.get_property('root_data_path_web')
@@ -224,19 +228,15 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         f.close()
 
     def write_upload_file(self):
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={
-                'REQUEST_METHOD': 'POST',
-                'CONTENT_TYPE': self.headers['Content-Type'],
-            }
-        )
+        form = self.get_cgi_form()
 
-        predict_file_raw = form['predict-file-raw'].value
-        predict_file_name = form['predict-file-name'].value
+        predict_file_raw = form['predict-file-raw'].value if 'predict-file-raw' in form else None
+        predict_file_name = form['predict-file-name'].value if 'predict-file-name' in form else None
 
-        if predict_file_raw == '' or predict_file_name == '':
+        predict_file_raw = None if predict_file_raw == '' else predict_file_raw
+        predict_file_name = None if predict_file_name == '' else predict_file_name
+
+        if predict_file_raw is None or predict_file_name is None:
             return {
                 'error': True,
                 'message': 'No file was uploaded. Please choose a file to predict before uploading it.'
@@ -344,7 +344,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET_favicon(self, argument, hook_results):
         """ route GET /favicon """
-        print('favicon')
         return self.do_GET_file('favicon', argument, hook_results)
 
     def do_GET_css(self, argument, hook_results):
@@ -382,25 +381,24 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'VERSION': model_data['model_version']
         }
 
-        if argument == 'flower':
-            html_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
-            html_content = self.get_template('flower') % {
-                'PREDICTION_FORM': html_form,
-                'USED_MODEL': used_model
-            }
-            html_body = self.get_template('body') % {'CONTENT': html_content}
-            self.respond_html(html_body)
-            return True
+        # unknown model type
+        if argument not in self.allowed_model_types:
+            return False
 
-        if argument == 'food':
-            html_content = self.get_template('food') % {
-                'USED_MODEL': used_model
-            }
-            html_body = self.get_template('body') % {'CONTENT': html_content}
-            self.respond_html(html_body)
-            return True
+        # build html
+        html_form = self.get_template('form') % {
+            'ERROR_MESSAGE': '',
+            'TEXT_UPLOAD': self.TEXT_UPLOAD,
+            'MODEL_TYPE': argument
+        }
+        html_content = self.get_template(argument) % {
+            'PREDICTION_FORM': html_form,
+            'USED_MODEL': used_model
+        }
 
-        return False
+        # send html to browser
+        self.respond_html(self.get_template('body') % {'CONTENT': html_content})
+        return True
 
     def do_GET_learning_overview(self, argument, hook_results):
         learning_overview_items = [
@@ -508,56 +506,70 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'VERSION': model_data['model_version']
         }
 
+        # check if an error occurred
         if upload_data['error']:
             html_error = self.get_template('error') % upload_data['message']
-            html_form = self.get_template('form') % {'ERROR_MESSAGE': html_error, 'TEXT_UPLOAD': self.TEXT_UPLOAD}
-            html_content = self.get_template('flower') % {
+            html_form = self.get_template('form') % {
+                'ERROR_MESSAGE': html_error,
+                'TEXT_UPLOAD': self.TEXT_UPLOAD,
+                'MODEL_TYPE': argument
+            }
+            html_content = self.get_template(argument) % {
                 'PREDICTION_FORM': html_form,
                 'USED_MODEL': used_model
             }
             html_body = self.get_template('body') % {'CONTENT': html_content}
-        else:
-            # call post hook
-            hook_name = 'POST_%s' % ('prediction')
-            evaluation_data = self.call_hook(hook_name, argument, upload_data)
 
-            # get data from post hook
-            evaluated_file_web_size = get_formatted_file_size(evaluation_data['evaluated_file'])
-            evaluated_file_web = evaluation_data['evaluated_file_web']
-            graph_file_web = evaluation_data['graph_file_web']
-            prediction_class = evaluation_data['prediction_class']
-            prediction_accuracy = evaluation_data['prediction_accuracy']
-            upload_form = self.get_template('form') % {'ERROR_MESSAGE': '', 'TEXT_UPLOAD': self.TEXT_UPLOAD}
-            prediction_time = evaluation_data['prediction_time']
-            prediction_overview_array = evaluation_data['prediction_overview_array']
-            prediction_overview_html = '<tr><th>Class</th><th>Prediction</th></tr>'
+            self.respond_html(html_body)
+            return True
 
-            i = 0
-            while i < len(prediction_overview_array):
-                prediction_overview_html += '<tr><td><b>%s</b></td><td>%.2f %%</td></tr>' % (
-                    prediction_overview_array[i]['class_name'],
-                    prediction_overview_array[i]['predicted_value'] * 100
-                )
-                i += 1
+        # call post hook
+        hook_name = 'POST_%s' % ('prediction')
+        evaluation_data = self.call_hook(hook_name, argument, upload_data)
 
-            html_content = self.get_template('prediction') % {
-                'EVALUATED_FILE_WEB_SIZE': evaluated_file_web_size,
-                'EVALUATED_FILE_WEB': evaluated_file_web,
-                'PREDICTION_CLASS': prediction_class,
-                'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
-                'GRAPH_FILE_WEB': graph_file_web,
-                'PREDICTION_OVERVIEW': prediction_overview_html,
-                'UPLOAD_FORM': upload_form,
-                'PREDICTION_TIME': prediction_time,
-                'USED_MODEL': used_model
-            }
-            html_body = self.get_template('body') % {'CONTENT': html_content}
+        # get data from post hook
+        evaluated_file_web_size = get_formatted_file_size(evaluation_data['evaluated_file'])
+        evaluated_file_web = evaluation_data['evaluated_file_web']
+        graph_file_web = evaluation_data['graph_file_web']
+        prediction_class = evaluation_data['prediction_class']
+        prediction_accuracy = evaluation_data['prediction_accuracy']
+        upload_form = self.get_template('form') % {
+            'ERROR_MESSAGE': '',
+            'TEXT_UPLOAD': self.TEXT_UPLOAD,
+            'MODEL_TYPE': argument
+        }
+        prediction_time = evaluation_data['prediction_time']
+        prediction_overview_array = evaluation_data['prediction_overview_array']
+        prediction_overview_html = '<tr><th class="is-size-5">Class</th><th class="is-size-5">Prediction</th></tr>'
 
-        self.respond_html(html_body)
+        i = 0
+        while i < len(prediction_overview_array):
+            prediction_overview_html += '<tr><td><b>%s</b></td><td>%.2f %%</td></tr>' % (
+                prediction_overview_array[i]['class_name'].capitalize(),
+                prediction_overview_array[i]['predicted_value'] * 100
+            )
+            i += 1
+
+        html_content = self.get_template('prediction') % {
+            'EVALUATED_FILE_WEB_SIZE': evaluated_file_web_size,
+            'EVALUATED_FILE_WEB': evaluated_file_web,
+            'PREDICTION_CLASS': prediction_class.capitalize(),
+            'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
+            'GRAPH_FILE_WEB': graph_file_web,
+            'PREDICTION_OVERVIEW': prediction_overview_html,
+            'UPLOAD_FORM': upload_form,
+            'PREDICTION_TIME': prediction_time,
+            'USED_MODEL': used_model
+        }
+        self.respond_html(self.get_template('body') % {'CONTENT': html_content})
         return True
 
     def do_POST(self):
-        argument = 'flower'
+        # renew and get the current cgi form
+        self.get_cgi_form(True)
+
+        # get some parameters
+        argument = self.get_post_value('model-type')
         hook_results = {}
         route_function_name = 'do_POST_%s' % 'prediction'
         hook_name = 'POST_%s_get_model' % 'prediction'
@@ -575,3 +587,26 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if not success:
             self.respond_html('', 404)
             return
+
+    def get_cgi_form(self, renew=False):
+        if not renew and SimpleHTTPRequestHandler.cgi_form is not None:
+            return SimpleHTTPRequestHandler.cgi_form
+
+        SimpleHTTPRequestHandler.cgi_form = cgi.FieldStorage(
+            fp=self.rfile,
+            headers=self.headers,
+            environ={
+                'REQUEST_METHOD': 'POST',
+                'CONTENT_TYPE': self.headers['Content-Type'],
+            }
+        )
+
+        return SimpleHTTPRequestHandler.cgi_form
+
+    def get_post_value(self, name):
+        form = self.get_cgi_form()
+
+        if name not in form:
+            return None
+
+        return form[name].value

@@ -42,60 +42,26 @@ class HttpRunner:
 
     @staticmethod
     def POST_prediction_hook(argument, upload_data):
-        # only the flower model is allowed in that moment
-        if argument is not 'flower':
+        # only flower and food models are allowed in that moment
+        if argument not in ['flower', 'food']:
             raise AssertionError('Unsupported model type "%s".' % argument)
 
         # get file to evaluate
         evaluation_file = upload_data['upload_path']
         evaluation_file_web = upload_data['upload_path_web']
+        prediction_array = HttpRunner.get_fake_prediction_array(argument)
 
-        prediction_overview = """classes
--------
-01) dahlia:                        94.21%
-02) sunflower:                      3.09%
-03) rose:                           1.62%
-04) coneflower:                     0.84%
-05) daisy:                          0.10%
-06) poppy:                          0.04%
-07) middayflower:                   0.04%
-08) tulip:                          0.02%
-09) dandelion:                      0.02%
-10) ranunculus:                     0.01%
--------"""
+        print(prediction_array)
 
-        prediction_class = 'dahlia'
-        prediction_accuracy = 94.21
-
-        prediction_overview_array = [
-            {
-                'class_name': 'dahlia',
-                'predicted_value': 0.9421
-            },
-            {
-                'class_name': 'sunflower',
-                'predicted_value': 0.0309
-            },
-            {
-                'class_name': 'rose',
-                'predicted_value': 0.0162
-            },
-            {
-                'class_name': 'coneflower',
-                'predicted_value': 0.0084
-            },
-            {
-                'class_name': 'daisy',
-                'predicted_value': 0.0010
-            }
-        ]
+        prediction_class = prediction_array['prediction_class']
+        prediction_accuracy = prediction_array['prediction_accuracy']
+        prediction_overview_array = prediction_array['prediction_array']
 
         return_value = {
             'evaluated_file': evaluation_file,
             'graph_file': evaluation_file,
             'evaluated_file_web': evaluation_file_web,
             'graph_file_web': evaluation_file_web,
-            'prediction_overview': prediction_overview,
             'prediction_overview_array': prediction_overview_array,
             'prediction_class': prediction_class,
             'prediction_accuracy': prediction_accuracy,
@@ -114,16 +80,10 @@ class HttpRunner:
 
     @staticmethod
     def get_model_data(argument):
-        print('----> MODEL: %s' % argument)
-
-        if argument == 'flower':
-            model_path = 'C:/Users/bjoern/data/processed/flower_10/flower_10_1.inceptionv3.best.17-0.95.h5'
-        elif argument == 'food':
-            return None
-        else:
+        if argument not in SimpleHTTPRequestHandler.allowed_model_types:
             raise AssertionError('Unknown model type "%s"' % argument)
 
-        # '2019-10-18T18:21Z'
+        model_path = 'C:/Users/bjoern/data/processed/flower_10/flower_10_1.inceptionv3.best.17-0.95.h5'
         model_name = os.path.basename(model_path)
         model_size = get_formatted_file_size(model_path) if os.path.isfile(model_path) else '121.12 MB'
         model_classes = 12
@@ -184,6 +144,68 @@ class HttpRunner:
         except KeyboardInterrupt:
             print('^C received, shutting down the web server')
             httpd.socket.close()
+
+    @staticmethod
+    def get_fake_prediction_array(model_type):
+        prediction_array = {
+            'flower': {
+                'prediction_class': 'dahlia',
+                'prediction_accuracy': 94.21,
+                'prediction_array': [
+                    {
+                        'class_name': 'dahlia',
+                        'predicted_value': 0.9421
+                    },
+                    {
+                        'class_name': 'sunflower',
+                        'predicted_value': 0.0309
+                    },
+                    {
+                        'class_name': 'rose',
+                        'predicted_value': 0.0162
+                    },
+                    {
+                        'class_name': 'coneflower',
+                        'predicted_value': 0.0084
+                    },
+                    {
+                        'class_name': 'daisy',
+                        'predicted_value': 0.0010
+                    }
+                ]
+            },
+            'food': {
+                'prediction_class': 'pizza',
+                'prediction_accuracy': 94.21,
+                'prediction_array': [
+                    {
+                        'class_name': 'pizza',
+                        'predicted_value': 0.9421
+                    },
+                    {
+                        'class_name': 'burger',
+                        'predicted_value': 0.0309
+                    },
+                    {
+                        'class_name': 'salad',
+                        'predicted_value': 0.0162
+                    },
+                    {
+                        'class_name': 'brownies',
+                        'predicted_value': 0.0084
+                    },
+                    {
+                        'class_name': 'martini',
+                        'predicted_value': 0.0010
+                    }
+                ]
+            }
+        }
+
+        if model_type not in prediction_array:
+            return []
+
+        return prediction_array[model_type]
 
 def run():
     http_runner = HttpRunner()

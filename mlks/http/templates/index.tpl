@@ -17,7 +17,7 @@
         <a class="list-item" href="/prediction/flower">
             <span class="pictogram-small">&#127803;</span> Predict flower images
         </a>
-        <a class="list-item" href="/prediction/food" style="text-decoration: line-through;">
+        <a class="list-item" href="/prediction/food">
             <span class="pictogram-small">&#127828;</span> Predict food images
         </a>
     </div>
