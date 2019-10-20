@@ -35,6 +35,7 @@ import json
 import os
 import glob
 import re
+import sys
 from typing import Dict
 from mlks.helper.filesystem import add_file_extension
 
@@ -193,13 +194,17 @@ class Config(object):
         self.set_data('model_files', model_files)
         self.set_data('model_file_best', model_file_best)
 
-    def set_dict(self, data):
+    def set_dict(self, data, force=False):
         for config, values in data.items():
+            #print('   -->', config, values)
             if config in self.configs and isinstance(values, dict):
                 # merge config
                 for key, value in values.items():
-                    if key not in self.configs[config]:
+                    if key not in self.configs[config] or force:
                         self.configs[config][key] = value
+                    else:
+                        #print('XXXXXX Ignored', config)
+                        pass
             else:
                 self.configs[config] = values
 
@@ -245,7 +250,7 @@ class Config(object):
 
         return json.dumps(self.get_dict(), sort_keys=True)
 
-    def load_json_from_config_file(self, config_file):
+    def load_json_from_config_file(self, config_file, force=False):
         if not os.path.exists(config_file) or not os.path.isfile(config_file):
             raise AssertionError('Model config "%s" does not exist.' % config_file)
 
@@ -253,10 +258,16 @@ class Config(object):
         with open(config_file) as json_file:
             data = json.load(json_file)
 
-        self.load_json(data)
+        self.load_data(data, force)
 
-    def load_json(self, data):
-        self.set_dict(data)
+    def load_data(self, data, force=False):
+        self.set_dict(data, force)
+
+    def load_json(self, json_string, force=False):
+        self.set_dict(json.loads(json_string), force)
+
+    def load_from_other_config(self, config, force=False):
+        self.load_json(config.get_json(), force)
 
 
 def general_config_writer(ctx, param, value):

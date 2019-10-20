@@ -373,6 +373,19 @@ option_config_file = click.option(
     required=True,
     type=str
 )
+option_config_file_2 = click.option(
+    '--config-file-2',
+    cls=OptionHelper,
+    option_type='concat_parameters',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the json config file for a second model.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=False,
+    type=str
+)
 option_accuracy_file = click.option(
     '--accuracy-file',
     cls=OptionHelper,
@@ -505,6 +518,7 @@ option_set_train_process = [
 option_set_evaluation_process = [
     option_environment_path,
     option_config_file,
+    option_config_file_2,
     option_evaluation_path
 ]
 option_set_nine_points = [
@@ -555,6 +569,7 @@ set_config_translator({
     'environment_path': data_config_writer,
     'model_file': data_config_writer,
     'config_file': data_config_writer,
+    'config_file_2': data_config_writer,
     'data_path': data_config_writer,
     'evaluation_path': data_config_writer,
 

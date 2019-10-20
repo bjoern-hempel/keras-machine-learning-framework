@@ -33,6 +33,8 @@
 import click
 import ssl
 import os
+import sys
+import json
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier
@@ -52,11 +54,16 @@ class EvaluateHttp(ImageClassifier):
         super().__init__(config)
 
     def POST_prediction_hook(self, argument, upload_data, models):
+        # some configs
         show_image = False
         save_image = True
 
         # get model
-        model = models[argument]
+        model = models[argument]['model']
+        model_json_config = models[argument]['json_config']
+
+        # load json
+        self.config.load_json(model_json_config, True)
 
         # get file to evaluate
         evaluation_file = upload_data['upload_path']
@@ -85,23 +92,29 @@ class EvaluateHttp(ImageClassifier):
 
         return return_value
 
-    def GET_prediction_get_model_hook(self, argument, model_paths):
-        return self.get_model_data(argument, model_paths)
+    def GET_prediction_get_model_hook(self, argument, models):
+        return self.get_model_data(argument, models)
 
-    def POST_prediction_get_model_hook(self, argument, model_paths):
-        return self.get_model_data(argument, model_paths)
+    def POST_prediction_get_model_hook(self, argument, models):
+        return self.get_model_data(argument, models)
 
-    def get_model_data(self, argument, model_paths):
+    def get_model_data(self, argument, models):
         # check argument
-        if argument not in model_paths:
+        if argument not in models:
             return None
 
+        # get model
+        model_json_config = models[argument]['json_config']
+
+        # load json
+        self.config.load_json(model_json_config, True)
+
         # get model path
-        model_path = model_paths[argument]
+        model_path = models[argument]['model_path']
         model_name = os.path.basename(model_path)
         model_size = get_formatted_file_size(model_path) if os.path.isfile(model_path) else '121.12 MB'
-        model_classes = 12
-        model_learning_epochs = 20
+        model_classes = len(self.config.get_environment('classes'))
+        model_learning_epochs = self.config.getml('epochs')
         model_date = get_changed_date(model_path) if os.path.isfile(model_path) else '2019-10-20T11:54:25.125386+00:00'
         model_version = '1.02'
 
@@ -114,10 +127,11 @@ class EvaluateHttp(ImageClassifier):
             'model_version': model_version
         }
 
-    def do(self):
+    def loadConfig(self, config_file):
+
         # load config file
         self.start_timer('load json config file')
-        self.config.load_json_from_config_file(self.config.get_data('config_file'))
+        self.config.load_json_from_config_file(config_file, True)
         self.finish_timer('load json config file')
 
         # rebuild model dict
@@ -126,35 +140,59 @@ class EvaluateHttp(ImageClassifier):
         self.config.save_json()
         self.finish_timer('save json config file')
 
-        # get some configs
-        model_file = self.config.get_data('model_file_best')['model_file']
+        return self.config
 
-        # check model file
-        check_if_file_exists(model_file)
+    def do(self):
+        # prepare some vars
+        model_files = {}
+        models = {}
 
-        # load model
-        self.start_timer('load model file %s' % model_file)
-        model = self.load_model(model_file)
-        self.finish_timer('load model file %s' % model_file)
+        config_file = self.config.get_data('config_file')
+        config_file_2 = self.config.get_data('config_file_2')
+
+        # add config (in that moment flower)
+        models['flower'] = {
+            'json_config': self.loadConfig(config_file).get_json()
+        }
+
+        # load second config (in that moment food)
+        if config_file_2 is not None:
+            models['food'] = {
+                'json_config': self.loadConfig(config_file_2).get_json()
+            }
+
+        # iterate through all models
+        for model_type in models:
+            # load json config
+            self.config.load_json(models[model_type]['json_config'], True)
+
+            # get best model paths
+            model_path = self.config.get_data('model_file_best')['model_file']
+
+            # check all model files
+            check_if_file_exists(model_path)
+
+            # load models
+            self.start_timer('load model "%s" file %s' % (model_type, model_path))
+            model = None if self.config.get('debug') else self.load_model(model_path)
+            self.finish_timer('load model "%s" file %s' % (model_type, model_path))
+
+            # save model and file
+            models[model_type]['model_path'] = model_path
+            models[model_type]['model'] = model
 
         # set hooks
         SimpleHTTPRequestHandler.set_hook('POST_prediction', {
             'lambda': self.POST_prediction_hook,
-            'arguments': [{
-                'flower': model
-            }]
+            'arguments': [models]
         })
         SimpleHTTPRequestHandler.set_hook('POST_prediction_get_model', {
             'lambda': self.POST_prediction_get_model_hook,
-            'arguments': [{
-                'flower': model_file
-            }]
+            'arguments': [models]
         })
         SimpleHTTPRequestHandler.set_hook('GET_prediction_get_model', {
             'lambda': self.GET_prediction_get_model_hook,
-            'arguments': [{
-                'flower': model_file
-            }]
+            'arguments': [models]
         })
         SimpleHTTPRequestHandler.set_property('root_data_path', get_root_data_path(self.config.get_data('config_file')))
         SimpleHTTPRequestHandler.set_property('root_data_path_web', '/')
