@@ -41,7 +41,7 @@ from mlks.helper.filesystem import get_root_project_path, get_formatted_file_siz
 class HttpRunner:
 
     @staticmethod
-    def POST_prediction_get_model_hook(argument, upload_data):
+    def POST_prediction_hook(argument, upload_data):
         # only the flower model is allowed in that moment
         if argument is not 'flower':
             raise AssertionError('Unsupported model type "%s".' % argument)
@@ -105,11 +105,11 @@ class HttpRunner:
         return return_value
 
     @staticmethod
-    def GET_prediction_hook(argument):
+    def GET_prediction_get_model_hook(argument):
         return HttpRunner.get_model_data(argument)
 
     @staticmethod
-    def POST_prediction_hook(argument):
+    def POST_prediction_get_model_hook(argument):
         return HttpRunner.get_model_data(argument)
 
     @staticmethod
@@ -125,10 +125,10 @@ class HttpRunner:
 
         # '2019-10-18T18:21Z'
         model_name = os.path.basename(model_path)
-        model_size = get_formatted_file_size(model_path)
+        model_size = get_formatted_file_size(model_path) if os.path.isfile(model_path) else '121.12 MB'
         model_classes = 12
         model_learning_epochs = 20
-        model_date = get_changed_date(model_path)
+        model_date = get_changed_date(model_path) if os.path.isfile(model_path) else '2019-10-20T11:54:25.125386+00:00'
         model_version = '1.02'
 
         return {
@@ -149,16 +149,16 @@ class HttpRunner:
     def run(data_path, port, port_ssl, bind_ip):
         """This scripts starts a simple demo http service for testing purpose."""
         try:
-            SimpleHTTPRequestHandler.set_hook('POST_prediction_get_model', {
-                'lambda': HttpRunner.POST_prediction_get_model_hook,
-                'arguments': []
-            })
             SimpleHTTPRequestHandler.set_hook('POST_prediction', {
                 'lambda': HttpRunner.POST_prediction_hook,
                 'arguments': []
             })
-            SimpleHTTPRequestHandler.set_hook('GET_prediction', {
-                'lambda': HttpRunner.GET_prediction_hook,
+            SimpleHTTPRequestHandler.set_hook('POST_prediction_get_model', {
+                'lambda': HttpRunner.POST_prediction_get_model_hook,
+                'arguments': []
+            })
+            SimpleHTTPRequestHandler.set_hook('GET_prediction_get_model', {
+                'lambda': HttpRunner.GET_prediction_get_model_hook,
                 'arguments': []
             })
             SimpleHTTPRequestHandler.set_property('root_data_path', data_path)

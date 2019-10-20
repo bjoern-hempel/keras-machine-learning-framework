@@ -32,10 +32,17 @@
 
 import click
 import ssl
+import os
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists, add_file_extension, get_root_project_path, get_root_data_path, PNG_EXTENSION
+from mlks.helper.filesystem import check_if_file_exists, \
+    add_file_extension, \
+    get_root_project_path, \
+    get_root_data_path, \
+    get_formatted_file_size, \
+    get_changed_date, \
+    PNG_EXTENSION
 
 
 class EvaluateHttp(ImageClassifier):
@@ -44,9 +51,12 @@ class EvaluateHttp(ImageClassifier):
         # initialize the parent class
         super().__init__(config)
 
-    def POST_hook(self, upload_data, model):
+    def POST_prediction_hook(self, argument, upload_data, models):
         show_image = False
         save_image = True
+
+        # get model
+        model = models[argument]
 
         # get file to evaluate
         evaluation_file = upload_data['upload_path']
@@ -77,6 +87,35 @@ class EvaluateHttp(ImageClassifier):
 
         return return_value
 
+    def GET_prediction_get_model_hook(self, argument, model_paths):
+        return self.get_model_data(argument, model_paths)
+
+    def POST_prediction_get_model_hook(self, argument, model_paths):
+        return self.get_model_data(argument, model_paths)
+
+    def get_model_data(self, argument, model_paths):
+        # check argument
+        if argument not in model_paths:
+            return None
+
+        # get model path
+        model_path = model_paths[argument]
+        model_name = os.path.basename(model_path)
+        model_size = get_formatted_file_size(model_path) if os.path.isfile(model_path) else '121.12 MB'
+        model_classes = 12
+        model_learning_epochs = 20
+        model_date = get_changed_date(model_path) if os.path.isfile(model_path) else '2019-10-20T11:54:25.125386+00:00'
+        model_version = '1.02'
+
+        return {
+            'model_name': model_name,
+            'model_size': model_size,
+            'model_classes': model_classes,
+            'model_learning_epochs': model_learning_epochs,
+            'model_date': model_date,
+            'model_version': model_version
+        }
+
     def do(self):
         # load config file
         self.start_timer('load json config file')
@@ -101,9 +140,23 @@ class EvaluateHttp(ImageClassifier):
         self.finish_timer('load model file %s' % model_file)
 
         # set hooks
-        SimpleHTTPRequestHandler.set_POST_hook({
-            'lambda': self.POST_hook,
-            'arguments': [model]
+        SimpleHTTPRequestHandler.set_hook('POST_prediction', {
+            'lambda': self.POST_prediction_hook,
+            'arguments': [{
+                'flower': model
+            }]
+        })
+        SimpleHTTPRequestHandler.set_hook('POST_prediction_get_model', {
+            'lambda': self.POST_prediction_get_model_hook,
+            'arguments': [{
+                'flower': model_file
+            }]
+        })
+        SimpleHTTPRequestHandler.set_hook('GET_prediction_get_model', {
+            'lambda': self.GET_prediction_get_model_hook,
+            'arguments': [{
+                'flower': model_file
+            }]
         })
         SimpleHTTPRequestHandler.set_property('root_data_path', get_root_data_path(self.config.get_data('config_file')))
         SimpleHTTPRequestHandler.set_property('root_data_path_web', '/')

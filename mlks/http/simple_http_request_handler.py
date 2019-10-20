@@ -239,7 +239,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if predict_file_raw == '' or predict_file_name == '':
             return {
                 'error': True,
-                'message': 'No file was uploaded.'
+                'message': 'No file was uploaded. Please choose a file to predict before uploading it.'
             }
 
         # check file
@@ -365,9 +365,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET_prediction(self, argument, hook_results):
         """ route GET /prediction """
         model_data = None
+        hook_name = 'GET_prediction_get_model'
 
-        if 'GET_prediction' in hook_results:
-            model_data = hook_results['GET_prediction']
+        if hook_name in hook_results:
+            model_data = hook_results[hook_name]
 
         if model_data is None:
             model_data = self.get_empty_model_data()
@@ -460,7 +461,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             output = re.search('^/%s(/(.+)?)?$' % route, url_path, flags=re.IGNORECASE)
             if output is not None:
                 route_function_name = 'do_GET_%s' % route.replace('-', '_')
-                hook_name = 'GET_%s' % route.replace('-', '_')
+                hook_name = 'GET_%s_get_model' % route.replace('-', '_')
                 argument = output.group(2)
 
                 if not hasattr(self, route_function_name):
@@ -490,9 +491,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST_prediction(self, argument, hook_results):
         upload_data = self.write_upload_file()
         model_data = None
+        hook_name = 'POST_prediction_get_model'
 
-        if 'POST_prediction' in hook_results:
-            model_data = hook_results['POST_prediction']
+        if hook_name in hook_results:
+            model_data = hook_results[hook_name]
 
         if model_data is None:
             model_data = self.get_empty_model_data()
@@ -516,7 +518,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             html_body = self.get_template('body') % {'CONTENT': html_content}
         else:
             # call post hook
-            hook_name = 'POST_%s_%s' % ('prediction', 'get_model')
+            hook_name = 'POST_%s' % ('prediction')
             evaluation_data = self.call_hook(hook_name, argument, upload_data)
 
             # get data from post hook
@@ -558,7 +560,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         argument = 'flower'
         hook_results = {}
         route_function_name = 'do_POST_%s' % 'prediction'
-        hook_name = 'POST_%s' % 'prediction'
+        hook_name = 'POST_%s_get_model' % 'prediction'
 
         if not hasattr(self, route_function_name):
             raise AssertionError('Please add method "SimpleHTTPRequestHandler.%s()"' % route_function_name)

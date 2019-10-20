@@ -10,12 +10,14 @@
 </div>
 
 <div class="container">
-    <h1 class="title"><span class="pictogram">&#127968;</span> Legal Notice</h1>
+    <h1 class="title"><span class="pictogram">&#9878;</span> Legal Notice</h1>
     <h2 class="subtitle">The legal things... ;).</h2>
     <p>
         Bj&ouml;rn Hempel<br />
         K&ouml;nigstr. 3<br />
-        01097 Dresden
+        01097 Dresden<br />
+        <br />
+        Contact me: bjoern&#64;hempel.li
     </p>
 
     <p>&nbsp;</p>
