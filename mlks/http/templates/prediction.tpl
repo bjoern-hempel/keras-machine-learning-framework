@@ -14,16 +14,22 @@
     <h2 class="subtitle">The analysed and classified %(MODEL_TYPE)s</h2>
 
     <h3 class="subtitle">Source image (%(EVALUATED_FILE_WEB_SIZE)s)</h3>
-    <p><img src="%(EVALUATED_FILE_WEB)s" style="max-width: 100%%;"></p>
+    <p><img class="bordered" src="%(EVALUATED_FILE_WEB)s" style="max-width: 100%%;"></p>
+    <p>&nbsp;</p>
+
     <h3 class="subtitle">Predicted image (%(PREDICTION_CLASS)s - %(PREDICTION_ACCURACY)s%% - %(PREDICTION_TIME)ss)</h3>
-    <p><img src="%(GRAPH_FILE_WEB)s" style="max-width: 100%%;"></p>
+    <p><img class="bordered" src="%(GRAPH_FILE_WEB)s" style="max-width: 100%%;"></p>
+    <p>&nbsp;</p>
+
     <h3 class="subtitle">Prediction classes</h3>
     <div class="table-container">
         <table class="table is-fullwidth is-hoverable">
             %(PREDICTION_OVERVIEW)s
         </table>
     </div>
+    <p>&nbsp;</p>
 
+    <h3 class="subtitle">Picture upload form</h3>
     %(UPLOAD_FORM)s
     %(USED_MODEL)s
 </div>
