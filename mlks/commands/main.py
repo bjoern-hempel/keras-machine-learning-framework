@@ -145,7 +145,7 @@ class Command:
             click.echo(Command.repeat_to_length('-', len(namespace)))
 
             for key in config.configs[namespace]:
-                click.echo('{key: <25} {attribute}'.format(key=key+':', attribute=config.configs[namespace][key]))
+                click.echo('{key: <30} {attribute}'.format(key=key+':', attribute=config.configs[namespace][key]))
             click.echo('')
         click.echo('')
 

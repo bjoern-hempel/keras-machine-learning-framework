@@ -32,8 +32,8 @@
 
 import click
 import sys
+import pathlib
 from matplotlib import pyplot as plt
-
 from mlks.commands.image_classifier.main import ImageClassifier
 
 
@@ -60,6 +60,29 @@ class Train(ImageClassifier):
         image_generator = self.get_image_generator()
         train_generator = self.get_train_generator(image_generator)
         validation_generator = self.get_validation_generator(image_generator)
+
+        files = {
+            'train': {},
+            'validation': {}
+        }
+
+        # generate train list
+        for file in train_generator.filenames:
+            namespace = 'train'
+            p = pathlib.Path(file)
+            if p.parts[0] not in files[namespace]:
+                files[namespace][p.parts[0]] = []
+            files[namespace][p.parts[0]].append(' '.join(p.parts[1:]))
+
+        # generate validation list
+        for file in validation_generator.filenames:
+            namespace = 'validation'
+            p = pathlib.Path(file)
+            if p.parts[0] not in files[namespace]:
+                files[namespace][p.parts[0]] = []
+            files[namespace][p.parts[0]].append(' '.join(p.parts[1:]))
+
+        self.config.set_environment('files', files)
         self.finish_timer('preparations')
 
         # prints out some informations

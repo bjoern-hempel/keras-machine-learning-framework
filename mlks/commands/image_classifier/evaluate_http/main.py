@@ -33,8 +33,6 @@
 import click
 import ssl
 import os
-import sys
-import json
 from http.server import HTTPServer
 from mlks.http.simple_http_request_handler import SimpleHTTPRequestHandler
 from mlks.commands.image_classifier.main import ImageClassifier

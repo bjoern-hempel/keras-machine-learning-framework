@@ -69,6 +69,7 @@ def get_changed_date(path):
     timestamp = os.path.getmtime(path)
     return str(datetime.fromtimestamp(timestamp).utcnow().replace(tzinfo=SimpleUtc()).isoformat())
 
+
 def get_formatted_file_size(path):
     if os.path.isfile(path):
         file_size = os.path.getsize(path)

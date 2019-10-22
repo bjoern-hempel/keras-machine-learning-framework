@@ -33,6 +33,10 @@
 import click
 import os
 import math
+import numpy as np
+
+# initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
+np.random.seed(1337)
 
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
