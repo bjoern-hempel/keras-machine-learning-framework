@@ -80,6 +80,7 @@ class Info:
             if x.device_type == 'GPU':
                 # try to extract the gpu name
                 gpu_name = re.findall(r"name:[ ]*([^,]+)", x.physical_device_desc)
+                device_type = "GPU"
                 device_name = gpu_name[0] if len(gpu_name) > 0 else device_name
 
             click.echo("%s: %s %s" % (device_type, x.name, "" if device_name == "" else "[%s]" % device_name))
