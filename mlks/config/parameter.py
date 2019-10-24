@@ -83,6 +83,17 @@ option_http = click.option(
     callback=option_callback,
     default=False
 )
+option_render_device = click.option(
+    '--render-device', '-r',
+    expose_value=False,
+    is_flag=False,
+    help='Specifies the device on which the calculation is to be performed.',
+    callback=option_callback,
+    required=False,
+    show_default=True,
+    default='AUTO',
+    type=click.Choice(['AUTO', 'CPU', 'CPU1', 'CPU2', 'CPU3', 'GPU', 'GPU1', 'GPU2', 'GPU3', 'PARALLEL'])
+)
 
 
 # Configure the http parameters here
@@ -479,7 +490,8 @@ option_set_general = [
     option_debug,
     option_yes,
     option_service,
-    option_http
+    option_http,
+    option_render_device
 ]
 option_set_http = [
     option_bind_ip,
@@ -535,6 +547,7 @@ set_config_translator({
     'yes': general_config_writer,
     'service': general_config_writer,
     'http': general_config_writer,
+    'render_device': general_config_writer,
 
     # http config
     'bind_ip': http_config_writer,

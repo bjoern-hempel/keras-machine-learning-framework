@@ -33,14 +33,19 @@
 import click
 import time
 import sys
+import os
 
 from mlks.helper.log import disable_warnings
+from mlks.helper.hardware import set_render_device
 
 
 class Command:
 
     def __init__(self, config):
         self.config = config
+
+        # set render device
+        set_render_device(self.config.get('render_device'))
 
         # disable warnings
         disable_warnings()

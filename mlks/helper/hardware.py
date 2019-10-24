@@ -79,11 +79,25 @@ def get_hardware_dict():
     return hardware_dict
 
 
+def get_hardware_dict_2():
+    return {
+        'number_of_gpus': 2,
+        'number_of_cpus': 1,
+        'devices': {
+            'CPU': {'name': 'CPU', 'id': ''},
+            'CPU1': {'name': 'CPU', 'id': ''},
+            'GPU': {'name': 'CPU', 'id': '0'},
+            'GPU1': {'name': 'CPU', 'id': '0'},
+            'GPU2': {'name': 'CPU', 'id': '1'}
+        }
+    }
+
+
 def set_render_device(render_device):
     click.echo('Set render hardware to "%s".' % render_device)
 
     if render_device != 'AUTO':
-        hardware_dict = get_hardware_dict()
+        hardware_dict = get_hardware_dict_2()
 
         # Unknown hardware
         if render_device not in hardware_dict['devices']:
@@ -91,9 +105,6 @@ def set_render_device(render_device):
 
         # set device
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-        os.environ["CUDA_VISIBLE_DEVICES"] = "1" # hardware_dict['devices'][render_device]['id']
-
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+        os.environ["CUDA_VISIBLE_DEVICES"] = hardware_dict['devices'][render_device]['id']
 
     click.echo('Done.')
