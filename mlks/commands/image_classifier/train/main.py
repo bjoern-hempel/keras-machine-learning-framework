@@ -33,8 +33,11 @@
 import click
 import sys
 import pathlib
+
 from matplotlib import pyplot as plt
+
 from mlks.commands.image_classifier.main import ImageClassifier
+from mlks.helper.filesystem import check_if_file_exists
 
 
 class Train(ImageClassifier):
@@ -47,16 +50,25 @@ class Train(ImageClassifier):
     def do(self):
 
         show_diagram = True
+        model_file = None
 
         if self.config.gettl('continue'):
-            print('continue')
-            config = self.config.get_config()
-            print(config)
-            sys.exit()
+            model_file = self.config.get_data('model_source')
+            click.echo('Continue learning from model %s' % model_file)
+
+        # load the model the model
+        if model_file is None:
+            self.start_timer('load model "%s"' % self.config.getml('transfer_learning_model'))
+            model = self.get_model()
+            self.finish_timer('load model "%s"' % self.config.getml('transfer_learning_model'))
+        else:
+            self.start_timer('load model file %s' % model_file)
+            check_if_file_exists(model_file)
+            model = self.load_model(model_file)
+            self.finish_timer('load model file %s' % model_file)
 
         # preparations
         self.start_timer('preparations')
-        model = self.get_model()
         image_generator = self.get_image_generator()
         train_generator = self.get_train_generator(image_generator)
         validation_generator = self.get_validation_generator(image_generator)

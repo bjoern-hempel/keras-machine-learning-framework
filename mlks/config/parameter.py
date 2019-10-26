@@ -371,6 +371,19 @@ option_model_file = click.option(
     required=True,
     type=str
 )
+option_model_source = click.option(
+    '--model-source',
+    cls=OptionHelper,
+    option_type='concat_parameters',
+    expose_value=False,
+    is_flag=False,
+    help='Sets the source model if you want to continue learning from.',
+    callback=option_callback,
+    concat='environment_path',
+    default=None,
+    required=False,
+    type=str
+)
 option_config_file = click.option(
     '--config-file',
     cls=OptionHelper,
@@ -525,7 +538,8 @@ option_set_transfer_learning = [
 option_set_train_process = [
     option_environment_path,
     option_model_file,
-    option_data_path
+    option_data_path,
+    option_model_source
 ]
 option_set_evaluation_process = [
     option_environment_path,
@@ -584,6 +598,7 @@ set_config_translator({
     'config_file': data_config_writer,
     'config_file_2': data_config_writer,
     'data_path': data_config_writer,
+    'model_source': data_config_writer,
     'evaluation_path': data_config_writer,
 
     # some other configs

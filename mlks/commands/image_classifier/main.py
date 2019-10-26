@@ -32,8 +32,10 @@
 
 import click
 import os
+
 import math
 import numpy as np
+import tensorflow as tf
 
 # initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
 np.random.seed(1337)
