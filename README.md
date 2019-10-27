@@ -55,6 +55,7 @@ Here is an overview of the demos:
 ## B. Sources
 
 * <sup><a name="gpumatrixmult">[1]</a></sup>[Understanding the Efficiency of GPU Algorithms for Matrix-Matrix Multiplication](https://graphics.stanford.edu/papers/gpumatrixmult/gpumatrixmult.pdf)
+* <sup><a name="stillinprogress">[2]</a></sup>[What Does Classifying More Than 10,000 Image Categories Tell Us?](http://vision.stanford.edu/pdf/DengBergLiFei-Fei_ECCV2010.pdf)
 
 ## C. Authors
 
