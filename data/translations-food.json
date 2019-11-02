@@ -272,33 +272,15 @@
                 "spoonacular": null
             }
         },
-        "appetizer platter": {
+        "appetizer sampler platter": {
             "name": {
                 "DE": "Aperitifplatte",
-                "GB": "Appetizer Platter"
+                "GB": "Appetizer Sampler Platter"
             },
             "categories": ["dish", "starter"],
             "description": {
                 "DE": null,
                 "GB": null
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "appetizer sampler": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
             },
             "urls": {
                 "wikipedia": {
