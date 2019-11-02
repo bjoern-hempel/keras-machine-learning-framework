@@ -18,6 +18,24 @@
                 "spoonacular": null
             }
         },
+        "dessert": {
+            "name": {
+                "DE": "Nachspeise",
+                "GB": "Dessert"
+            },
+            "categories": ["dish"],
+            "description": {
+                "DE": "Mit Dessert bezeichnet man im deutschen Sprachraum den Nachtisch bzw. eine Nachspeise.",
+                "GB": "Dessert is a course that concludes a meal."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Dessert",
+                    "GB": "https://en.wikipedia.org/wiki/Dessert"
+                },
+                "spoonacular": null
+            }
+        },
         "drink": {
             "name": {
                 "DE": "Getränk",
@@ -292,18 +310,18 @@
         },
         "apple cake": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Apfelkuchen",
+                "GB": "Apple cake"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Der Apfelkuchen ist einer der klassischen Obstkuchen, der in vielen Varianten zubereitet wird.",
+                "GB": "Apple cake is a popular dessert produced with the main ingredient of apples."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Apple_cake"
                 },
                 "spoonacular": null
             }
@@ -327,24 +345,6 @@
             }
         },
         "apple juice": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "apple pie": {
             "name": {
                 "DE": "",
                 "GB": ""
