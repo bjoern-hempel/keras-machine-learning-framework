@@ -1,0 +1,324 @@
+{
+    "categories": {
+        "asteraceae": {
+            "name": {
+                "DE": "Korbblütler",
+                "GB": "Asteraceae"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Die Korbblütler (botanisch Asteraceae oder Compositae), auch Korbblütengewächse, Asterngewächse oder Köpfchenblütler genannt, sind die größte Familie der Ordnung der Asternartigen (Asterales) innerhalb der Bedecktsamigen Pflanzen (Magnoliopsida).",
+                "GB": "Asteraceae or Compositae (commonly referred to as the aster, daisy, composite,[4] or sunflower family), is a very large and widespread family of flowering plants (Angiospermae)."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Korbbl%C3%BCtler",
+                    "GB": "https://en.wikipedia.org/wiki/Asteraceae"
+                }
+            }
+        },
+        "caryophyllales": {
+            "name": {
+                "DE": "Nelkenartige",
+                "GB": "Caryophyllales"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Die Nelkenartigen (Caryophyllales) bilden eine Ordnung innerhalb der Bedecktsamigen Pflanzen (Magnoliopsida).",
+                "GB": "Caryophyllales is an order of flowering plants that includes the cacti, carnations, amaranths, ice plants, beets, and many carnivorous plants."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Nelkenartige",
+                    "GB": "https://en.wikipedia.org/wiki/Caryophyllales"
+                }
+            }
+        },
+        "liliaceae": {
+            "name": {
+                "DE": "Liliengewächse",
+                "GB": "Liliaceae"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Die Liliengewächse (Liliaceae) sind eine Pflanzenfamilie der Monokotyledonen (Einkeimblättrigen Pflanzen).",
+                "GB": "The lily family, Liliaceae, consists of about 254 genera and about 4075 known species of flowering plants within the order Liliales."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Liliengew%C3%A4chse",
+                    "GB": "https://en.wikipedia.org/wiki/Liliaceae"
+                }
+            }
+        },
+        "papaveraceae": {
+            "name": {
+                "DE": "Mohngewächse",
+                "GB": "Papaveraceae"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Die Mohngewächse (Papaveraceae) sind eine Familie in der Ordnung der Hahnenfußartigen (Ranunculales) innerhalb der Bedecktsamigen Pflanzen (Magnoliopsida).",
+                "GB": "The Papaveraceae /pəpævəˈreɪsiiː/[2] are an economically important family of about 42 genera and approximately 775 known species[3] of flowering plants in the order Ranunculales, informally known as the poppy family."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Mohngew%C3%A4chse",
+                    "GB": "https://en.wikipedia.org/wiki/Papaveraceae"
+                }
+            }
+        },
+        "ranunculaceae": {
+            "name": {
+                "DE": "Hahnenfußgewächse",
+                "GB": "Ranunculaceae"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Die Hahnenfußgewächse (Ranunculaceae) sind eine Familie in der Ordnung der Hahnenfußartigen (Ranunculales) innerhalb der Bedecktsamigen Pflanzen (Magnoliopsida)."
+                "GB": "Ranunculaceae is a family of over 2,000 known species of flowering plants in 43 genera, distributed worldwide."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Hahnenfu%C3%9Fgew%C3%A4chse",
+                    "GB": "https://en.wikipedia.org/wiki/Ranunculaceae"
+                }
+            }
+        },
+        "rosaceae": {
+             "name": {
+                "DE": "Rosengewächse",
+                "GB": "Rosaceae"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Die Rosengewächse (Rosaceae) sind eine Pflanzenfamilie der Kerneudikotyledonen.",
+                "GB": "Rosaceae, the rose family, is a medium-sized family of flowering plants, including 4,828 known species in 91 genera."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Rosengew%C3%A4chse",
+                    "GB": "https://en.wikipedia.org/wiki/Rosaceae"
+                }
+            }
+        }
+    },
+    "classes": {
+        "coneflower": {
+            "name": {
+                "DE": "Sonnenhüte (Echinacea)",
+                "GB": "Echinacea"
+            },
+            "categories": [
+                "asteraceae"
+            ],
+            "description": {
+                "DE": "Die Sonnenhüte, auch Scheinsonnenhüte oder Igelköpfe genannt, sind eine Pflanzengattung aus der Familie der Korbblütler (Asteraceae).",
+                "GB": "Echinacea is a genus, or group of herbaceous flowering plants in the daisy family."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Sonnenh%C3%BCte_(Echinacea)",
+                    "GB": "https://en.wikipedia.org/wiki/Echinacea"
+                }
+            }
+        },
+        "dahlia": {
+            "name": {
+                "DE": "Dahlien",
+                "GB": "Dahlia"
+            },
+            "categories": [
+                "asteraceae"
+            ],
+            "description": {
+                "DE": "Die Dahlien (Dahlia), selten auch noch Georginen genannt, bilden eine Pflanzengattung in der Familie der Korbblütler (Asteraceae).",
+                "GB": "Dahlia is a genus of bushy, tuberous, herbaceous perennial plants native to Mexico."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Dahlien",
+                    "GB": "https://en.wikipedia.org/wiki/Dahlia"
+                }
+            }
+        },
+        "daisy": {
+            "name": {
+                "DE": "Gänseblümchen",
+                "GB": "Daisy (Bellis perennis)"
+            },
+            "categories": [
+                "asteraceae"
+            ],
+            "description": {
+                "DE": "Das Gänseblümchen (Bellis perennis), auch Ausdauerndes Gänseblümchen, Mehrjähriges Gänseblümchen, Maßliebchen, Tausendschön, Monatsröserl oder schweizerisch Margritli (\"Kleine Margerite\") genannt, ist eine Pflanzenart innerhalb der Familie der Korbblütler (Asteraceae).",
+                "GB": "Bellis perennis is a common European species of daisy, of the family Asteraceae, often considered the archetypal species of that name."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/G%C3%A4nsebl%C3%BCmchen",
+                    "GB": "https://en.wikipedia.org/wiki/Bellis_perennis"
+                }
+            }
+        },
+        "dandelion": {
+            "name": {
+                "DE": "Löwenzahn",
+                "GB": "Dandelion (Taraxacum)"
+            },
+            "categories": [
+                "asteraceae"
+            ],
+            "description": {
+                "DE": "Löwenzahn (Taraxacum) ist eine Pflanzengattung innerhalb der Familie der Korbblütler (Asteraceae).",
+                "GB": "Taraxacum is a large genus of flowering plants in the family Asteraceae, which consists of species commonly known as dandelions."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/L%C3%B6wenzahn_(Taraxacum)",
+                    "GB": "https://en.wikipedia.org/wiki/Taraxacum"
+                }
+            }
+        },
+        "gerbera": {
+            "name": {
+                "DE": "Gerbera",
+                "GB": "Gerbera"
+            },
+            "categories": [
+                "asteraceae"
+            ],
+            "description": {
+                "DE": "Gerbera ist der botanische und zugleich der deutsche Name einer Pflanzengattung und ihrer Züchtungen.",
+                "GB": "Gerbera is a genus of plants in the Asteraceae (daisy family)."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Gerbera",
+                    "GB": "https://en.wikipedia.org/wiki/Gerbera"
+                }
+            }
+        },
+        "middayflower": {
+            "name": {
+                "DE": "Mittagsblumengewächse",
+                "GB": "Middayflower (Aizoaceae)"
+            },
+            "categories": [
+                "caryophyllales"
+            ],
+            "description": {
+                "DE": "Die Mittagsblumengewächse (Aizoaceae) sind eine artenreiche Pflanzenfamilie in der Ordnung der Nelkenartigen (Caryophyllales).",
+                "GB": "The Aizoaceae is a large family of dicotyledonous flowering plants containing 135 genera and about 1800 species."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Mittagsblumengew%C3%A4chse",
+                    "GB": "https://en.wikipedia.org/wiki/Aizoaceae"
+                }
+            }
+        },
+        "poppy": {
+            "name": {
+                "DE": "Klatschmohn",
+                "GB": "Red Poppy (Papaver rhoeas)"
+            },
+            "categories": ["papaveraceae"],
+            "description": {
+                "DE": "Der Klatschmohn (Papaver rhoeas), auch Mohnblume oder Klatschrose genannt, ist eine Pflanzenart aus der Gattung Mohn (Papaver) innerhalb der Familie der Mohngewächse (Papaveraceae).",
+                "GB": "Papaver rhoeas (common names include common poppy,[3] corn poppy, corn rose, field poppy,[4] Flanders poppy, or red poppy) is an annual herbaceous species of flowering plant in the poppy family, Papaveraceae."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Klatschmohn",
+                    "GB": "https://en.wikipedia.org/wiki/Papaver_rhoeas"
+                }
+            }
+        },
+        "ranunculus": {
+            "name": {
+                "DE": "Hahnenfuß (Ranunkel)",
+                "GB": "Ranunculus"
+            },
+            "categories": ["ranunculaceae"],
+            "description": {
+                "DE": "Die artenreiche Pflanzengattung Hahnenfuß, auch Ranunkel (lat. Ranunculus), gehört zur Familie der Hahnenfußgewächse (Ranunculaceae).",
+                "GB": "Ranunculus is a genus of about 500 species of flowering plants in the family Ranunculaceae."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Hahnenfu%C3%9F",
+                    "GB": "https://en.wikipedia.org/wiki/Ranunculus"
+                }
+            }
+        },
+        "rose": {
+            "name": {
+                "DE": "Rose",
+                "GB": "Rose"
+            },
+            "categories": ["rosaceae"],
+            "description": {
+                "DE": "Die Rosen (Rosa) sind die namensgebende Pflanzengattung der Familie der Rosengewächse (Rosaceae).",
+                "GB": "A rose is a woody perennial flowering plant of the genus Rosa, in the family Rosaceae, or the flower it bears."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Rosen",
+                    "GB": "https://en.wikipedia.org/wiki/Rose"
+                }
+            }
+        },
+        "sunflower": {
+            "name": {
+                "DE": "Sonnenblume",
+                "GB": "Sunflower (Helianthus annuus)"
+            },
+            "categories": ["asteraceae"],
+            "description": {
+                "DE": "Die Sonnenblume (Helianthus annuus), auch Gewöhnliche Sonnenblume genannt, ist eine Pflanzenart aus der Gattung der Sonnenblumen (Helianthus) in der Familie der Korbblütler (Asteraceae).",
+                "GB": "Helianthus annuus, the common sunflower, is a large annual forb of the genus Helianthus grown as a crop for its edible oil and edible fruits."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Sonnenblume",
+                    "GB": "https://en.wikipedia.org/wiki/Helianthus_annuus"
+                }
+            }
+        },
+        "thistle": {
+            "name": {
+                "DE": "Silberdistel",
+                "GB": "Silver thistle (Carlina acaulis)"
+            },
+            "categories": ["asteraceae"],
+            "description": {
+                "DE": "Die Silberdistel (Carlina acaulis) ist eine Pflanzenart, die zur Gattung der Eberwurzen (Carlina) in der Unterfamilie der Carduoideae innerhalb der Familie der Korbblütler (Asteraceae) gehört.",
+                "GB": "Carlina acaulis, the stemless carline thistle, dwarf carline thistle, or silver thistle, is a perennial dicotyledonous flowering plant in the family Asteraceae, native to alpine regions of central and southern Europe."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Silberdistel",
+                    "GB": "https://en.wikipedia.org/wiki/Carlina_acaulis"
+                }
+            }
+        },
+        "tulip": {
+            "name": {
+                "DE": "Tulpe",
+                "GB": "Tulip"
+            },
+            "categories": ["liliaceae"],
+            "description": {
+                "DE": "Die Tulpen (Tulipa) bilden eine Pflanzengattung in der Familie der Liliengewächse (Liliaceae).",
+                "GB": "Tulips (Tulipa) form a genus of spring-blooming perennial herbaceous bulbiferous geophytes (having bulbs as storage organs)."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Tulpen",
+                    "GB": "https://en.wikipedia.org/wiki/Tulip"
+                }
+            }
+        }
+    }
+}
