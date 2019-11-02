@@ -54,6 +54,24 @@
                 "spoonacular": null
             }
         },
+        "dish": {
+            "name": {
+                "DE": "Gericht (Speise)",
+                "GB": "Dish (food)"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Ein Gericht bzw. eine Speise sind Küchenerzeugnisse, die aus Speisenteilen bestehen.",
+                "GB": "A dish in gastronomy is a specific food preparation, a \"distinct article or variety of food\", ready to eat, or be served."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Gericht_(Speise)",
+                    "GB": "https://en.wikipedia.org/wiki/Dish_(food)"
+                },
+                "spoonacular": null
+            }
+        },
         "liqueur": {
             "name": {
                 "DE": "Likör",
@@ -115,7 +133,7 @@
                 "DE": "Agnolotti",
                 "GB": "Agnolotti"
             },
-            "categories": ["pasta"],
+            "categories": ["dish", "pasta"],
             "description": {
                 "DE": "Agnolotti sind eine italienische Pastasorte, und zwar gefüllte Teigtäschchen aus der Region Piemont.",
                 "GB": "Agnolotti is a type of pasta typical of the Piedmont region of Italy, made with small pieces of flattened pasta dough, folded over a filling of roasted meat or vegetables."
@@ -133,7 +151,7 @@
                 "DE": "Gelbflossen-Thun",
                 "GB": "Yellowfin tuna"
             },
-            "categories": ["fish"],
+            "categories": ["dish", "fish"],
             "description": {
                 "DE": "Der Gelbflossen-Thun (Thunnus albacares), auch Ahi genannt, ist eine Thunfischart und ein bedeutender Speisefisch.",
                 "GB": "The yellowfin tuna (Thunnus albacares) is a species of tuna found in pelagic waters of tropical and subtropical oceans worldwide."
@@ -187,7 +205,7 @@
                 "DE": "Sardellen",
                 "GB": "Anchovy"
             },
-            "categories": ["fish"],
+            "categories": ["dish", "fish"],
             "description": {
                 "DE": "Die Sardellen (Engraulidae) sind eine Familie der Heringsartigen.",
                 "GB": "An anchovy is a small, common forage fish of the family Engraulidae."
@@ -205,7 +223,7 @@
                 "DE": "Capellini",
                 "GB": "Capellini"
             },
-            "categories": ["pasta"],
+            "categories": ["dish", "pasta"],
             "description": {
                 "DE": "Die Capellini sind eine mit zumeist 0,88 Millimeter Durchmesser extrem dünne, den Spaghetti ähnliche Pastaform aus der italienischen Küche.",
                 "GB": "Capellini is a very thin variety of Italian pasta, with a diameter between 0.85 and 0.92 millimetres (0.033 and 0.036 in)."
@@ -223,7 +241,7 @@
                 "DE": "Antipasto",
                 "GB": "Antipasto"
             },
-            "categories": ["starter"],
+            "categories": ["dish", "starter"],
             "description": {
                 "DE": "Antipasto (Mehrzahl Antipasti) ist die italienische Bezeichnung für \"Vorspeise\".",
                 "GB": "Antipasto (plural antipasti) is the traditional first course of a formal Italian meal."
@@ -256,13 +274,13 @@
         },
         "appetizer platter": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Aperitifplatte",
+                "GB": "Appetizer Platter"
             },
-            "categories": [],
+            "categories": ["dish", "starter"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
