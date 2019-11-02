@@ -67,6 +67,23 @@
                 },
                 "spoonacular": null
             }
+        },
+        "starter": {
+            "name": {
+                "DE": "Vorspeise",
+                "GB": "Entrée (starter)"
+            },
+            "description": {
+                "DE": "Pasta (Italienisch für Teig) ist in der italienischen Küche die Bezeichnung für Teigwaren aus Hartweizengrieß, Kochsalz und Wasser in vielen Größen und Formen.",
+                "GB": "An entrée (starter) in modern French table service and that of much of the English-speaking world (apart from the United States and parts of Canada) is a dish served before the main course of a meal."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Pasta",
+                    "GB": "https://en.wikipedia.org/wiki/Entr%C3%A9e"
+                },
+                "spoonacular": null
+            }
         }
     },
     "classes": {
@@ -162,54 +179,36 @@
         },
         "angel hair pasta": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Capellini",
+                "GB": "Capellini"
             },
-            "category": null,
+            "category": "pasta",
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Die Capellini sind eine mit zumeist 0,88 Millimeter Durchmesser extrem dünne, den Spaghetti ähnliche Pastaform aus der italienischen Küche.",
+                "GB": "Capellini is a very thin variety of Italian pasta, with a diameter between 0.85 and 0.92 millimetres (0.033 and 0.036 in)."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "antipasti": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "category": null,
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Capellini",
+                    "GB": "https://en.wikipedia.org/wiki/Capellini"
                 },
                 "spoonacular": null
             }
         },
         "antipasto": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Antipasto",
+                "GB": "Antipasto"
             },
-            "category": null,
+            "category": "starter",
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Antipasto (Mehrzahl Antipasti) ist die italienische Bezeichnung für \"Vorspeise\".",
+                "GB": "Antipasto (plural antipasti) is the traditional first course of a formal Italian meal."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Antipasto",
+                    "GB": "https://en.wikipedia.org/wiki/Antipasto"
                 },
                 "spoonacular": null
             }
