@@ -265,6 +265,25 @@
                 },
                 "spoonacular": null
             }
+        },
+        "stew": {
+            "name": {
+                "DE": "Eintopf",
+                "GB": "Stew"
+            },
+            "related-categories": [],
+            "parent-categories": ["dish"],
+            "description": {
+                "DE": "Ein Eintopf ist eine Kombination aus festen Lebensmittelzutaten, die in Flüssigkeit gekocht und in der entstehenden Sauce serviert werden.",
+                "GB": "A stew is a combination of solid food ingredients that have been cooked in liquid and served in the resultant gravy."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": null,
+                    "GB": "https://en.wikipedia.org/wiki/Stew"
+                },
+                "spoonacular": null
+            }
         }
     },
     "classes": {
@@ -1011,33 +1030,33 @@
         },
         "beef steak": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Beefsteak",
+                "GB": "Beefsteak"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Als Beefsteak werden Scheiben aus dem Muskelfleisch des Rindes bezeichnet, unter anderem aus dem Filet, aus dem Roastbeef und aus der Hüfte (Schwanzstück) oder aus Hackfleisch.",
+                "GB": "A beef steak is a flat cut of beef, with parallel faces spaced to a thickness of 1 to 5 centimetres (1⁄2 to 2 in), usually cut perpendicular to the muscle fibers, with a raw mass in common restaurant service ranging from 120 to 600 grams (4 to 21 oz)."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Beefsteak",
+                    "GB": "https://en.wikipedia.org/wiki/Beefsteak"
                 },
                 "spoonacular": null
             }
         },
         "beef stew": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Rindereintopf",
+                "GB": "Beef stew"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "stew"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -1049,38 +1068,38 @@
         },
         "beef stroganoff": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bœuf Stroganoff",
+                "GB": "Beef Stroganoff"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bœuf Stroganoff ist ein Gericht der russischen Küche und der Haute cuisine aus sautierten Würfelchen oder Streifen der Spitze des Rinderfilets, in einer säuerlich abgeschmeckten Soße, die Zwiebel (oder Schalotte), Sauerrahm und Senf enthält.",
+                "GB": "Beef Stroganoff or beef Stroganov is a Russian dish of sautéed pieces of beef served in a sauce with smetana (sour cream)."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/B%C5%93uf_Stroganoff",
+                    "GB": "https://en.wikipedia.org/wiki/Beef_Stroganoff"
                 },
                 "spoonacular": null
             }
         },
         "beef wellington": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Filet Wellington",
+                "GB": "Beef Wellington"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Das Filet Wellington ist ein Fleischgericht, das angeblich von dem Schweizer Küchenchef Charles Senn anlässlich der Zürcher Internationalen Kochkunstausstellung (ZIKA) 1930 kreiert wurde.",
+                "GB": "Beef Wellington is a preparation of fillet steak coated with pâté and duxelles, which is then wrapped in parma ham, puff pastry and baked."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Filet_Wellington",
+                    "GB": "https://en.wikipedia.org/wiki/Beef_Wellington"
                 },
                 "spoonacular": null
             }
