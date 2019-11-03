@@ -1,5 +1,24 @@
 {
     "categories": {
+        "beef": {
+            "name": {
+                "DE": "Rindfleisch",
+                "GB": "Beef"
+            },
+            "related-categories": [],
+            "parent-categories": ["meat"],
+            "description": {
+                "DE": "Als Rindfleisch bezeichnet man im deutschsprachigen Raum allgemein das Fleisch verschiedener Hausrindrassen, das nach der Schlachtung von Tieren aus der Rinderproduktion erzeugt wird.",
+                "GB": "Beef is the culinary name for meat from cattle, particularly skeletal muscle."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Rindfleisch",
+                    "GB": "https://en.wikipedia.org/wiki/Beef"
+                },
+                "spoonacular": null
+            }
+        },
         "beer": {
             "name": {
                 "DE": "Bier",
@@ -44,7 +63,7 @@
                 "GB": "Chicken"
             },
             "related-categories": [],
-            "parent-categories": ["dish"],
+            "parent-categories": ["meat"],
             "description": {
                 "DE": "Huhn ist die häufigste Geflügelart der Welt.",
                 "GB": "Chicken is the most common type of poultry in the world."
@@ -148,6 +167,25 @@
                 "wikipedia": {
                     "DE": "https://de.wikipedia.org/wiki/Lik%C3%B6r",
                     "GB": "https://en.wikipedia.org/wiki/Liqueur"
+                },
+                "spoonacular": null
+            }
+        },
+        "meat": {
+            "name": {
+                "DE": "Fleisch",
+                "GB": "Meat"
+            },
+            "related-categories": [],
+            "parent-categories": ["dish"],
+            "description": {
+                "DE": "Fleisch bezeichnet im Allgemeinen Weichteile von Mensch und Tieren.",
+                "GB": "Meat is animal flesh that is eaten as food."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Fleisch",
+                    "GB": "https://en.wikipedia.org/wiki/Meat"
                 },
                 "spoonacular": null
             }
@@ -935,57 +973,38 @@
         },
         "beef brisket": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Rinderbrust",
+                "GB": "Beef brisket"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Die Rinderbrust ist in der Kochkunst bzw. im Fleischer-Gewerbe ein mäßig durchwachsenes, langfaseriges Teilstück des Vorderviertels vom Rind.",
+                "GB": "Brisket is a cut of meat from the breast or lower chest of beef or veal."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "beef ribs": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Rinderbrust",
+                    "GB": "https://en.wikipedia.org/wiki/Brisket"
                 },
                 "spoonacular": null
             }
         },
         "beef short ribs": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Querrippe vom Rind",
+                "GB": "Short ribs"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Die Quer- oder Zwerchrippe ist das vordere Teilstück der Rippen vom Rind unterhalb von Rinderhals und Hochrippe.",
+                "GB": "Short ribs are a cut of beef taken from the brisket, chuck, plate, or rib areas of beef cattle."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Querrippe",
+                    "GB": "https://en.wikipedia.org/wiki/Short_ribs"
                 },
                 "spoonacular": null
             }
