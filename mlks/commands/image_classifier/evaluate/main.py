@@ -54,8 +54,14 @@ class Evaluate(ImageClassifier):
         self.config.load_json_from_config_file(self.config.get_data('config_file'))
         self.finish_timer('load json config file')
 
+        # rebuild model dict
+        self.config.rebuild_model_dict()
+        self.start_timer('save json config file')
+        self.config.save_json()
+        self.finish_timer('save json config file')
+
         # get some configs
-        model_file = self.config.get_data('model_file')
+        model_file = self.config.get_data('model_file_best')['model_file']
         evaluation_files = []
 
         # check model file
@@ -73,9 +79,9 @@ class Evaluate(ImageClassifier):
             raise AssertionError('Unknown given path "%s"' % self.config.get_data('evaluation_path'))
 
         # load model
-        self.start_timer('load model file')
+        self.start_timer('load model file "%s"' % model_file)
         model = self.load_model(model_file)
-        self.finish_timer('load model file')
+        self.finish_timer('load model file "%s"' % model_file)
 
         # evaluate given files
         for evaluation_file in evaluation_files:
