@@ -76,6 +76,25 @@
                 "spoonacular": null
             }
         },
+        "cocktail": {
+            "name": {
+                "DE": "Cocktail",
+                "GB": "Cocktail"
+            },
+            "related-categories": [],
+            "parent-categories": ["drink"],
+            "description": {
+                "DE": "Ein Cocktail ist ein alkoholisches Mischgetränk. Typischerweise bestehen Cocktails aus zwei oder mehr Zutaten, darunter mindestens einer Spirituose.",
+                "GB": "A cocktail is an alcoholic mixed drink, which is either a combination of spirits, or one or more spirits mixed with other ingredients such as fruit juice, flavored syrup, or cream."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Cocktail",
+                    "GB": "https://en.wikipedia.org/wiki/Cocktail"
+                },
+                "spoonacular": null
+            }
+        },
         "dessert": {
             "name": {
                 "DE": "Nachspeise",
@@ -247,6 +266,25 @@
                 "spoonacular": null
             }
         },
+        "soup": {
+            "name": {
+                "DE": "Suppe",
+                "GB": "Soup"
+            },
+            "related-categories": [],
+            "parent-categories": ["dish"],
+            "description": {
+                "DE": "Suppe bezeichnet eine flüssige bis dünnbreiige Speise, die auf Grundlage eines Fonds und weiteren Zutaten hergestellt werden kann.",
+                "GB": "Soup is a primarily liquid food, generally served warm or hot (but may be cool or cold), that is made by combining ingredients of meat or vegetables with stock, or water."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Suppe",
+                    "GB": "https://en.wikipedia.org/wiki/Soup"
+                },
+                "spoonacular": null
+            }
+        },
         "starter": {
             "name": {
                 "DE": "Vorspeise",
@@ -274,13 +312,51 @@
             "related-categories": [],
             "parent-categories": ["dish"],
             "description": {
-                "DE": "Ein Eintopf ist eine Kombination aus festen Lebensmittelzutaten, die in Flüssigkeit gekocht und in der entstehenden Sauce serviert werden.",
+                "DE": "Als Eintopf werden allgemein sättigende Suppen oft bäuerlichen Ursprungs bezeichnet, die als vollständige Mahlzeit dienen.",
                 "GB": "A stew is a combination of solid food ingredients that have been cooked in liquid and served in the resultant gravy."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
+                    "DE": "https://de.wikipedia.org/wiki/Eintopf",
                     "GB": "https://en.wikipedia.org/wiki/Stew"
+                },
+                "spoonacular": null
+            }
+        },
+        "tea": {
+            "name": {
+                "DE": "Tee",
+                "GB": "Tea"
+            },
+            "related-categories": [],
+            "parent-categories": ["drink"],
+            "description": {
+                "DE": "Tee im eigentlichen Sinne ist ein heißes Aufgussgetränk, das in der Hauptsache aus den Blättern und Blattknospen (buds) der Teepflanze zubereitet wird.",
+                "GB": "Tea is an aromatic beverage commonly prepared by pouring hot or boiling water over cured leaves of the Camellia sinensis, an evergreen shrub (bush) native to East Asia."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Tee",
+                    "GB": "https://en.wikipedia.org/wiki/Tea"
+                },
+                "spoonacular": null
+            }
+        },
+        "wine": {
+            "name": {
+                "DE": "Wein",
+                "GB": "Wine"
+            },
+            "related-categories": [],
+            "parent-categories": ["drink"],
+            "description": {
+                "DE": "Wein ist ein alkoholisches Getränk aus dem vergorenen Saft der Beeren der Edlen Weinrebe.",
+                "GB": "Wine is an alcoholic drink made from fermented grapes."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Wein",
+                    "GB": "https://en.wikipedia.org/wiki/Wine"
                 },
                 "spoonacular": null
             }
@@ -1106,33 +1182,33 @@
         },
         "beer": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bier",
+                "GB": "Beer"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "beer"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bier ist ein Getränk, das durch Gärung aus stärkehaltigen Stoffen gewonnen und nicht destilliert wird.",
+                "GB": "Beer is one of the oldest and most widely consumed alcoholic drinks in the world."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bier",
+                    "GB": "https://en.wikipedia.org/wiki/Beer"
                 },
                 "spoonacular": null
             }
         },
         "beet salad": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Rübensalat",
+                "GB": "Beet salad"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "salad"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -1144,394 +1220,337 @@
         },
         "bellini": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bellini (Cocktail)",
+                "GB": "Bellini (cocktail)"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "cocktail"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bellini ist ein Cocktail, der aus trockenem Prosecco, Sekt oder Champagner, einem halben pürierten weißen Pfirsich und nach Geschmack etwas Zuckersirup besteht.",
+                "GB": "A Bellini is a cocktail made with Prosecco and peach purée or nectar."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "benedict": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bellini_(Cocktail)",
+                    "GB": "https://en.wikipedia.org/wiki/Bellini_(cocktail)"
                 },
                 "spoonacular": null
             }
         },
         "beurre blanc": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Beurre blanc",
+                "GB": "Beurre blanc"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["sauce"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Beurre blanc (deutsch „weiße Butter“, in Frankreich auch als „Beurre nantais“ bezeichnet) ist eine klassische Buttersauce der französischen Küche, die vor allem zu Fisch und hellem Geflügel serviert wird.",
+                "GB": "Beurre blanc—literally translated from French as \"white butter\"—is a hot emulsified butter sauce made with a reduction of vinegar and/or white wine (normally Muscadet) and grey shallots into which softened, whole butter is whisked in off the heat to prevent separation."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Beurre_blanc",
+                    "GB": "https://en.wikipedia.org/wiki/Beurre_blanc"
                 },
                 "spoonacular": null
             }
         },
         "bibimbap": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bibimbap",
+                "GB": "Bibimbap"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bibimbap ist ein beliebtes koreanisches Gericht, das mit Reis und verschiedenen Gemüsesorten, etwas Rindfleisch oder Tofu, einem rohen oder gebratenen Ei und Gochujang (einer Chilipaste) zubereitet wird.",
+                "GB": "Bibimbap from Korean is a Korean rice dish."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bibimbap",
+                    "GB": "https://en.wikipedia.org/wiki/Bibimbap"
                 },
                 "spoonacular": null
             }
         },
         "biryani": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Biryani",
+                "GB": "Biryani"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Biryani ist ein herzhaftes Reisgericht aus Asien.",
+                "GB": "Biryani, also known as biriyani, biriani, birani or briyani, is a mixed rice dish with its origins among the Muslims of the Indian subcontinent."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Biryani",
+                    "GB": "https://en.wikipedia.org/wiki/Biryani"
                 },
                 "spoonacular": null
             }
         },
         "biscotti": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cantuccini",
+                "GB": "Biscotti"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cantuccini (auch Cantucci oder Biscotti di Prato) sind ein traditionelles Mandelgebäck aus der italienischen Provinz Prato nahe Florenz.",
+                "GB": "Biscotti, known also as cantucci, are Italian almond biscuits that originated in the city of Prato."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Cantuccini",
+                    "GB": "https://en.wikipedia.org/wiki/Biscotti"
                 },
                 "spoonacular": null
             }
         },
         "biscuits and gravy": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Kekse und Soßen",
+                "GB": "Biscuits and gravy"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Kekse und Soße sind in den Vereinigten Staaten, vor allem im Süden, ein beliebtes Frühstücksessen.",
+                "GB": "Biscuits and gravy is a popular breakfast dish in the United States, especially in the South."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Biscuits_and_gravy"
                 },
                 "spoonacular": null
             }
         },
         "bison burger": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Buffalo-Burger",
+                "GB": "Buffalo burger"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bison-Burger sind Hamburger, die aus Fleisch vom Rind oder amerikanischen Bison (Bison-Bison) hergestellt werden.",
+                "GB": "Buffalo burgers are hamburgers made with meat from the beefalo or American bison (Bison bison)."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Buffalo_burger"
                 },
                 "spoonacular": null
             }
         },
         "bisque": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bisque",
+                "GB": "Bisque"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "soup"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bisque ist eine geschmacksintensive pürierte Suppe, die aus Hummern oder anderen Krustentieren gekocht wird.",
+                "GB": "Bisque is a smooth, creamy, highly seasoned soup of French origin, classically based on a strained broth (coulis) of crustaceans."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "black cod": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bisque",
+                    "GB": "https://en.wikipedia.org/wiki/Bisque_(food)"
                 },
                 "spoonacular": null
             }
         },
         "black tea": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Schwarzer Tee",
+                "GB": "Black tea"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "tea"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Schwarzer Tee oder Schwarztee, in Ostasien als roter Tee bezeichnet, ist eine Variante, Tee herzustellen.",
+                "GB": "Black tea is a type of tea that is more oxidized than oolong, green, and white teas. Black tea is generally stronger in flavour than the less oxidized teas."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Schwarzer_Tee",
+                    "GB": "https://en.wikipedia.org/wiki/Black_tea"
                 },
                 "spoonacular": null
             }
         },
         "bloody mary": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bloody Mary",
+                "GB": "Bloody Mary"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "cocktail"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bloody Mary ist ein klassischer Cocktail aus Wodka, Tomatensaft und Gewürzen.",
+                "GB": "A Bloody Mary is a cocktail containing vodka, tomato juice, and combinations of other spices and flavorings including Worcestershire sauce, hot sauces, garlic, herbs, horseradish, celery, olives, salt, black pepper, lemon juice, lime juice and/or celery salt."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bloody_Mary",
+                    "GB": "https://en.wikipedia.org/wiki/Bloody_Mary_(cocktail)"
                 },
                 "spoonacular": null
             }
         },
         "blt": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "BLT",
+                "GB": "BLT"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein BLT ist eine Art Sandwich, benannt nach den Initialen seiner Hauptbestandteile Speck, Salat und Tomate.",
+                "GB": "A BLT is a type of sandwich, named for the initials of its primary ingredients, bacon, lettuce and tomato."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "boba": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/BLT"
                 },
                 "spoonacular": null
             }
         },
         "bolognese": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ragù alla bolognese",
+                "GB": "Bolognese sauce"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["sauce", "meat"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ragù alla bolognese ist eine Hackfleischsauce, die vorwiegend mit Pasta kombiniert wird.",
+                "GB": "Bolognese sauce is a meat-based sauce in Italian cuisine, typical of the city of Bologna."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Rag%C3%B9_alla_bolognese",
+                    "GB": "https://en.wikipedia.org/wiki/Bolognese_sauce"
                 },
                 "spoonacular": null
             }
         },
         "boquerones": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Sardellen in Essig",
+                "GB": "Boquerones en vinagre"
             },
-            "related-classes": [],
-            "categories": [],
+            "related-classes": ["anchovy"],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Boquerones en vinagre sind eine Art Vorspeise oder Tapa, die man in Spanien findet.",
+                "GB": "Boquerones en vinagre are a type of appetizer or tapa found in Spain."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Boquerones_en_vinagre"
                 },
                 "spoonacular": null
             }
         },
         "bordeaux": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bordeaux Wein",
+                "GB": "Bordeaux wine"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "wine"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Bordeaux-Wein ist jeder Wein, der in der Region Bordeaux im Südwesten Frankreichs hergestellt wird. Bordeaux liegt in der Stadt Bordeaux, am Fluss Garonne.",
+                "GB": "A Bordeaux wine is any wine produced in the Bordeaux region of southwest France. Bordeaux is centered on the city of Bordeaux, on the Garonne River."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Bordeaux_wine"
                 },
                 "spoonacular": null
             }
         },
         "bouillabaisse": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bouillabaisse",
+                "GB": "Bouillabaisse"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "stew"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bouillabaisse ist ein provenzalisches Fischgericht, das je nach Zubereitung als zweigängiges Gericht aus Fischsuppe und gegartem Speisefisch mit Meeresfrüchten oder als reichhaltiger Eintopf serviert wird.",
+                "GB": "Bouillabaisse is a traditional Provençal fish stew originating from the port city of Marseille."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bouillabaisse",
+                    "GB": "https://en.wikipedia.org/wiki/Bouillabaisse"
                 },
                 "spoonacular": null
             }
         },
         "boule": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Boule",
+                "GB": "Boule"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Boule, aus dem Französischen für \"Ball\", ist eine traditionelle Form von französischem Brot, die an einen zerquetschten Ball erinnert.",
+                "GB": "Boule, from the French for \"ball\", is a traditional shape of French bread, resembling a squashed ball."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Boule_(bread)"
                 },
                 "spoonacular": null
             }
         },
         "bourbon": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bourbon Whiskey",
+                "GB": "Bourbon whiskey"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bourbon Whiskey, kurz Bourbon, ist eine ursprünglich nur in Kentucky gebrannte Variante des amerikanischen Whiskeys.",
+                "GB": "Bourbon whiskey is a type of American whiskey, a barrel-aged distilled spirit made primarily from corn."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bourbon_Whiskey",
+                    "GB": "https://en.wikipedia.org/wiki/Bourbon_whiskey"
                 },
                 "spoonacular": null
             }
         },
         "bowl": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bowl",
+                "GB": "Bowl"
             },
             "related-classes": [],
             "categories": [],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -1543,14 +1562,14 @@
         },
         "braised lamb shank": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Geschmorte Lammkeule",
+                "GB": "Braised lamb shank"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -1562,19 +1581,19 @@
         },
         "braised short ribs": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Geschmorte kurze Rippen",
+                "GB": "Braised short ribs"
             },
-            "related-classes": [],
-            "categories": [],
+            "related-classes": ["spare rips"],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Galbi-jjjim oder geschmorte kurze Rippen sind eine Vielzahl von jjim oder koreanischen Dampfgerichten, die aus Galbi hergestellt werden.",
+                "GB": "Galbi-jjim or braised short ribs is a variety of jjim or Korean steamed dish made with galbi."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Galbi-jjim"
                 },
                 "spoonacular": null
             }
@@ -13777,7 +13796,7 @@
                 "spoonacular": null
             }
         },
-        "sable": {
+        "sablefish": {
             "name": {
                 "DE": "",
                 "GB": ""
