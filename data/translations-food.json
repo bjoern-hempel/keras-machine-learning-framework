@@ -36,6 +36,24 @@
                 "spoonacular": null
             }
         },
+        "dish": {
+            "name": {
+                "DE": "Gericht (Speise)",
+                "GB": "Dish (food)"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Ein Gericht bzw. eine Speise sind Küchenerzeugnisse, die aus Speisenteilen bestehen.",
+                "GB": "A dish in gastronomy is a specific food preparation, a \"distinct article or variety of food\", ready to eat, or be served."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Gericht_(Speise)",
+                    "GB": "https://en.wikipedia.org/wiki/Dish_(food)"
+                },
+                "spoonacular": null
+            }
+        },
         "drink": {
             "name": {
                 "DE": "Getränk",
@@ -72,24 +90,6 @@
                 "spoonacular": null
             }
         },
-        "dish": {
-            "name": {
-                "DE": "Gericht (Speise)",
-                "GB": "Dish (food)"
-            },
-            "categories": [],
-            "description": {
-                "DE": "Ein Gericht bzw. eine Speise sind Küchenerzeugnisse, die aus Speisenteilen bestehen.",
-                "GB": "A dish in gastronomy is a specific food preparation, a \"distinct article or variety of food\", ready to eat, or be served."
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": "https://de.wikipedia.org/wiki/Gericht_(Speise)",
-                    "GB": "https://en.wikipedia.org/wiki/Dish_(food)"
-                },
-                "spoonacular": null
-            }
-        },
         "liqueur": {
             "name": {
                 "DE": "Likör",
@@ -122,6 +122,24 @@
                 "wikipedia": {
                     "DE": "https://de.wikipedia.org/wiki/Pasta",
                     "GB": "https://en.wikipedia.org/wiki/Pasta"
+                },
+                "spoonacular": null
+            }
+        },
+        "sauce": {
+            "name": {
+                "DE": "Sauce",
+                "GB": "Sauce"
+            },
+            "categories": [],
+            "description": {
+                "DE": "Sauce oder Soße ist eine flüssig bis sämig gebundene, würzende Beigabe zu warmen und kalten Gerichten, Salaten und Desserts.",
+                "GB": "In cooking, a sauce is a liquid, cream, or semi-solid food, served on or used in preparing other foods."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Sauce",
+                    "GB": "https://en.wikipedia.org/wiki/Sauce"
                 },
                 "spoonacular": null
             }
@@ -320,7 +338,7 @@
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
+                    "DE": "https://de.wikipedia.org/wiki/Apfelkuchen",
                     "GB": "https://en.wikipedia.org/wiki/Apple_cake"
                 },
                 "spoonacular": null
@@ -328,85 +346,67 @@
         },
         "apple cider": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Apfelschaumwein",
+                "GB": "Apple cider"
             },
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Apfelschaumwein (auch Apfelsekt oder Apfelperlwein) ist eine Bezeichnung für moussierende Apfelweine, die aus verschiedenen Apfelsorten vergoren werden.",
+                "GB": "Apple cider (also called sweet cider or soft cider or simply cider) is the name used in the United States and parts of Canada for an unfiltered, unsweetened, non-alcoholic beverage made from apples."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Apfelschaumwein",
+                    "GB": "https://en.wikipedia.org/wiki/Apple_cider"
                 },
                 "spoonacular": null
             }
         },
         "apple juice": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Apfelsaft",
+                "GB": "Apple juice"
             },
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Apfelsaft ist ein Fruchtsaft, der durch Pressung von Äpfeln gewonnen wird.",
+                "GB": "Apple juice is a fruit juice made by the maceration and pressing of an apple."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "arroz con pollo": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Apfelsaft",
+                    "GB": "https://en.wikipedia.org/wiki/Apple_juice"
                 },
                 "spoonacular": null
             }
         },
         "artichoke dip": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Artischockendip",
+                "GB": "Artichoke dip"
             },
-            "categories": [],
+            "categories": ["sauce"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Artischockendip ist ein Dip, der Artischocken als Hauptbestandteil verwendet.",
+                "GB": "Artichoke dip is a dip that uses artichoke as a primary ingredient."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Artichoke_dip"
                 },
                 "spoonacular": null
             }
         },
         "avocado roll": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Avocado-Rolle",
+                "GB": "Avocado Roll"
             },
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Eine Avocado-Rolle ist ein japanisches Sushi-Gericht aus erkaltetem, gesäuertem Reis, ergänzt um Avocados und Gurken.",
+                "GB": "An avocado roll is a Japanese sushi dish made from cooled, acidified rice, supplemented with avocados and cucumbers."
             },
             "urls": {
                 "wikipedia": {
@@ -2955,6 +2955,24 @@
             }
         },
         "chicken pie": {
+            "name": {
+                "DE": "",
+                "GB": ""
+            },
+            "categories": [],
+            "description": {
+                "DE": "",
+                "GB": ""
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": null,
+                    "GB": null
+                },
+                "spoonacular": null
+            }
+        },
+        "chicken rice": {
             "name": {
                 "DE": "",
                 "GB": ""
