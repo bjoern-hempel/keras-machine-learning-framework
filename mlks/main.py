@@ -38,6 +38,7 @@ from mlks.commands.image_classifier.evaluate.main import Evaluate as CliImageCla
 from mlks.commands.image_classifier.evaluate_service.main import EvaluateService as CliImageClassifierEvaluateService
 from mlks.commands.image_classifier.evaluate_http.main import EvaluateHttp as CliImageClassifierEvaluateHttp
 from mlks.commands.image_classifier.train.main import Train as CliImageClassifierTrain
+from mlks.commands.image_classifier.graph.main import Graph as CliImageClassifierGraph
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron as CliDemoXorPerceptron
@@ -51,6 +52,7 @@ from mlks.config.parameter import option_set_general, \
     option_set_transfer_learning, \
     option_set_train_process, \
     option_set_evaluation_process, \
+    option_set_graph_process, \
     option_set_nine_points
 
 @click.group(name='cli')
@@ -84,6 +86,17 @@ def cli_train(config):
     """This subcommand trains a classifier."""
 
     train_class = CliImageClassifierTrain(config)
+    train_class.do()
+
+
+@cli.command(name='graph')
+@add_options(option_set_graph_process)
+@add_options(option_set_general)
+@pass_config
+def cli_train(config):
+    """This subcommand creates some nice graphs."""
+
+    train_class = CliImageClassifierGraph(config)
     train_class.do()
 
 

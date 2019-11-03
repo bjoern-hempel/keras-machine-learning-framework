@@ -33,7 +33,6 @@
 import click
 import time
 import sys
-import os
 
 from mlks.helper.log import disable_warnings
 from mlks.helper.hardware import set_render_device

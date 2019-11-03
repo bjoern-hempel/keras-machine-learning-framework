@@ -547,6 +547,10 @@ option_set_evaluation_process = [
     option_config_file_2,
     option_evaluation_path
 ]
+option_set_graph_process = [
+    option_environment_path,
+    option_config_file
+]
 option_set_nine_points = [
     option_x_0_1,
     option_y_0_1

@@ -32,17 +32,24 @@
 
 import click
 import os
-
+import sys
 import math
 import numpy as np
-import tensorflow as tf
+import sys
 
 # initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
 np.random.seed(1337)
 
+# some own libraries and helper
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
 from mlks.helper.graph import print_image
+from mlks.helper.dict import get_best_value, get_best_index, count_len_recursive, get_sort_index_array
+from mlks.helper.ml import get_epoch_array
+
+# matplotlib libraries
+from matplotlib import pyplot as plt
+from matplotlib.patches import Rectangle
 
 # DenseNet121, DenseNet169, DenseNet201
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
@@ -446,3 +453,177 @@ class ImageClassifier(Command):
         data_path_info = get_number_of_folders_and_files(data_path)
 
         return data_path_info['folders']
+
+    def build_train_graph(self, show_diagram=True, save_diagram=False):
+
+        # some configs
+        x_from = 1
+        x_to = self.config.getml('epochs')
+        y_from = 0
+        y_to = 1.1
+
+        # some variables
+        learning_rate = self.config.getml('learning_rate')
+        learning_rate_string = ('%f' % learning_rate).rstrip('0').rstrip('.')
+        learning_rate_drop = self.config.getml('learning_rate_drop')
+        learning_rate_drop_string = ('%f' % learning_rate_drop).rstrip('0').rstrip('.')
+        learning_rate_epochs_drop = self.config.getml('learning_rate_epochs_drop')
+        epochs = self.config.getml('epochs')
+        files = self.config.get_environment('files')
+
+        # some preparations
+        number_of_trained_files = count_len_recursive(files['train'])
+        number_of_validated_files = count_len_recursive(files['validation'])
+        epoch_array = get_epoch_array(epochs, learning_rate, learning_rate_drop, learning_rate_epochs_drop)
+        trained_data_y = self.config.get_environment('accuracies_trained')
+        validated_data_y = self.config.get_environment('accuracies_validated')
+        trained_data_x = list(range(1, len(trained_data_y) + 1))
+        validated_data_x = list(range(1, len(validated_data_y) + 1))
+        sort_index_array_trained = get_sort_index_array(trained_data_y, True)
+        sort_index_array_validated = get_sort_index_array(validated_data_y, True)
+
+        # descriptions, text and titles
+        subtitle = '%s with %d classes' % (
+            os.path.basename(self.config.get_data('data_path')).capitalize(),
+            len(self.config.get_environment('classes'))
+        )
+        title = '%s - #train:#val %s:%s - best acc. %.2f%%@ep.%d\nlr %s (drop rate %s every %d epochs) ' % (
+            self.config.gettl('transfer_learning_model'),
+            '{:,d}'.format(number_of_trained_files).replace(',', '.'),
+            '{:,d}'.format(number_of_validated_files).replace(',', '.'),
+            validated_data_y[sort_index_array_validated[0]] * 100,
+            sort_index_array_validated[0] + 1,
+            learning_rate_string,
+            learning_rate_drop_string,
+            learning_rate_epochs_drop
+        )
+        x_axis_description = 'Number of epochs'
+        y_axis_description = 'Accuracy in percent'
+        text = 'LEARNING RATE'
+
+        # set x and y axis
+        axes = plt.gca()
+        axes.set_xlim([x_from, x_to])
+        axes.set_ylim([y_from, y_to])
+
+        # format y axis
+        y_values = axes.get_yticks()
+        axes.set_yticklabels(['{:,.0%}'.format(x) for x in y_values])
+
+        # print descriptions and the title
+        plt.suptitle(subtitle, fontsize=10)
+        plt.title(title, fontsize=7)
+
+        # plot the graph
+        best_marker_on_trained = [
+            sort_index_array_trained[0],
+            sort_index_array_trained[1]
+        ]
+        best_marker_on_validated = [
+            sort_index_array_validated[0],
+            sort_index_array_validated[1]
+        ]
+        plt.plot(
+            trained_data_x,
+            trained_data_y,
+            '-g.',
+            label='Training',
+            color='green',
+            markevery=best_marker_on_trained
+        )
+        plt.plot(
+            validated_data_x,
+            validated_data_y,
+            '-g.',
+            label='Validation',
+            color='blue',
+            markevery=best_marker_on_validated
+        )
+
+        plt.xlabel(x_axis_description)
+        plt.ylabel(y_axis_description)
+        plt.legend(
+            fontsize=7
+        )
+
+        # build learning rate rectangles
+        counter = 0
+        color_from = 0.75
+        color_to = 0.95
+        colors_dist = (color_to - color_from) / len(epoch_array)
+        current_color_pos = color_from
+        for epoch_item in epoch_array:
+            epoch_from = epoch_item['epoch_from']
+            epoch_to = epoch_item['epoch_to']
+            learning_rate_current = epoch_item['learning_rate']
+            poly = Rectangle(
+                [epoch_from - 1, 0],
+                width=epoch_to - epoch_from + 1,
+                height=y_to,
+                facecolor='%s' % current_color_pos,
+                linewidth=0
+            )
+            axes.add_patch(poly)
+            counter += 1
+            current_color_pos += colors_dist
+            text += '\n%s from %02d to %02d' % (
+                ('%f' % learning_rate_current).rstrip('0').rstrip('.'),
+                epoch_from,
+                epoch_to
+            )
+
+        # print some scatters
+        for index in range(len(best_marker_on_validated)):
+            plt.text(
+                best_marker_on_validated[index] + 1,
+                validated_data_y[best_marker_on_validated[index]] + 0.02,
+                s='%.2f%% (%d)' % (validated_data_y[best_marker_on_validated[index]] * 100, index + 1),
+                fontsize=6
+            )
+        for index in range(len(best_marker_on_trained)):
+            plt.text(
+                best_marker_on_trained[index] + 1,
+                trained_data_y[best_marker_on_trained[index]] + 0.02,
+                s='%.2f%% (%d)' % (trained_data_y[best_marker_on_trained[index]] * 100, index + 1),
+                fontsize=6
+            )
+
+        max_value_trained = trained_data_y[best_marker_on_trained[0]]
+        max_value_validated = validated_data_y[best_marker_on_validated[0]]
+        max_value = max_value_trained if max_value_trained > max_value_validated else max_value_validated
+
+        if max_value > 0.8:
+            x_text = self.config.getml('epochs') - (0.05 * (self.config.getml('epochs') - 1))
+            y_text = 0.05
+            align = 'right'
+            valign = 'bottom'
+        else:
+            x_text = 0.05 * (self.config.getml('epochs') + 4)
+            y_text = y_to - 0.05
+            align = 'left'
+            valign = 'top'
+        plt.text(
+            s=text,
+            fontsize=7,
+            x=x_text,
+            y=y_text,
+            color='green',
+            bbox=dict(facecolor='white', alpha=0.6, edgecolor='grey', boxstyle='round,pad=0.5'),
+            horizontalalignment=align,
+            verticalalignment=valign
+        )
+
+        # save accuracy diagram
+        if save_diagram:
+            plt.savefig(self.config.get_data('accuracy_file'))
+
+        # show accuracy diagram
+        if show_diagram:
+            plt.show()
+            return None
+
+        # return absolute and url path if accuracy file was created
+        return {
+            'absolute_path': self.config.get_data('accuracy_file'),
+            'url_path': self.config.get_data('accuracy_file')
+        }
