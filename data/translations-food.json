@@ -416,105 +416,69 @@
                 "spoonacular": null
             }
         },
-        "baby back ribs": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "baccala": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
         "baguette": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Baguette",
+                "GB": "Baguette"
             },
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Das bzw. die Baguette, in Deutschland auch Stangenweißbrot, Pariser Weißbrot oder kurz Pariser, in der Schweiz auch Parisette, ist ein langgestrecktes, knuspriges Weißbrot französischen Ursprungs.",
+                "GB": "A baguette is a long, thin loaf of French bread that is commonly made from basic lean dough (the dough, though not the shape, is defined by French law)."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Baguette",
+                    "GB": "https://en.wikipedia.org/wiki/Baguette"
                 },
                 "spoonacular": null
             }
         },
         "baileys": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Baileys",
+                "GB": "Baileys Irish Cream"
             },
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Baileys ist die Kurzform für Baileys Original Irish Cream, dem Markennamen eines irischen Sahnelikörs aus irischem Whiskey und Rahm mit einem Alkoholgehalt von 17 Vol.-%. Baileys gehört zum Diageo-Konzern.",
+                "GB": "Baileys Irish Cream is an Irish cream liqueur - an alcoholic beverage flavored with cream, cocoa, and Irish whiskey - made by Diageo at Nangor Road, in Dublin, Republic of Ireland and in Mallusk, Northern Ireland owned by Gilbeys of Ireland, the trademark is currently owned by Diageo."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Baileys",
+                    "GB": "https://en.wikipedia.org/wiki/Baileys_Irish_Cream"
                 },
                 "spoonacular": null
             }
         },
         "baked beans": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Gebackene Bohnen",
+                "GB": "Baked beans"
             },
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Baked Beans (englisch für Gebackene Bohnen) sind ein traditionelles britisches und US-amerikanisches Gericht aus weißen Bohnen, die mit Tomatensauce oder Ketchup im Ofen gebacken werden.",
+                "GB": "Baked beans is a dish traditionally containing white beans which are parboiled and then baked at a low temperature for a lengthy period of time in some sort of sauce."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Baked_Beans",
+                    "GB": "https://en.wikipedia.org/wiki/Baked_beans"
                 },
                 "spoonacular": null
             }
         },
         "baked brie": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Gebackener Brie",
+                "GB": "Baked brie"
             },
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -526,103 +490,85 @@
         },
         "baked potato": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Backkartoffel",
+                "GB": "Baked potato"
             },
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Backkartoffeln, gebackene Kartoffeln oder Ofenkartoffeln sind ungeschälte Kartoffeln, die ohne Zugabe von Flüssigkeit in der Glut eines Feuers, im Erdofen oder im Backofen gegart werden.",
+                "GB": "A baked potato, or jacket potato, is a potato that has been baked for eating."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "baked potatoes": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Backkartoffel",
+                    "GB": "https://en.wikipedia.org/wiki/Baked_potato"
                 },
                 "spoonacular": null
             }
         },
         "baked ziti": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Gebackener Ziti Auflauf",
+                "GB": "Baked ziti"
             },
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Gebackener Ziti ist eine beliebte Auflaufform aus Ziti-Nudeln und einem Gericht auf Tomatenbasis, das typisch für die italienisch-amerikanische Küche nach neapolitanischem Stil ist.",
+                "GB": "Baked ziti is a popular casserole with ziti pasta and a Neapolitan-style tomato-based sauce characteristic of Italian-American cuisine."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Baked_ziti"
                 },
                 "spoonacular": null
             }
         },
         "baklava": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Baklava",
+                "GB": "Baklava"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Baklava ist ein in Zuckersirup eingelegtes Gebäck aus Blätter- oder Filoteig, gefüllt mit gehackten Walnüssen, Mandeln oder Pistazien.",
+                "GB": "Baklava is a rich, sweet dessert pastry made of layers of filo filled with chopped nuts and sweetened and held together with syrup or honey."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Baklava",
+                    "GB": "https://en.wikipedia.org/wiki/Baklava"
                 },
                 "spoonacular": null
             }
         },
         "banana bread": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananenbrot",
+                "GB": "Banana bread"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Es wird, je nach Rezept, aus zerkleinerten Bananen, Weizenmehl, Zucker, Backpulver, Butter, Milch und Ei bzw. Sojamilch oder Tofu hergestellt.",
+                "GB": "Banana bread is a type of bread made from mashed bananas."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bananenbrot",
+                    "GB": "https://en.wikipedia.org/wiki/Banana_bread"
                 },
                 "spoonacular": null
             }
         },
         "banana cake": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananenkuchen",
+                "GB": "Banana cake"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -634,13 +580,13 @@
         },
         "banana cream pie": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananen Creme Torte",
+                "GB": "Banana cream pie"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": null
             },
             "urls": {
                 "wikipedia": {
@@ -652,54 +598,54 @@
         },
         "banana pudding": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananenpudding",
+                "GB": "Banana pudding"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": null,
+                "GB": "Banana pudding is a dessert generally consisting of layers of sweet vanilla flavored custard, cookies (usually Vanilla Wafers or ladyfingers) and sliced fresh bananas placed in a dish and served, topped with whipped cream or meringue."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Banana_pudding"
                 },
                 "spoonacular": null
             }
         },
         "bananas foster": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananen Foster",
+                "GB": "Bananas Foster"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananas Foster ist ein Dessert aus Bananen und Vanilleeis mit einer Sauce aus Butter, braunem Zucker, Zimt, dunklem Rum und Bananenlikör.",
+                "GB": "Bananas Foster is a dessert made from bananas and vanilla ice cream, with a sauce made from butter, brown sugar, cinnamon, dark rum, and banana liqueur."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Bananas_Foster"
                 },
                 "spoonacular": null
             }
         },
         "banana split": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananensplit",
+                "GB": "Banana split"
             },
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bananensplit ist eine Eisspeise, der aus der US-amerikanischen Küche stammt.",
+                "GB": "A banana split is an ice cream-based dessert."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bananensplit",
+                    "GB": "https://en.wikipedia.org/wiki/Banana_split"
                 },
                 "spoonacular": null
             }
@@ -14528,24 +14474,6 @@
                 "spoonacular": null
             }
         },
-        "spareribs": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
         "sparkling wine": {
             "name": {
                 "DE": "",
@@ -14763,6 +14691,24 @@
             }
         },
         "stir fry": {
+            "name": {
+                "DE": "",
+                "GB": ""
+            },
+            "categories": [],
+            "description": {
+                "DE": "",
+                "GB": ""
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": null,
+                    "GB": null
+                },
+                "spoonacular": null
+            }
+        },
+        "stockfish": {
             "name": {
                 "DE": "",
                 "GB": ""
