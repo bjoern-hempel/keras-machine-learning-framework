@@ -487,11 +487,12 @@ class ImageClassifier(Command):
             os.path.basename(self.config.get_data('data_path')).capitalize(),
             len(self.config.get_environment('classes'))
         )
-        title = '%s - #train:#val %s:%s - best acc. %.2f%%\nlr %s/%s@%d ' % (
+        title = '%s - #train:#val %s:%s - best acc. %.2f%%@ep.%d\nlr %s (drop rate %s every %d epochs) ' % (
             self.config.gettl('transfer_learning_model'),
             '{:,d}'.format(number_of_trained_files).replace(',', '.'),
             '{:,d}'.format(number_of_validated_files).replace(',', '.'),
             validated_data_y[sort_index_array_validated[0]] * 100,
+            sort_index_array_validated[0] + 1,
             learning_rate_string,
             learning_rate_drop_string,
             learning_rate_epochs_drop
