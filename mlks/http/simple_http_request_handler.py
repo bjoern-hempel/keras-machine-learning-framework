@@ -37,11 +37,26 @@ import magic
 import base64
 import collections
 import json
+import numpy as np
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from mlks.helper.filesystem import get_formatted_file_size, get_database, get_database_path, get_formatted_file_size, \
     PNG_EXTENSION
 
+
+class NumpyEncoder(json.JSONEncoder):
+    """ Special json encoder for numpy types """
+    def default(self, obj):
+        if isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
+            np.int16, np.int32, np.int64, np.uint8,
+            np.uint16, np.uint32, np.uint64)):
+            return int(obj)
+        elif isinstance(obj, (np.float_, np.float16, np.float32,
+            np.float64)):
+            return float(obj)
+        elif isinstance(obj,(np.ndarray,)): #### This is the fix
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     TEXT_UPLOAD = 'Your image is currently being uploaded and evaluated. Please wait...'
@@ -570,8 +585,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'UPLOAD_FORM': upload_form,
             'PREDICTION_TIME': prediction_time,
             'USED_MODEL': used_model,
-            'DATABASE': json.dumps(database),
-            'EVALUATION_DATA': json.dumps(evaluation_data)
+            'DATABASE': json.dumps(database, cls=NumpyEncoder),
+            'EVALUATION_DATA': json.dumps(evaluation_data, cls=NumpyEncoder)
         }
         self.respond_html(self.get_template('body') % {'CONTENT': html_content})
         return True
