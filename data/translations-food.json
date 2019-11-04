@@ -38,6 +38,25 @@
                 "spoonacular": null
             }
         },
+        "breakfast": {
+            "name": {
+                "DE": "Frühstück",
+                "GB": "Breakfast"
+            },
+            "related-categories": [],
+            "parent-categories": [],
+            "description": {
+                "DE": "Das Frühstück ist die in der Regel morgens zu sich genommene erste Mahlzeit des Tages.",
+                "GB": "Breakfast is the first meal of a day."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Fr%C3%BChst%C3%BCck",
+                    "GB": "https://en.wikipedia.org/wiki/Breakfast"
+                },
+                "spoonacular": null
+            }
+        },
         "burger": {
             "name": {
                 "DE": "Hamburger",
@@ -914,25 +933,6 @@
                 "spoonacular": null
             }
         },
-        "bass": {
-            "name": {
-                "DE": "Bass",
-                "GB": "Barsch"
-            },
-            "related-classes": [],
-            "categories": ["dish", "fish"],
-            "description": {
-                "DE": "Die Echten Barsche sind eine Familie aus der Ordnung der Barschartigen (Perciformes).",
-                "GB": "Bass is a name shared by many species of fish."
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": "https://de.wikipedia.org/wiki/Echte_Barsche",
-                    "GB": "https://en.wikipedia.org/wiki/Bass_(fish)"
-                },
-                "spoonacular": null
-            }
-        },
         "battered fish": {
             "name": {
                 "DE": "Panierter Fisch",
@@ -1600,114 +1600,76 @@
         },
         "brandy": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Weinbrand",
+                "GB": "Brandy"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Weinbrand ist ein Gattungsbegriff für Spirituosen aus einem Weindestillat.",
+                "GB": "Brandy is a spirit produced by distilling wine."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "branzino": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Weinbrand",
+                    "GB": "https://en.wikipedia.org/wiki/Brandy"
                 },
                 "spoonacular": null
             }
         },
         "bread pudding": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Brotpudding",
+                "GB": "Bread pudding"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Brotpudding, auch Semmelauflauf oder Semmelschmarren ist ein Gericht nach traditionellen Rezepten, das in seiner Zubereitung dem ursprünglichen englischen Pudding entspricht, der in Deutschland früher auch Serviettenkloß genannt wurde.",
+                "GB": "Bread pudding is a bread-based dessert popular in many countries' cuisines, made with stale bread and milk or cream, generally containing eggs, a form of fat such as oil, butter or suet, and depending on whether the pudding is sweet or savory, a variety of other ingredients."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "breadsticks": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Brotpudding",
+                    "GB": "https://en.wikipedia.org/wiki/Bread_pudding"
                 },
                 "spoonacular": null
             }
         },
         "breakfast burrito": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Breakfast burrito",
+                "GB": "Frühstücksburrito"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "breakfast"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Der Frühstücksburrito, manchmal auch als Frühstückswrap außerhalb des amerikanischen Südwestens bezeichnet, ist eine Variante des amerikanischen Frühstücks, die aus Frühstücksbestandteilen besteht, die in einem Mehltortilla-Burrito verpackt sind.",
+                "GB": "The breakfast burrito, sometimes referred to as a breakfast wrap outside of the American Southwest, is a variety of American breakfast composed of breakfast items wrapped inside a flour tortilla burrito."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Breakfast_burrito"
                 },
                 "spoonacular": null
             }
         },
         "breakfast sandwich": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Breakfast sandwich",
+                "GB": "Frühstückssandwich"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "breakfast"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "In North America, a breakfast sandwich is any sandwich filled with foods associated with the breakfast meal.",
+                "GB": "In Nordamerika ist ein Frühstückssandwich jedes Sandwich, das mit Lebensmitteln gefüllt ist, die mit der Frühstücksmahlzeit verbunden sind."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Breakfast_sandwich"
                 },
                 "spoonacular": null
             }
@@ -7661,19 +7623,19 @@
         },
         "grissini": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Grissini",
+                "GB": "Grissini"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Grissini sind dünne, mürbe Brotstangen aus Hefeteig.",
+                "GB": "Breadsticks (also known as grissini, grissino or dipping sticks) are generally pencil-sized sticks of crisp, dry baked bread that originated in Italy."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Grissini",
+                    "GB": "https://en.wikipedia.org/wiki/Breadstick"
                 },
                 "spoonacular": null
             }
@@ -14330,38 +14292,19 @@
         },
         "sea bass": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Seebarsch",
+                "GB": "Sea bass"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "fish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Der Europäische Wolfsbarsch oder auch Seebarsch (Dicentrarchus labrax) ist ein Fisch aus der Familie der Wolfsbarsche (Moronidae).",
+                "GB": "The European bass (Dicentrarchus labrax) is a primarily ocean-going fish native to the waters off Europe's western and southern and Africa's northern coasts, though it can also be found in shallow coastal waters and river mouths during the summer months."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
-        },
-        "seabass": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Europ%C3%A4ischer_Wolfsbarsch",
+                    "GB": "https://en.wikipedia.org/wiki/European_bass"
                 },
                 "spoonacular": null
             }
