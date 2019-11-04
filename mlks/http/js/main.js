@@ -29,7 +29,7 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         let percent = Math.round(predictionItem['predicted_value'] * 100 * 100) / 100;
         let classes = database['classes'];
         let categories = database['categories'];
-        let name = className;
+        let name = className.replace(':', '');
 
         console.log(classes);
         console.log(className);
