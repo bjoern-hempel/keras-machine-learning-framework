@@ -25,11 +25,11 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
 
     for (let index in evaluationData['prediction_overview_array']) {
         let predictionItem = evaluationData['prediction_overview_array'][index];
-        let className = predictionItem['class_name'];
+        let className = predictionItem['class_name'].replace(':', '');
         let percent = Math.round(predictionItem['predicted_value'] * 100 * 100) / 100;
         let classes = database['classes'];
         let categories = database['categories'];
-        let name = className.replace(':', '');
+        let name = className;
 
         console.log(classes);
         console.log(className);
