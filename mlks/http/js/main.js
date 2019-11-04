@@ -34,7 +34,7 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         console.log(classes);
         console.log(className);
 
-        if (className in classes) {
+        if (true || className in classes) {
             alert('123');
             name = '<b>' + classes[className]['name'][language] + '</b>';
         }
