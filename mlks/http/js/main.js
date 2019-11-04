@@ -35,8 +35,11 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         console.log(className);
 
         if (className in classes) {
+            alert('123');
             name = '<b>' + classes[className]['name'][language] + '</b>';
         }
+
+        alert(456);
 
         var predictionHtml = classTemplate.
             replace(/%\(name\)s/, name).
