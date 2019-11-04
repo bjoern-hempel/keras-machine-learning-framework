@@ -29,7 +29,7 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         let percent = Math.round(predictionItem['predicted_value'] * 100 * 100) / 100;
         let classes = database['classes'];
         let categories = database['categories'];
-        let name = className;
+        let name = '<b>' + className + '</b>';
 
         if (className in classes && classes[className]['name'][language]) {
             name = '<b>' + classes[className]['name'][language] + '</b>';
@@ -42,11 +42,13 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         if (className in classes) {
             let description = classes[className]['description'][language];
 
-            description += '<br /><b>Wikipedia:</b> </b>' +
-                '<a href="' + classes[className]['urls']['wikipedia'][language] + '" target="_blank">' +
+            if (classes[className]['urls']['wikipedia'][language]) {
+                description += '<br /><b>Wikipedia:</b> </b>' +
+                    '<a href="' + classes[className]['urls']['wikipedia'][language] + '" target="_blank">' +
                     classes[className]['urls']['wikipedia'][language] +
-                '</a>'
-            ;
+                    '</a>'
+                ;
+            }
 
             let categoriesCurrent = classes[className]['categories'];
 
