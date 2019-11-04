@@ -33,6 +33,7 @@
 import os
 import shutil
 import re
+import json
 from pathlib import Path
 from datetime import datetime
 from mlks.helper.time import SimpleUtc
@@ -57,6 +58,28 @@ def get_root_project_path():
     split_string = '/%s/' % __package__
     parts = re.split(split_string, str(Path(__file__)).replace('\\', '/'))
     return parts[0]
+
+
+def get_database_path(model_type):
+    database_path = '%s/data/translations-%s.json' % (get_root_project_path(), model_type)
+
+    # check if json database exists
+    if not os.path.isfile(database_path):
+        raise AssertionError('The database "%s" does not exists.' % database_path)
+
+    return database_path
+
+
+def get_database(model_type):
+    database_path = get_database_path(model_type)
+
+    # try to read the json database file
+    with open(database_path, 'r', encoding='utf-8') as f:
+        try:
+            return json.load(f)
+        except ValueError as e:
+            print('invalid json: %s' % e)
+            return None
 
 
 def get_root_data_path(path):
@@ -85,6 +108,7 @@ def get_formatted_file_size(path):
 
     file_size /= 1024
     return '%.2f MB' % file_size
+
 
 def get_number_of_folders_and_files(path):
     files = 0

@@ -10,6 +10,22 @@
 </div>
 
 <div class="container">
+    <script>
+
+        database = %(DATABASE)s;
+
+        evaluationData = %(EVALUATION_DATA)s;
+
+        titleTemplate = '<tr><th class="is-size-5" style="padding: 5px 10px;">Class</th><th class="is-size-5" style="padding: 5px 10px;">Prediction</th></tr>'
+
+        classTemplate = '<tr>' +
+            '<td class="is-size-6" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(name)s</td>' +
+            '<td class="is-size-6" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(percent)s</td>' +
+        '</tr>';
+        classTemplateExtra = '<tr><td colspan="2" class="is-size-7" style="padding: 0 10px 5px 10px;">%%(more)s</td></tr>';
+
+    </script>
+
     <h1 class="title"><span class="pictogram">%(ICON)s</span> %(MODEL_TYPE_TITLE)s prediction result</h1>
     <h2 class="subtitle">The analysed and classified %(MODEL_TYPE)s</h2>
 
@@ -25,9 +41,12 @@
     <p>In the order in which the model would classify the image.</p>
     <p>&nbsp;</p>
     <div class="table-container">
-        <table class="table is-fullwidth is-hoverable">
-            %(PREDICTION_OVERVIEW)s
-        </table>
+        <table class="table is-fullwidth is-hoverable" id="prediction-table"></table>
+        <script>
+
+            window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra);
+
+        </script>
     </div>
     <p>&nbsp;</p>
 

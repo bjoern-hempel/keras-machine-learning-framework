@@ -19,6 +19,56 @@ window.submitPicture = function () {
     return true;
 }
 
+window.renewPredictionOverview = function(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra) {
+    let html = titleTemplate;
+    let language = 'GB';
+
+    for (let index in evaluationData['prediction_overview_array']) {
+        let predictionItem = evaluationData['prediction_overview_array'][index];
+        let className = predictionItem['class_name'];
+        let percent = Math.round(predictionItem['predicted_value'] * 100 * 100) / 100;
+        let classes = database['classes'];
+        let categories = database['categories'];
+        let name = className;
+
+        if (className in classes) {
+            name = '<b>' + classes[className]['name'][language] + '</b>';
+        }
+
+        var predictionHtml = classTemplate.
+            replace(/%\(name\)s/, name).
+            replace(/%\(percent\)s/, percent + '%');
+
+        if (className in classes) {
+            let description = classes[className]['description'][language];
+
+            description += '<br /><b>Wikipedia:</b> </b>' +
+                '<a href="' + classes[className]['urls']['wikipedia'][language] + '" target="_blank">' +
+                    classes[className]['urls']['wikipedia'][language] +
+                '</a>'
+            ;
+
+            let categoriesCurrent = classes[className]['categories'];
+
+            for (let categoryId in categoriesCurrent) {
+                let categoryCurrent = categoriesCurrent[categoryId];
+                description += '<br /><b>Category:</b> ' +
+                    '<a href="' + categories[categoryCurrent]['urls']['wikipedia'][language] + '" target="_blank">' +
+                        categories[categoryCurrent]['name'][language] +
+                    '</a>'
+                ;
+            }
+
+            predictionHtml += classTemplateExtra.
+                replace(/%\(more\)s/, description);
+        }
+
+        html += predictionHtml
+    }
+
+    document.getElementById('prediction-table').innerHTML = html;
+}
+
 window.fileChange = function (e) {
     document.getElementById('predict-file-raw').value = '';
     document.getElementById('predict-file-name').value = '';

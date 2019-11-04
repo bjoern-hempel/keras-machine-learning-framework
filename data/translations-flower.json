@@ -1,4 +1,5 @@
 {
+    "version": "1.00",
     "categories": {
         "asteraceae": {
             "name": {
@@ -8,7 +9,7 @@
             "categories": [],
             "description": {
                 "DE": "Die Korbblütler (botanisch Asteraceae oder Compositae), auch Korbblütengewächse, Asterngewächse oder Köpfchenblütler genannt, sind die größte Familie der Ordnung der Asternartigen (Asterales) innerhalb der Bedecktsamigen Pflanzen (Magnoliopsida).",
-                "GB": "Asteraceae or Compositae (commonly referred to as the aster, daisy, composite,[4] or sunflower family), is a very large and widespread family of flowering plants (Angiospermae)."
+                "GB": "Asteraceae or Compositae (commonly referred to as the aster, daisy, composite, or sunflower family), is a very large and widespread family of flowering plants (Angiospermae)."
             },
             "urls": {
                 "wikipedia": {

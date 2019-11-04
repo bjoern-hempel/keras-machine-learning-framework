@@ -36,9 +36,11 @@ import os
 import magic
 import base64
 import collections
+import json
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse
-from mlks.helper.filesystem import get_formatted_file_size, PNG_EXTENSION
+from mlks.helper.filesystem import get_formatted_file_size, get_database, get_database_path, get_formatted_file_size, \
+    PNG_EXTENSION
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -372,13 +374,18 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if model_data is None:
             model_data = self.get_empty_model_data()
 
+        database_path = get_database_path(argument)
+        database = get_database(argument)
         used_model = self.get_template('used_model') % {
             'MODEL_NAME': model_data['model_name'],
             'MODEL_SIZE': model_data['model_size'],
             'CLASSES': model_data['model_classes'],
             'LEARNING_EPOCHS': model_data['model_learning_epochs'],
             'MODEL_DATE': model_data['model_date'],
-            'VERSION': model_data['model_version']
+            'VERSION': model_data['model_version'],
+            'DATABASE': os.path.basename(database_path),
+            'DATABASE_SIZE': get_formatted_file_size(database_path),
+            'DATABASE_VERSION': database['version']
         }
 
         # unknown model type
@@ -497,13 +504,18 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if model_data is None:
             model_data = self.get_empty_model_data()
 
+        database_path = get_database_path(argument)
+        database = get_database(argument)
         used_model = self.get_template('used_model') % {
             'MODEL_NAME': model_data['model_name'],
             'MODEL_SIZE': model_data['model_size'],
             'CLASSES': model_data['model_classes'],
             'LEARNING_EPOCHS': model_data['model_learning_epochs'],
             'MODEL_DATE': model_data['model_date'],
-            'VERSION': model_data['model_version']
+            'VERSION': model_data['model_version'],
+            'DATABASE': os.path.basename(database_path),
+            'DATABASE_SIZE': get_formatted_file_size(database_path),
+            'DATABASE_VERSION': database['version']
         }
 
         # check if an error occurred
@@ -540,15 +552,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         }
         prediction_time = evaluation_data['prediction_time']
         prediction_overview_array = evaluation_data['prediction_overview_array']
-        prediction_overview_html = '<tr><th class="is-size-5">Class</th><th class="is-size-5">Prediction</th></tr>'
-
-        i = 0
-        while i < len(prediction_overview_array):
-            prediction_overview_html += '<tr><td><b>%s</b></td><td>%.2f %%</td></tr>' % (
-                prediction_overview_array[i]['class_name'].replace('_', ' ').title(),
-                prediction_overview_array[i]['predicted_value'] * 100
-            )
-            i += 1
 
         icons = {
             'flower': '&#127803;',
@@ -564,10 +567,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             'PREDICTION_CLASS': prediction_class.replace('_', ' ').title(),
             'PREDICTION_ACCURACY': '%.2f' % prediction_accuracy,
             'GRAPH_FILE_WEB': graph_file_web,
-            'PREDICTION_OVERVIEW': prediction_overview_html,
             'UPLOAD_FORM': upload_form,
             'PREDICTION_TIME': prediction_time,
-            'USED_MODEL': used_model
+            'USED_MODEL': used_model,
+            'DATABASE': json.dumps(database),
+            'EVALUATION_DATA': json.dumps(evaluation_data)
         }
         self.respond_html(self.get_template('body') % {'CONTENT': html_content})
         return True
