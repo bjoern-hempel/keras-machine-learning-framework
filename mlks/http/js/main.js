@@ -31,7 +31,7 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         let categories = database['categories'];
         let name = className;
 
-        if (className in classes) {
+        if (className in classes && classes[className]['name'][language]) {
             name = '<b>' + classes[className]['name'][language] + '</b>';
         }
 
