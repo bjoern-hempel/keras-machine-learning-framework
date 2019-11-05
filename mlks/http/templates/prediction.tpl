@@ -20,7 +20,7 @@
 
         classTemplate = '<tr>' +
             '<td class="is-size-6" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(name)s</td>' +
-            '<td class="is-size-4" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(percent)s</td>' +
+            '<td class="is-size-5" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(percent)s</td>' +
         '</tr>';
         classTemplateExtra = '<tr><td colspan="2" class="is-size-7" style="padding: 0 10px 5px 10px;">%%(more)s</td></tr>';
 
