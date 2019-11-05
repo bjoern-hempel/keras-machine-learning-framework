@@ -41,8 +41,9 @@
     <p>In the order in which the model would classify the image.</p>
     <p>&nbsp;</p>
     <p>
-        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'GB'); return false;">GB</a> -
-        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'DE'); return false;">DE</a>
+        &nbsp;
+        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'GB'); return false;">English</a> -
+        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'DE'); return false;">German</a>
     <p/>
     <div class="table-container">
         <table class="table is-fullwidth is-hoverable" id="prediction-table"></table>
