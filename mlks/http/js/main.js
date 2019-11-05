@@ -47,7 +47,7 @@ window.getExtraInformationText = function(database, className, language) {
 
         extraInformationText += '<b>Wikipedia:</b> </b>' +
             '<a href="' + classes[className]['urls']['wikipedia'][language] + '" target="_blank">' +
-            classes[className]['urls']['wikipedia'][language] +
+            classes[className]['name'][language] +
             '</a>'
         ;
     }
