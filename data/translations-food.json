@@ -115,6 +115,25 @@
                 "spoonacular": null
             }
         },
+        "coffee": {
+            "name": {
+                "DE": "Kaffee",
+                "GB": "Coffee"
+            },
+            "related-categories": [],
+            "parent-categories": ["drink"],
+            "description": {
+                "DE": "Kaffee oder Kaffeegetränk ist ein schwarzes, psychotropes, koffeinhaltiges Getränk, das aus gerösteten und gemahlenen Kaffeebohnen, den Samen der Frucht der Kaffeepflanze, und heißem Wasser hergestellt wird.",
+                "GB": "Coffee is a brewed drink prepared from roasted coffee beans, the seeds of berries from certain Coffea species."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Kaffee",
+                    "GB": "https://en.wikipedia.org/wiki/Coffee"
+                },
+                "spoonacular": null
+            }
+        },
         "dessert": {
             "name": {
                 "DE": "Nachspeise",
@@ -2247,19 +2266,19 @@
         },
         "cappuccino": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cappuccino",
+                "GB": "Cappuccino"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "coffee"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cappuccino ist ein italienisches Kaffeegetränk, das aus einem Espresso und heißem Milchschaum zubereitet wird.",
+                "GB": "A cappuccino is an espresso-based coffee drink that originated in Italy, and is traditionally prepared with steamed milk foam (microfoam)."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Cappuccino",
+                    "GB": "https://en.wikipedia.org/wiki/Cappuccino"
                 },
                 "spoonacular": null
             }
@@ -6351,19 +6370,19 @@
         },
         "flat white": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Flat White",
+                "GB": "Flat white"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "coffee"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "\"Flat White\" ist eine Bezeichnung für die Zubereitungsvariante eines Cappuccinos, der in der Regel mit Latte Art verziert wird.",
+                "GB": "A flat white is a coffee drink consisting of espresso with microfoam (steamed milk with small, fine bubbles and a glossy or velvety consistency)."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Flat_White",
+                    "GB": "https://en.wikipedia.org/wiki/Flat_white"
                 },
                 "spoonacular": null
             }
@@ -8859,19 +8878,19 @@
         },
         "latte": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Milchkaffee",
+                "GB": "Latte"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "coffee"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Milchkaffee ist ein Kaffee mit einem hohen Anteil Milch oder Milchschaum, der in verschiedenen Ländern vor allem morgens getrunken wird.",
+                "GB": "A latte is a coffee drink made with espresso and steamed milk."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Milchkaffee",
+                    "GB": "https://en.wikipedia.org/wiki/Latte"
                 },
                 "spoonacular": null
             }
