@@ -40,10 +40,16 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
             replace(/%\(percent\)s/, percent + '%');
 
         if (className in classes) {
-            let description = classes[className]['description'][language];
+            let description = '';
+
+            if (classes[className]['description'][language]) {
+                description = classes[className]['description'][language];
+            }
 
             if (classes[className]['urls']['wikipedia'][language]) {
-                description += '<br /><b>Wikipedia:</b> </b>' +
+                description += description ? '<br />' : '';
+
+                description += '<b>Wikipedia:</b> </b>' +
                     '<a href="' + classes[className]['urls']['wikipedia'][language] + '" target="_blank">' +
                     classes[className]['urls']['wikipedia'][language] +
                     '</a>'
@@ -54,7 +60,9 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
 
             for (let categoryId in categoriesCurrent) {
                 let categoryCurrent = categoriesCurrent[categoryId];
-                description += '<br /><b>Category:</b> ' +
+
+                description += description ? '<br />' : '';
+                description += '<b>Category:</b> ' +
                     '<a href="' + categories[categoryCurrent]['urls']['wikipedia'][language] + '" target="_blank">' +
                         categories[categoryCurrent]['name'][language] +
                     '</a>'
