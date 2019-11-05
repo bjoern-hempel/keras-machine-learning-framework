@@ -3810,41 +3810,25 @@
         },
         "cinnamon roll": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Zimtschnecke",
+                "GB": "Cinnamon roll"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Eine Zimtschnecke (in Österreich auch Zuckerschnecke genannt, dänisch: Kanelsnegl) ist ein süßes Gebäck, das in Skandinavien und Mitteleuropa, aber auch in ganz Nordamerika (als Cinnamon roll oder brioche à la cannelle) verbreitet ist.",
+                "GB": "A cinnamon roll (also cinnamon bun, cinnamon swirl, cinnamon Danish and cinnamon snail) is a sweet roll served commonly in Northern Europe (mainly in Scandinavia) and North America."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Zimtschnecke",
+                    "GB": "https://en.wikipedia.org/wiki/Cinnamon_roll"
                 },
                 "spoonacular": null
             }
         },
         "cinnamon rolls": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "cinnamon roll"
         },
         "cioppino": {
             "name": {
@@ -3961,23 +3945,7 @@
             }
         },
         "coca cola": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "cola"
         },
         "cocktail": {
             "name": {
@@ -4208,39 +4176,23 @@
             }
         },
         "coke": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "cola"
         },
         "cola": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cola",
+                "GB": "Cola"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cola, auch Kola, ist ein coffein- und kohlensäurehaltiges Erfrischungsgetränk.",
+                "GB": "Cola is a sweetened, carbonated soft drink flavored with vanilla, cinnamon, citrus oils and other flavorings."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Cola",
+                    "GB": "https://en.wikipedia.org/wiki/Cola"
                 },
                 "spoonacular": null
             }
@@ -4950,41 +4902,25 @@
         },
         "cupcake": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Cupcake",
+                "GB": "Cupcake"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Cupcake (amerikanisches Englisch; im britischen Englisch auch fairy cake) ist ein kleiner Kuchen, der in einer tassengroßen Backform gebacken wird und mit einem Guss oder einer Cremehaube versehen ist.",
+                "GB": "A cupcake (also British English: fairy cake; Hiberno-English: bun; Australian English: fairy cake or patty cake) is a small cake designed to serve one person, which may be baked in a small thin paper or aluminum cup."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Cupcake",
+                    "GB": "https://en.wikipedia.org/wiki/Cupcake"
                 },
                 "spoonacular": null
             }
         },
         "cupcakes": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "cupcake"
         },
         "curly fries": {
             "name": {
@@ -5006,39 +4942,23 @@
             }
         },
         "curries": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "curry"
         },
         "curry": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Curry",
+                "GB": "Curry"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Curry ist die Bezeichnung für Gerichte der südasiatischen, südostasiatischen und japanischen Küche auf der Basis einer sämigen Sauce mit verschiedenen Gewürzen und Zugaben von Fleisch, Fisch oder Gemüse.",
+                "GB": "Curry (plural curries) is a variety of dishes originating in the Indian subcontinent that use a complex combination of spices or herbs, usually including ground turmeric, cumin, coriander, ginger, and fresh or dried chilies."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Curry_(Gericht)",
+                    "GB": "https://en.wikipedia.org/wiki/Curry"
                 },
                 "spoonacular": null
             }
@@ -5234,80 +5154,32 @@
             }
         },
         "dog": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "hotdog"
         },
         "dogs": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "dog"
         },
         "donut": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Donut",
+                "GB": "Donut"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Donut ist ein handtellergroßer amerikanischer/kanadischer Krapfen aus Hefeteig oder Rührteig (auch Schmalzgebäckkringel oder Lochkrapfen genannt).",
+                "GB": "A doughnut or donut (the latter spelling often seen in American English) is a type of fried dough confection or dessert food."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Donut",
+                    "GB": "https://en.wikipedia.org/wiki/Doughnut"
                 },
                 "spoonacular": null
             }
         },
         "donuts": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "donut"
         },
         "double cheeseburger": {
             "name": {
@@ -5329,42 +5201,10 @@
             }
         },
         "doughnut": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "donut"
         },
         "doughnuts": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "doughnut"
         },
         "drunken noodles": {
             "name": {
@@ -7976,61 +7816,29 @@
             }
         },
         "hot dog": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "hotdog"
         },
         "hotdog": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Hotdog",
+                "GB": "Hot dog"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Der Hotdog (englisch für heißer Hund, auch Hot Dog) ist ein Fast-Food-Gericht, das aus einer warmen Brühwurst mit weiteren Zutaten in einem weichen Weizenbrötchen besteht.",
+                "GB": "The hot dog (also spelled hotdog) or dog is a grilled or steamed link-sausage sandwich where the sausage is served in the slit of a partially sliced bun."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Hotdog",
+                    "GB": "https://en.wikipedia.org/wiki/Hot_dog"
                 },
                 "spoonacular": null
             }
         },
         "hot dogs": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "hot dog"
         },
         "huevos rancheros": {
             "name": {
