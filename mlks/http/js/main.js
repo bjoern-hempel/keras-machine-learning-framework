@@ -72,9 +72,8 @@ window.getExtraInformationText = function(database, className, language) {
     return extraInformationText;
 };
 
-window.renewPredictionOverview = function(database, evaluationData, titleTemplate, classTemplate, classTemplateExtraInformation) {
+window.renewPredictionOverview = function(database, evaluationData, titleTemplate, classTemplate, classTemplateExtraInformation, language) {
     let html = titleTemplate;
-    let language = 'GB';
 
     for (let index in evaluationData['prediction_overview_array']) {
         let predictionItem = evaluationData['prediction_overview_array'][index];

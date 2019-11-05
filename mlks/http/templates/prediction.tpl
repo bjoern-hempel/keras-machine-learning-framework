@@ -40,11 +40,15 @@
     <h3 class="subtitle">Prediction classes</h3>
     <p>In the order in which the model would classify the image.</p>
     <p>&nbsp;</p>
+    <p>
+        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'GB'); return false;">GB</a> -
+        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'DE'); return false;">DE</a>
+    <p/>
     <div class="table-container">
         <table class="table is-fullwidth is-hoverable" id="prediction-table"></table>
         <script>
 
-            window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra);
+            window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'GB');
 
         </script>
     </div>
