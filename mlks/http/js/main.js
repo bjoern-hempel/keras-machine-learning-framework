@@ -58,6 +58,10 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
 
             let categoriesCurrent = classes[className]['categories'];
 
+            if (categoriesCurrent.length > 0) {
+                description += description ? '<br />' : '';
+            }
+
             for (let categoryId in categoriesCurrent) {
                 let categoryCurrent = categoriesCurrent[categoryId];
 
