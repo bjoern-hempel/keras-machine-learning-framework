@@ -4223,19 +4223,19 @@
         },
         "coffee": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Kaffee",
+                "GB": "Coffee"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "coffee"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Kaffee oder Kaffeegetränk ist ein schwarzes, psychotropes, koffeinhaltiges Getränk, das aus gerösteten und gemahlenen Kaffeebohnen, den Samen der Frucht der Kaffeepflanze, und heißem Wasser hergestellt wird.",
+                "GB": "Coffee is a brewed drink prepared from roasted coffee beans, the seeds of berries from certain Coffea species."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Kaffee",
+                    "GB": "https://en.wikipedia.org/wiki/Coffee"
                 },
                 "spoonacular": null
             }
@@ -5819,19 +5819,19 @@
         },
         "espresso": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Espresso",
+                "GB": "Espresso"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "coffee"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Espresso ist eine aus Mailand stammende Kaffeezubereitungsart, bei der heißes Wasser mit hohem Druck durch sehr fein gemahlenes Kaffeemehl aus gerösteten Kaffeebohnen gepresst wird.",
+                "GB": "Espresso is coffee of Italian origin, brewed by forcing a small amount of nearly boiling water under pressure (expressing) through finely ground coffee beans."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Espresso",
+                    "GB": "https://en.wikipedia.org/wiki/Espresso"
                 },
                 "spoonacular": null
             }
