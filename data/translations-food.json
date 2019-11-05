@@ -39,6 +39,25 @@
                 "spoonacular": null
             }
         },
+        "bread": {
+            "name": {
+                "DE": "Brot",
+                "GB": "Bread"
+            },
+            "related-categories": [],
+            "parent-categories": ["dish"],
+            "description": {
+                "DE": "Brot ist ein traditionelles Nahrungsmittel, das aus einem Teig aus gemahlenem Getreide (Mehl), Wasser, einem Triebmittel und meist weiteren Zutaten gebacken wird.",
+                "GB": "Bread is a staple food prepared from a dough of flour and water, usually by baking."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Brot",
+                    "GB": "https://en.wikipedia.org/wiki/Bread"
+                },
+                "spoonacular": null
+            }
+        },
         "breakfast": {
             "name": {
                 "DE": "Frühstück",
@@ -72,7 +91,7 @@
             "urls": {
                 "wikipedia": {
                     "DE": "https://de.wikipedia.org/wiki/Hamburger",
-                    "GB": "https://en.wikipedia.org/wiki/Chicken_as_food"
+                    "GB": "https://en.wikipedia.org/wiki/Hamburger"
                 },
                 "spoonacular": null
             }
@@ -377,6 +396,25 @@
                 "wikipedia": {
                     "DE": "https://de.wikipedia.org/wiki/Tee",
                     "GB": "https://en.wikipedia.org/wiki/Tea"
+                },
+                "spoonacular": null
+            }
+        },
+        "vegetable": {
+            "name": {
+                "DE": "Gemüse",
+                "GB": "Vegetable"
+            },
+            "related-categories": [],
+            "parent-categories": ["dish"],
+            "description": {
+                "DE": "Gemüse ist heute ein Sammelbegriff für essbare Pflanzenteile wild wachsender oder in Kultur genommener Pflanzen.",
+                "GB": "Vegetables are parts of plants that are consumed by humans or other animals as food."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Gem%C3%BCse",
+                    "GB": "https://en.wikipedia.org/wiki/Vegetable"
                 },
                 "spoonacular": null
             }
@@ -1353,23 +1391,7 @@
             }
         },
         "bison burger": {
-            "name": {
-                "DE": "Buffalo-Burger",
-                "GB": "Buffalo burger"
-            },
-            "related-classes": [],
-            "categories": ["dish", "meat", "beef"],
-            "description": {
-                "DE": "Bison-Burger sind Hamburger, die aus Fleisch vom Rind oder amerikanischen Bison (Bison-Bison) hergestellt werden.",
-                "GB": "Buffalo burgers are hamburgers made with meat from the beefalo or American bison (Bison bison)."
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": "https://en.wikipedia.org/wiki/Buffalo_burger"
-                },
-                "spoonacular": null
-            }
+            "duplicate": "buffalo burger"
         },
         "bisque": {
             "name": {
@@ -1696,128 +1718,112 @@
         },
         "breeze": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Sea Breeze",
+                "GB": "Sea Breeze"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "cocktail"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "A Sea Breeze ist ein Cocktail mit Wodka mit Preiselbeersaft und Grapefruitsaft.",
+                "GB": "A Sea Breeze is a cocktail containing vodka with cranberry juice and grapefruit juice."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Sea_Breeze_(cocktail)"
                 },
                 "spoonacular": null
             }
         },
         "brioche": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Brioche",
+                "GB": "Brioche"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Die Brioche, im Deutschen gelegentlich als „Apostelkuchen“ bezeichnet, ist ein feines Tafelgebäck aus ei- und fettreichem Hefeteig, das aus zwei oder drei verschieden großen und pyramidenartig aufeinander gesetzten Teigkugeln besteht.",
+                "GB": "Brioche is a bread of French origin that is similar to a highly enriched pastry, and whose high egg and butter content (400 grams for each kilogram of flour) give it a rich and tender crumb."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Brioche",
+                    "GB": "https://en.wikipedia.org/wiki/Brioche"
                 },
                 "spoonacular": null
             }
         },
         "brisket": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Rinderbrust",
+                "GB": "Brisket"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Die Rinderbrust ist in der Kochkunst bzw. im Fleischer-Gewerbe ein mäßig durchwachsenes, langfaseriges Teilstück des Vorderviertels vom Rind.",
+                "GB": "Brisket is a cut of meat from the breast or lower chest of beef or veal."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Rinderbrust",
+                    "GB": "https://en.wikipedia.org/wiki/Brisket"
                 },
                 "spoonacular": null
             }
         },
         "broccoli rabe": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Rübstiel",
+                "GB": "Rapini"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "vegetable"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Als Rübstiel bezeichnet man die als Gemüse verwendeten Stiele und Blätter einiger Unterarten des Rübsen.",
+                "GB": "Rapini or broccoli rabe is a green cruciferous vegetable, with the leaves, buds, and stems all being edible; the buds somewhat resemble broccoli, but do not form a large head."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/R%C3%BCbstiel",
+                    "GB": "https://en.wikipedia.org/wiki/Rapini"
                 },
                 "spoonacular": null
             }
         },
         "brownie": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Brownie",
+                "GB": "Chocolate brownie"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Brownie (auch Boston Brownie) ist ein traditioneller Kuchen der US-amerikanischen Küche.",
+                "GB": "A chocolate brownie (commonly referred to as simply brownie) is a square or rectangular, baked, chocolate cake. Brownies come in a variety of forms and may be either fudgy or cakey, depending on their density."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Brownie_(Geb%C3%A4ck)",
+                    "GB": "https://en.wikipedia.org/wiki/Chocolate_brownie"
                 },
                 "spoonacular": null
             }
         },
         "brownies": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "brownie"
         },
         "brownie sundae": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Brownie Sundae",
+                "GB": "Brownie Sundae"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Brownie Eisbecher ist einfach ein Eisbecher auf einem Brownie.",
+                "GB": "A Brownie Sundae is simply a sundae on top of a brownie."
             },
             "urls": {
                 "wikipedia": {
@@ -1829,247 +1835,183 @@
         },
         "brunch": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Brunch",
+                "GB": "Brunch"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Als Brunch wird eine Mahlzeit bezeichnet, die aus Komponenten des Frühstücks und des Mittagessens besteht.",
+                "GB": "Brunch is a combination of breakfast and lunch, and regularly has some form of alcoholic drink (most usually champagne or a cocktail) served with it."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Brunch",
+                    "GB": "https://en.wikipedia.org/wiki/Brunch"
                 },
                 "spoonacular": null
             }
         },
         "bruschetta": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bruschetta",
+                "GB": "Bruschetta"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "starter"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bruschetta gehört zu den italienischen Antipasti.",
+                "GB": "Bruschetta is an antipasto from Italy consisting of grilled bread rubbed with garlic and topped with olive oil and salt."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bruschetta",
+                    "GB": "https://en.wikipedia.org/wiki/Bruschetta"
                 },
                 "spoonacular": null
             }
         },
         "bubble tea": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bubble Tea",
+                "GB": "Bubble tea"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink", "tea"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bubble Tea, international auch bekannt unter dem Namen Pearl Milk Tea oder Boba, ist ein taiwanisches Getränk auf der Basis von gesüßtem grünem oder schwarzem Tee, das häufig mit Milch und Fruchtsirup versetzt und wie ein Milchshake zubereitet wird.",
+                "GB": "Bubble tea (also known as pearl milk tea, bubble milk tea, or boba) is a Taiwanese tea-based drink invented in Tainan and Taichung in the 1980s."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bubble_Tea",
+                    "GB": "https://en.wikipedia.org/wiki/Bubble_tea"
                 },
                 "spoonacular": null
             }
         },
         "bucatini": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bucatini",
+                "GB": "Bucatini"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "pasta"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bucatini oder Perciatelli sind röhrenförmige Nudeln aus Hartweizenmehl, die bei einem Durchmesser von 3 mm und einer Wanddicke von 1 mm eine Länge von etwa 30 cm besitzen, vor dem Kochen allerdings auch in kürzere Stücke zerbrochen werden können.",
+                "GB": "Bucatini, also known as perciatelli, is a thick spaghetti-like pasta with a hole running through the center."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bucatini",
+                    "GB": "https://en.wikipedia.org/wiki/Bucatini"
                 },
                 "spoonacular": null
             }
         },
         "buffalo burger": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Buffalo-Burger",
+                "GB": "Buffalo burger"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "meat", "beef"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bison-Burger sind Hamburger, die aus Fleisch vom Rind oder amerikanischen Bison (Bison-Bison) hergestellt werden.",
+                "GB": "Buffalo burgers are hamburgers made with meat from the beefalo or American bison (Bison bison)."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Buffalo_burger"
                 },
                 "spoonacular": null
             }
         },
         "buffalo chicken": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "chicken wings"
         },
         "buffalo wings": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "chicken wings"
         },
         "bulgogi": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bulgogi",
+                "GB": "Bulgogi"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bulgogi ist ein Fleischgericht der koreanischen Küche. In Korea gilt es als Festtagsgericht.",
+                "GB": "Bulgogi is a gui made of thin, marinated slices of beef or pork grilled on a barbecue or on a stove-top griddle."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bulgogi",
+                    "GB": "https://en.wikipedia.org/wiki/Bulgogi"
                 },
                 "spoonacular": null
             }
         },
         "bun": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Bun",
+                "GB": "Bun"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "bread"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Bun ist ein weiches Brötchen, wahlweise mit Sesam bestreut, das in runder Form für Hamburger und in länglicher Form für Hot Dogs verwendet wird.",
+                "GB": "A bun is a small, sometimes sweet, bread-based item or roll."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Bun",
+                    "GB": "https://en.wikipedia.org/wiki/Bun"
                 },
                 "spoonacular": null
             }
         },
         "buns": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "bun"
         },
         "burger": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Hamburger",
+                "GB": "Hamburger"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "burger"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Hamburger (kurz Burger) ist ein warmes Schnell- oder Fertiggericht und der Standardartikel vieler Fast-Food-Ketten.",
+                "GB": "A hamburger (short: burger) is a sandwich consisting of one or more cooked patties of ground meat, usually beef, placed inside a sliced bread roll or bun."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Hamburger",
+                    "GB": "https://en.wikipedia.org/wiki/Hamburger"
                 },
                 "spoonacular": null
             }
         },
         "burgers": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "burger"
         },
         "burrito": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Burrito",
+                "GB": "Burrito"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Burrito ist eine gefüllte Tortilla aus Weizenmehl und ein Gericht aus der mexikanischen und Tex-Mex-Küche.",
+                "GB": "A burrito is a dish in Mexican and Tex-Mex cuisine that consists of a flour tortilla wrapped into a sealed cylindrical shape around various ingredients."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Burrito",
+                    "GB": "https://en.wikipedia.org/wiki/Burrito"
                 },
                 "spoonacular": null
             }
@@ -2094,23 +2036,7 @@
             }
         },
         "burritos": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "burrito"
         },
         "butter chicken": {
             "name": {
@@ -3367,23 +3293,7 @@
             }
         },
         "chicken wing": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "singular": "chicken wings"
         },
         "chicken wings": {
             "name": {
@@ -7851,42 +7761,10 @@
             }
         },
         "hamburger": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "burger"
         },
         "hamburgers": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "hamburger"
         },
         "hash": {
             "name": {
