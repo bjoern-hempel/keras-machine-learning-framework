@@ -121,15 +121,15 @@ window.getName = function(database, className, language) {
     }
     if (finalClassNameConfig['is-plural']) {
         nameAdd += nameAdd !== '' ? ', ' : '';
-        nameAdd += ' <span class="is-size-7">' + translatePlural[language] + '"<b>' + finalClassNameConfig['is-plural'] + '</b>"' + '</span>';
+        nameAdd += ' <span class="is-size-7" style="color: red;">' + translatePlural[language] + '"<b>' + finalClassNameConfig['is-plural'] + '</b>"' + '</span>';
     }
     if (finalClassNameConfig['is-singular']) {
         nameAdd += nameAdd !== '' ? ', ' : '';
-        nameAdd += ' <span class="is-size-7">' + translateSingular[language] + '"<b>' + finalClassNameConfig['is-singular'] + '</b>"' + '</span>';
+        nameAdd += ' <span class="is-size-7" style="color: red;">' + translateSingular[language] + '"<b>' + finalClassNameConfig['is-singular'] + '</b>"' + '</span>';
     }
     if (finalClassNameConfig['is-duplicate']) {
         nameAdd += nameAdd !== '' ? ', ' : '';
-        nameAdd += ' <span class="is-size-7">' + translateDuplicate[language] + '"<b>' + finalClassNameConfig['is-duplicate'] + '</b>"' + '</span>';
+        nameAdd += ' <span class="is-size-7" style="color: red;">' + translateDuplicate[language] + '"<b>' + finalClassNameConfig['is-duplicate'] + '</b>"' + '</span>';
     }
 
     return '<b>' + name + '</b>' + nameAdd;
