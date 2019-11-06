@@ -93,11 +93,7 @@ window.getName = function(database, className, language) {
     };
 
     if (finalClassNameConfig === null) {
-        if (name !== className) {
-            nameAdd += nameAdd !== '' ? ' - ' : '';
-            nameAdd += ' <span class="is-size-7">' + translateClassName[language] + ': "<b>' + className + '</b>"' + '</span>';
-        }
-        return '<b>' + name + '</b>' + nameAdd;
+        return '<b>' + name + '</b> <span class="is-size-7">(raw)</span>';
     }
 
     name = finalClassNameConfig['name'][language] === "" ? className : finalClassNameConfig['name'][language];
@@ -105,37 +101,50 @@ window.getName = function(database, className, language) {
 
     if (finalClassNameConfig['is-plural'] || finalClassNameConfig['is-singular'] || finalClassNameConfig['is-duplicate']) {
         if (finalClassNameConfig['original-class-name']) {
-            //nameAdd += nameAdd !== '' ? ' - ' : '';
-            nameAdd += '<br /><span class="is-size-7">' + translateClassName[language] + ': "<b>' + className + '</b>"' + '</span>';
+            nameAdd += nameAdd !== '' ? ', ' : '';
+            nameAdd += translateClassName[language] + ': "' + className + '"';
         } else {
             if (name !== className) {
-                //nameAdd += nameAdd !== '' ? ' - ' : '';
-                nameAdd += '<br /><span class="is-size-7">' + translateClassName[language] + ': "<b>' + className + '</b>"' + '</span>';
+                nameAdd += nameAdd !== '' ? ', ' : '';
+                nameAdd += translateClassName[language] + ': "' + className + '"';
             }
         }
     } else {
         if (name !== className) {
-            //nameAdd += nameAdd !== '' ? ' - ' : '';
-            nameAdd += '<br /><span class="is-size-7">' + translateClassName[language] + ': "<b>' + className + '</b>"' + '</span>';
+            nameAdd += nameAdd !== '' ? ', ' : '';
+            nameAdd += translateClassName[language] + ': "' + className + '"';
+        } else {
+            nameAdd += 'raw';
         }
     }
     if (finalClassNameConfig['is-plural']) {
-        //nameAdd += nameAdd !== '' ? ', ' : '';
-        nameAdd += '<br /><span class="is-size-7" style="color: red;">' + translatePlural[language] + '"<b>' + finalClassNameConfig['is-plural'] + '</b>"' + '</span>';
+        nameAdd += nameAdd !== '' ? ', ' : '';
+        nameAdd += '<span style="color: red;">' + translatePlural[language] + '"' + finalClassNameConfig['is-plural'] + '"' + '</span>';
     }
     if (finalClassNameConfig['is-singular']) {
-        //nameAdd += nameAdd !== '' ? ', ' : '';
-        nameAdd += '<br /><span class="is-size-7" style="color: red;">' + translateSingular[language] + '"<b>' + finalClassNameConfig['is-singular'] + '</b>"' + '</span>';
+        nameAdd += nameAdd !== '' ? ', ' : '';
+        nameAdd += '<span style="color: red;">' + translateSingular[language] + '"' + finalClassNameConfig['is-singular'] + '"' + '</span>';
     }
     if (finalClassNameConfig['is-duplicate']) {
-        //nameAdd += nameAdd !== '' ? ', ' : '';
-        nameAdd += '<br /><span class="is-size-7" style="color: red;">' + translateDuplicate[language] + '"<b>' + finalClassNameConfig['is-duplicate'] + '</b>"' + '</span>';
+        nameAdd += nameAdd !== '' ? ', ' : '';
+        nameAdd += '<span style="color: red;">' + translateDuplicate[language] + '"' + finalClassNameConfig['is-duplicate'] + '"' + '</span>';
     }
 
-    return '<b>' + name + '</b>' + nameAdd;
+    let nameString = '<b>' + name + '</b>';
+
+    if (nameAdd !== '') {
+        nameString += ' <span class="is-size-7">(' + nameAdd + ')</span>';
+    }
+
+    return nameString;
 };
 
 window.getExtraInformationText = function(database, className, language) {
+    let translateCategoriesLabel = {
+        'GB': 'Categories',
+        'DE': 'Kategorien'
+    };
+
     let categories = database['categories'];
     let extraInformationText = '';
     let finalClassNameConfig = window.getFinalClassNameConfig(database, className);
@@ -149,30 +158,27 @@ window.getExtraInformationText = function(database, className, language) {
     }
 
     if (finalClassNameConfig['urls']['wikipedia'][language]) {
-        extraInformationText += extraInformationText ? '<br /><br />' : '';
-
-        extraInformationText += '<b>Wikipedia:</b> </b>' +
-            '<a href="' + finalClassNameConfig['urls']['wikipedia'][language] + '" target="_blank">' +
-            finalClassNameConfig['name'][language] +
+        extraInformationText += '' +
+            ' <a href="' + finalClassNameConfig['urls']['wikipedia'][language] + '" target="_blank">' +
+                'Wikipedia (' + finalClassNameConfig['name'][language] + ')' +
             '</a>'
         ;
     }
 
     let categoriesCurrent = finalClassNameConfig['categories'];
-
-    if (categoriesCurrent.length > 0) {
-        extraInformationText += '<br />';
-    }
-
+    let categoryText = '';
     for (let categoryId in categoriesCurrent) {
         let categoryCurrent = categoriesCurrent[categoryId];
 
-        extraInformationText += extraInformationText ? '<br />' : '';
-        extraInformationText += '<b>Category:</b> ' +
+        categoryText += categoryText !== '' ? ', ' : '';
+        categoryText += '' +
             '<a href="' + categories[categoryCurrent]['urls']['wikipedia'][language] + '" target="_blank">' +
                 categories[categoryCurrent]['name'][language] +
             '</a>'
         ;
+    }
+    if (categoryText !== '') {
+        extraInformationText += '<br /><br /><b>' + translateCategoriesLabel[language] + ':</b> ' + categoryText;
     }
 
     return extraInformationText;
@@ -180,8 +186,22 @@ window.getExtraInformationText = function(database, className, language) {
 
 window.renewPredictionOverview = function(database, evaluationData, titleTemplate, classTemplate, classTemplateExtraInformation, language) {
     let html = titleTemplate;
+    let maxClasses = 15;
+    let counter = 0;
+
+    let links = '';
+    if (language === 'DE') {
+        links += '<a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, \'GB\'); return false;">Switch to English</a>';
+    } else {
+        links += '<a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, \'DE\'); return false;">Switch to German</a>';
+    }
+    document.getElementById('language-switcher').innerHTML = links;
 
     for (let index in evaluationData['prediction_overview_array']) {
+        if (counter >= maxClasses) {
+            break;
+        }
+
         let predictionItem = evaluationData['prediction_overview_array'][index];
         let className = predictionItem['class_name'].replace(/:$/, '');
         let percent = Math.round(predictionItem['predicted_value'] * 100 * 100) / 100;
@@ -192,11 +212,17 @@ window.renewPredictionOverview = function(database, evaluationData, titleTemplat
         /* add html templates */
         predictionHtml += classTemplate.
             replace(/%\(name\)s/, name).
-            replace(/%\(percent\)s/, percent + '%');
-        predictionHtml += classTemplateExtraInformation.
-            replace(/%\(more\)s/, extraInformationText);
+            replace(/%\(percent\)s/, percent + '%').
+            replace(/%\(classes\)s/, extraInformationText !== '' ? 'no-border' : '');
 
-        html += predictionHtml
+        if (extraInformationText !== '') {
+            predictionHtml += classTemplateExtraInformation.
+                replace(/%\(more\)s/, extraInformationText);
+        }
+
+        html += predictionHtml;
+
+        counter++;
     }
 
     document.getElementById('prediction-table').innerHTML = html;

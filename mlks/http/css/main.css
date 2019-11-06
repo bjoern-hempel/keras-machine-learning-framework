@@ -32,3 +32,26 @@ hr.info {
 .bordered {
     box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
+
+table.table tr th.prediction-header-class {
+    padding-left: 0;
+}
+
+table.table tr th.prediction-header-accuracy {
+    padding-right: 0;
+    text-align: right;
+}
+
+table.table tr td.prediction-title {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+table.table tr td.no-border {
+    border-bottom-width: 0px;
+}
+
+table.table tr td.prediction-description {
+    padding-right: 0;
+    padding-left: 0;
+}

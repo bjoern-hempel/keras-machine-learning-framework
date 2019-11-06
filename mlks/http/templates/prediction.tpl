@@ -16,13 +16,21 @@
 
         evaluationData = %(EVALUATION_DATA)s;
 
-        titleTemplate = '<tr><th class="is-size-5" style="padding: 5px 10px;">Class</th><th class="is-size-5" style="padding: 5px 10px;">Prediction</th></tr>'
+        titleTemplate = '' +
+            '<tr>' +
+                '<th class="is-size-5 prediction-header-class">Class</th>' +
+                '<th class="is-size-5 prediction-header-accuracy">Accuracy</th>' +
+            '</tr>';
 
-        classTemplate = '<tr>' +
-            '<td class="is-size-6" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(name)s</td>' +
-            '<td class="is-size-5" style="border-bottom-width: 0px; padding: 5px 10px 0 10px;">%%(percent)s</td>' +
-        '</tr>';
-        classTemplateExtra = '<tr><td colspan="2" class="is-size-7" style="padding: 0 10px 5px 10px;">%%(more)s</td></tr>';
+        classTemplate = '' +
+            '<tr>' +
+                '<td colspan="2" class="is-size-6 prediction-title %%(classes)s"><div style="float: right; margin-left: 10px;">%%(percent)s</div>%%(name)s</td>' +
+            '</tr>';
+
+        classTemplateExtra = '' +
+            '<tr>' +
+                '<td colspan="2" class="is-size-7 prediction-description">%%(more)s</td>' +
+            '</tr>';
 
     </script>
 
@@ -40,11 +48,7 @@
     <h3 class="subtitle">Prediction classes</h3>
     <p>In the order in which the model would classify the image.</p>
     <p>&nbsp;</p>
-    <p>
-        &nbsp;
-        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'GB'); return false;">English</a> -
-        <a href="#" onclick="window.renewPredictionOverview(database, evaluationData, titleTemplate, classTemplate, classTemplateExtra, 'DE'); return false;">German</a>
-    <p/>
+    <p id="language-switcher"><p/>
     <div class="table-container">
         <table class="table is-fullwidth is-hoverable" id="prediction-table"></table>
         <script>
