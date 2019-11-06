@@ -19,40 +19,116 @@ window.submitPicture = function () {
     return true;
 };
 
-window.getName = function(database, className, language) {
+window.getFinalClassNameConfig = function(database, className, finalClassNameConfig = {}) {
     let classes = database['classes'];
 
-    if (className in classes && classes[className]['name'][language]) {
-        return '<b>' + classes[className]['name'][language] + '</b>';
+    /* clone object */
+    finalClassNameConfig = JSON.parse(JSON.stringify(finalClassNameConfig));
+
+    /* the class name was not found */
+    if (!(className in classes)) {
+        return null;
     }
 
-    return '<b>' + className + '</b>';
+    /* Plural was found */
+    if (('plural' in classes[className]) && (classes[className]['plural'] in classes)) {
+        finalClassNameConfig['is-plural'] = classes[className]['plural'];
+
+        if (!('original-class-name' in finalClassNameConfig)) {
+            finalClassNameConfig['original-class-name'] = className;
+        }
+
+        return window.getFinalClassNameConfig(database, classes[className]['plural'], finalClassNameConfig);
+    }
+
+    /* Singular was found */
+    if (('singular' in classes[className]) && (classes[className]['singular'] in classes)) {
+        finalClassNameConfig['is-singular'] = classes[className]['singular'];
+
+        if (!('original-class-name' in finalClassNameConfig)) {
+            finalClassNameConfig['original-class-name'] = className;
+        }
+
+        return window.getFinalClassNameConfig(database, classes[className]['singular'], finalClassNameConfig);
+    }
+
+    /* Singular was found */
+    if (('duplicate' in classes[className]) && (classes[className]['duplicate'] in classes)) {
+        finalClassNameConfig['is-duplicate'] = classes[className]['duplicate'];
+
+        if (!('original-class-name' in finalClassNameConfig)) {
+            finalClassNameConfig['original-class-name'] = className;
+        }
+
+        return window.getFinalClassNameConfig(database, classes[className]['duplicate'], finalClassNameConfig);
+    }
+
+    let classesConfig = JSON.parse(JSON.stringify(classes[className]));
+
+    finalClassNameConfig = Object.assign(classesConfig, finalClassNameConfig);
+
+    return finalClassNameConfig;
+}
+
+window.getName = function(database, className, language) {
+    let finalClassNameConfig = window.getFinalClassNameConfig(database, className);
+
+    if (finalClassNameConfig === null) {
+        return '<b>' + className + '</b>';
+    }
+
+    let name = finalClassNameConfig['name'][language] === "" ? className : finalClassNameConfig['name'][language];
+    let nameAdd = '';
+
+    if (finalClassNameConfig['original-class-name']) {
+        nameAdd += nameAdd !== '' ? ' - ' : '';
+        nameAdd += ' <span class="is-size-7">' + 'Original class name: "' + finalClassNameConfig['original-class-name'] + '"' + '</span>';
+    } else {
+        if (name !== className) {
+            nameAdd += nameAdd !== '' ? ' - ' : '';
+            nameAdd += ' <span class="is-size-7">' + 'Original class name: "' + className + '"' + '</span>';
+        }
+    }
+    if (finalClassNameConfig['is-plural']) {
+        nameAdd += nameAdd !== '' ? ' - ' : '';
+        nameAdd += ' <span class="is-size-7">Plural</span>';
+    }
+    if (finalClassNameConfig['is-singular']) {
+        nameAdd += nameAdd !== '' ? ' - ' : '';
+        nameAdd += ' <span class="is-size-7">Singular</span>';
+    }
+    if (finalClassNameConfig['is-duplicate']) {
+        nameAdd += nameAdd !== '' ? ' - ' : '';
+        nameAdd += ' <span class="is-size-7">Duplicate</span>';
+    }
+
+    return '<b>' + name + '</b>' + nameAdd;
 };
 
 window.getExtraInformationText = function(database, className, language) {
-    let classes = database['classes'];
     let categories = database['categories'];
     let extraInformationText = '';
+    let finalClassNameConfig = window.getFinalClassNameConfig(database, className);
 
-    if (!(className in classes)) {
+    if (finalClassNameConfig === null) {
         return extraInformationText;
     }
 
-    if (classes[className]['description'][language]) {
-        extraInformationText = classes[className]['description'][language];
+    if (finalClassNameConfig['description'][language]) {
+        extraInformationText = finalClassNameConfig['description'][language];
     }
 
-    if (classes[className]['urls']['wikipedia'][language]) {
+    if (finalClassNameConfig['urls']['wikipedia'][language]) {
         extraInformationText += extraInformationText ? '<br />' : '';
 
         extraInformationText += '<b>Wikipedia:</b> </b>' +
-            '<a href="' + classes[className]['urls']['wikipedia'][language] + '" target="_blank">' +
-            classes[className]['name'][language] +
+            '<a href="' + finalClassNameConfig['urls']['wikipedia'][language] + '" target="_blank">' +
+            finalClassNameConfig['name'][language] +
             '</a>'
         ;
     }
 
-    let categoriesCurrent = classes[className]['categories'];
+    let categoriesCurrent = finalClassNameConfig['categories'];
 
     if (categoriesCurrent.length > 0) {
         extraInformationText += '<br />';

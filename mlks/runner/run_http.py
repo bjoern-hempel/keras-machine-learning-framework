@@ -197,7 +197,27 @@ class HttpRunner:
                     },
                     {
                         'class_name': 'martini_on_the_rock',
+                        'predicted_value': 0.0011
+                    },
+                    {
+                        'class_name': 'dogs',
                         'predicted_value': 0.0010
+                    },
+                    {
+                        'class_name': 'dog',
+                        'predicted_value': 0.0009
+                    },
+                    {
+                        'class_name': 'hot dogs',
+                        'predicted_value': 0.0008
+                    },
+                    {
+                        'class_name': 'hot dog',
+                        'predicted_value': 0.0007
+                    },
+                    {
+                        'class_name': 'hotdog',
+                        'predicted_value': 0.0006
                     }
                 ]
             }
