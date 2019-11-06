@@ -149,7 +149,7 @@ window.getExtraInformationText = function(database, className, language) {
     }
 
     if (finalClassNameConfig['urls']['wikipedia'][language]) {
-        extraInformationText += extraInformationText ? '<br />' : '';
+        extraInformationText += extraInformationText ? '<br /><br />' : '';
 
         extraInformationText += '<b>Wikipedia:</b> </b>' +
             '<a href="' + finalClassNameConfig['urls']['wikipedia'][language] + '" target="_blank">' +
