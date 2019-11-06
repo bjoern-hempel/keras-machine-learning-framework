@@ -286,6 +286,25 @@
                 "spoonacular": null
             }
         },
+        "pizza": {
+            "name": {
+                "DE": "Pizza",
+                "GB": "Pizza"
+            },
+            "related-categories": [],
+            "parent-categories": ["dish"],
+            "description": {
+                "DE": "Pizza ist ein vor dem Backen würzig belegtes Fladenbrot aus einfachem Hefeteig aus der italienischen Küche.",
+                "GB": "Pizza is a savory dish of Italian origin, consisting of a usually round, flattened base of leavened wheat-based dough topped with tomatoes, cheese, and often various other ingredients (anchovies, olives, meat, etc.) baked at a high temperature, traditionally in a wood-fired oven."
+            },
+            "urls": {
+                "wikipedia": {
+                    "DE": "https://de.wikipedia.org/wiki/Pizza",
+                    "GB": "https://en.wikipedia.org/wiki/Pizza"
+                },
+                "spoonacular": null
+            }
+        },
         "salad": {
             "name": {
                 "DE": "Salat",
@@ -9466,23 +9485,7 @@
             }
         },
         "margherita pizza": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "duplicate": "pizza margherita"
         },
         "marmalade": {
             "name": {
@@ -11652,19 +11655,19 @@
         },
         "pizza margherita": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Pizza Margherita",
+                "GB": "Pizza Margherita"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "pizza"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Pizza Margherita (im Englischen besser bekannt als Margherita-Pizza) ist eine typisch neapolitanische Pizza, hergestellt aus San Marzano-Tomaten, Mozzarella-Käse, frischem Basilikum, Salz und nativem Olivenöl extra.",
+                "GB": "Pizza Margherita (more commonly known in English as Margherita pizza) is a typical Neapolitan pizza, made with San Marzano tomatoes, mozzarella cheese, fresh basil, salt and extra-virgin olive oil."
             },
             "urls": {
                 "wikipedia": {
                     "DE": null,
-                    "GB": null
+                    "GB": "https://en.wikipedia.org/wiki/Pizza_Margherita"
                 },
                 "spoonacular": null
             }
