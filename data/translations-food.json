@@ -516,6 +516,9 @@
                 "spoonacular": null
             }
         },
+        "anchovies": {
+            "plural": "anchovy"
+        },
         "anchovy": {
             "name": {
                 "DE": "Sardellen",
@@ -554,6 +557,9 @@
                 "spoonacular": null
             }
         },
+        "antipasti": {
+            "plural": "antipasto"
+        },
         "antipasto": {
             "name": {
                 "DE": "Antipasto",
@@ -591,6 +597,12 @@
                 },
                 "spoonacular": null
             }
+        },
+        "appetizer platter": {
+            "duplicate": "appetizer sampler platter"
+        },
+        "appetizer sampler": {
+            "duplicate": "appetizer sampler platter"
         },
         "appetizer sampler platter": {
             "name": {
@@ -668,6 +680,12 @@
                 "spoonacular": null
             }
         },
+        "apple pie": {
+            "duplicate": "apple cake"
+        },
+        "arroz con pollo": {
+            "duplicate": "chicken rice"
+        },
         "artichoke dip": {
             "name": {
                 "DE": "Artischockendip",
@@ -705,6 +723,12 @@
                 },
                 "spoonacular": null
             }
+        },
+        "baby back ribs": {
+            "duplicate": "spare ribs"
+        },
+        "baccala": {
+            "duplicate": "stockfish"
         },
         "baguette": {
             "name": {
@@ -800,6 +824,9 @@
                 },
                 "spoonacular": null
             }
+        },
+        "baked potatoes": {
+            "plural": "baked potato"
         },
         "baked ziti": {
             "name": {
@@ -991,6 +1018,9 @@
                 "spoonacular": null
             }
         },
+        "bass": {
+            "duplicate": "sea bass"
+        },
         "battered fish": {
             "name": {
                 "DE": "Panierter Fisch",
@@ -1142,6 +1172,9 @@
                 },
                 "spoonacular": null
             }
+        },
+        "beef ribs": {
+            "duplicate": "beef short ribs"
         },
         "beef short ribs": {
             "name": {
@@ -1295,6 +1328,9 @@
                 "spoonacular": null
             }
         },
+        "benedict": {
+            "duplicate": "eggs benedict"
+        },
         "beurre blanc": {
             "name": {
                 "DE": "Beurre blanc",
@@ -1412,6 +1448,9 @@
                 "spoonacular": null
             }
         },
+        "black cod": {
+            "duplicate": "sablefish"
+        },
         "black tea": {
             "name": {
                 "DE": "Schwarzer Tee",
@@ -1469,6 +1508,9 @@
                 "spoonacular": null
             }
         },
+        "boba": {
+            "duplicate": ,"bubble tea"
+        },
         "bolognese": {
             "name": {
                 "DE": "Ragù alla bolognese",
@@ -1488,7 +1530,7 @@
                 "spoonacular": null
             }
         },
-        "boquerones": {
+        "boquerone": {
             "name": {
                 "DE": "Sardellen in Essig",
                 "GB": "Boquerones en vinagre"
@@ -1506,6 +1548,9 @@
                 },
                 "spoonacular": null
             }
+        },
+        "boquerones": {
+            "plural": "boquerone"
         },
         "bordeaux": {
             "name": {
@@ -1639,6 +1684,9 @@
                 },
                 "spoonacular": null
             }
+        },
+        "branzino": {
+            "duplicate": "sea bass"
         },
         "brandy": {
             "name": {
@@ -14034,6 +14082,9 @@
                 "spoonacular": null
             }
         },
+        "seabass": {
+            "duplicate": "sea bass"
+        },
         "seafood salad": {
             "name": {
                 "DE": "",
@@ -16979,40 +17030,43 @@
                 "spoonacular": null
             }
         },
-        "waffles": {
+        "waffle": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Waffel",
+                "GB": "Waffle"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish", "dessert"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Waffeln sind in ihrer einfachsten Form (Oblate) ein aus Mehl und Wasser bestehendes, flaches Feingebäck, das zwischen zwei heißen Eisen (Waffeleisen) gebacken wird.",
+                "GB": "A waffle is a dish made from leavened batter or dough that is cooked between two plates that are patterned to give a characteristic size, shape, and surface impression."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Waffel",
+                    "GB": "https://en.wikipedia.org/wiki/Waffle"
                 },
                 "spoonacular": null
             }
         },
+        "waffles": {
+            "plural": "waffle"
+        },
         "water": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Mineralwasser",
+                "GB": "Mineral water"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["drink"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Mineralwasser ist nach der deutschen Mineral- und Tafelwasserverordnung bzw. der österreichischen Mineralwasser- und Quellwasserverordnung ein Grundwasser mit besonderen Eigenschaften.",
+                "GB": "Mineral water is water from a mineral spring that contains various minerals, such as salts and sulfur compounds."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Mineralwasser",
+                    "GB": "https://en.wikipedia.org/wiki/Mineral_water"
                 },
                 "spoonacular": null
             }
