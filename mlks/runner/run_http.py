@@ -218,6 +218,10 @@ class HttpRunner:
                     {
                         'class_name': 'hotdog',
                         'predicted_value': 0.0006
+                    },
+                    {
+                        'class_name': 'cola',
+                        'predicted_value': 0.0006
                     }
                 ]
             }
