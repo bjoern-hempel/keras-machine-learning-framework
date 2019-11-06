@@ -80,13 +80,15 @@ window.getName = function(database, className, language) {
     let name = finalClassNameConfig['name'][language] === "" ? className : finalClassNameConfig['name'][language];
     let nameAdd = '';
 
-    if (finalClassNameConfig['original-class-name']) {
-        nameAdd += nameAdd !== '' ? ' - ' : '';
-        nameAdd += ' <span class="is-size-7">' + 'Original class name: "' + finalClassNameConfig['original-class-name'] + '"' + '</span>';
-    } else {
-        if (name !== className) {
+    if (finalClassNameConfig['is-plural'] || finalClassNameConfig['is-singular'] || finalClassNameConfig['is-duplicate']) {
+        if (finalClassNameConfig['original-class-name']) {
             nameAdd += nameAdd !== '' ? ' - ' : '';
-            nameAdd += ' <span class="is-size-7">' + 'Original class name: "' + className + '"' + '</span>';
+            nameAdd += ' <span class="is-size-7">' + 'Original class name: "' + finalClassNameConfig['original-class-name'] + '"' + '</span>';
+        } else {
+            if (name !== className) {
+                nameAdd += nameAdd !== '' ? ' - ' : '';
+                nameAdd += ' <span class="is-size-7">' + 'Original class name: "' + className + '"' + '</span>';
+            }
         }
     }
     if (finalClassNameConfig['is-plural']) {
