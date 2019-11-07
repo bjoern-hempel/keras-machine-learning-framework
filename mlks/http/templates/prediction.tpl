@@ -19,7 +19,7 @@
         titleTemplate = '' +
             '<tr>' +
                 '<th class="is-size-5 prediction-header-class">Class</th>' +
-                '<th class="is-size-5 prediction-header-accuracy">Accuracy</th>' +
+                '<th class="is-size-6 prediction-header-accuracy">Accuracy</th>' +
             '</tr>';
 
         classTemplate = '' +

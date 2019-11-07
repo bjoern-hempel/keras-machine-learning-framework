@@ -186,7 +186,7 @@ window.getExtraInformationText = function(database, className, language) {
 
 window.renewPredictionOverview = function(database, evaluationData, titleTemplate, classTemplate, classTemplateExtraInformation, language) {
     let html = titleTemplate;
-    let maxClasses = 15;
+    let maxClasses = 30;
     let counter = 0;
 
     let links = '';
