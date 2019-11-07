@@ -4931,19 +4931,19 @@
         },
         "crumble": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Crumble",
+                "GB": "Crumble"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Crumble (dt.: Krümel) ist eine Nachspeise der englischen und US-amerikanischen Küche.",
+                "GB": "A crumble is a dish that can be made in a sweet or savoury version, although the sweet version is much more common."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Crumble",
+                    "GB": "https://en.wikipedia.org/wiki/Crumble"
                 },
                 "spoonacular": null
             }
@@ -7194,19 +7194,19 @@
         },
         "granola": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Knuspermüsli",
+                "GB": "Granola"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Knuspermüsli oder Granola besteht in der Grundform aus mit Zucker oder Honig gebackenen Haferflocken, die als Frühstücksflocken (Müsli), als Snack oder auch als Garnierung zum Beispiel von Speiseeis gegessen werden. Eine weitere häufige Zutat sind Nüsse.",
+                "GB": "Granola is a breakfast food and snack food consisting of rolled oats, nuts, honey or other sweeteners such as brown sugar, and sometimes puffed rice, that is usually baked until it is crisp, toasted and golden brown."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Knusperm%C3%BCsli",
+                    "GB": "https://en.wikipedia.org/wiki/Granola"
                 },
                 "spoonacular": null
             }
@@ -9793,19 +9793,19 @@
         },
         "migas": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Migas",
+                "GB": "Migas"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Migas oder Migas de Pastor sind ein spanisches und portugiesisches traditionelles Bauern- bzw. Hirtengericht, bei dem altes Weißbrot als Beilage oder eigenständiges Hauptgericht verwertet wird.",
+                "GB": "Migas is a dish in Spanish and Portuguese cuisines."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Migas",
+                    "GB": "https://en.wikipedia.org/wiki/Migas"
                 },
                 "spoonacular": null
             }
