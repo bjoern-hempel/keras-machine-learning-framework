@@ -4342,41 +4342,25 @@
         },
         "cookie": {
             "name": {
-                "DE": "",
-                "GB": ""
+                "DE": "Keks",
+                "GB": "Biscuit"
             },
             "related-classes": [],
-            "categories": [],
+            "categories": ["dish"],
             "description": {
-                "DE": "",
-                "GB": ""
+                "DE": "Ein Keks (aus dem Plural cakes von englisch cake \"Kuchen\") ist ein ursprünglich englisches Gebäckstück.",
+                "GB": "A biscuit is a flour-based baked food product."
             },
             "urls": {
                 "wikipedia": {
-                    "DE": null,
-                    "GB": null
+                    "DE": "https://de.wikipedia.org/wiki/Keks",
+                    "GB": "https://en.wikipedia.org/wiki/Biscuit"
                 },
                 "spoonacular": null
             }
         },
         "cookies": {
-            "name": {
-                "DE": "",
-                "GB": ""
-            },
-            "related-classes": [],
-            "categories": [],
-            "description": {
-                "DE": "",
-                "GB": ""
-            },
-            "urls": {
-                "wikipedia": {
-                    "DE": null,
-                    "GB": null
-                },
-                "spoonacular": null
-            }
+            "plural": "cookie"
         },
         "cooler": {
             "name": {
