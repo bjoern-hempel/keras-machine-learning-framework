@@ -344,7 +344,7 @@ class ImageClassifier(Command):
                 click.echo('Decay: %s' % decay)
                 click.echo('Nesterov: %s' % nesterov)
 
-        model.compile(optimizer=optimizer, loss=loss, metrics=[metrics])
+        model.compile(optimizer=optimizer, loss=loss, metrics=[metrics, 'top_k_categorical_accuracy'])
 
     def get_image_generator(self):
         validation_split = self.config.getml('validation_split')
