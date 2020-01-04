@@ -11,67 +11,41 @@ import sys
 
 pp = pprint.PrettyPrinter(indent=4)
 
-path_root = 'F:/data'
-path_experiment_relative = 'processed/different_models/all/food-50-80-20-densenet201-8'
-path_experiment_absolute = '%s/%s' % (path_root, path_experiment_relative)
 
-# read parameter
-if len(sys.argv) > 1:
-    path_experiment_relative = sys.argv[1]
-    path_experiment_absolute = '%s/%s' % (path_root, path_experiment_relative)
+class ConverterLogJson:
+    path_root = 'F:/data'
+    path_experiment_relative = 'processed/different_models/all/food-50-80-20-densenet201-8'
+    file_command_log_name = 'command.txt'
+    file_data_json_name = 'data.json'
 
-file_command_log_name = 'command.txt'
-file_command_log_absolute = '%s/%s' % (path_experiment_absolute, file_command_log_name)
+    total_data_config = [
+        # general
+        {'search': 'render_device', 'field-name': 'render-device', 'type': 'string', 'section': 'general'},
 
-file_data_json_name = 'data.json'
-file_data_json_absolute = '%s/%s' % (path_experiment_absolute, file_data_json_name)
+        # data
+        {'search': 'data_path', 'field-name': 'data-path', 'type': 'string', 'section': 'data'},
+        {'search': 'use_train_val', 'field-name': 'use-train-val', 'type': 'boolean', 'section': 'data'},
 
-total_data_config = [
-    # general
-    {'search': 'render_device', 'field-name': 'render-device', 'type': 'string', 'section': 'general'},
+        # transfer learning
+        {'search': 'number_trainable_layers', 'field-name': 'number-trainable-layers', 'type': 'string',
+         'section': 'transfer-learning'},
+        {'search': 'transfer_learning_model', 'field-name': 'transfer-learning-model', 'type': 'string',
+         'section': 'transfer-learning'},
+        {'search': 'input_dimension', 'field-name': 'input-dimension', 'type': 'string',
+         'section': 'transfer-learning'},
+        {'search': 'dense_size', 'field-name': 'dense-size', 'type': 'string', 'section': 'transfer-learning'},
+        {'search': 'weights', 'field-name': 'weights', 'type': 'string', 'section': 'transfer-learning'},
 
-    # data
-    {'search': 'data_path', 'field-name': 'data-path', 'type': 'string', 'section': 'data'},
+        # machine learning
+        {'search': 'batch_size', 'field-name': 'batch-size', 'type': 'int', 'section': 'machine-learning'},
+        {'search': 'momentum', 'field-name': 'momentum', 'type': 'float', 'section': 'machine-learning'},
+        {'search': 'activation_function', 'field-name': 'activation-function', 'type': 'string',
+         'section': 'machine-learning'},
+        {'search': 'loss_function', 'field-name': 'loss-function', 'type': 'string', 'section': 'machine-learning'},
+        {'search': 'optimizer', 'field-name': 'optimizer', 'type': 'string', 'section': 'machine-learning'}
+    ]
 
-    # transfer learning
-    {'search': 'number_trainable_layers', 'field-name': 'number-trainable-layers', 'type': 'string', 'section': 'transfer-learning'},
-    {'search': 'transfer_learning_model', 'field-name': 'transfer-learning-model', 'type': 'string', 'section': 'transfer-learning'},
-    {'search': 'input_dimension', 'field-name': 'input-dimension', 'type': 'string', 'section': 'transfer-learning'},
-    {'search': 'dense_size', 'field-name': 'dense-size', 'type': 'string', 'section': 'transfer-learning'},
-    {'search': 'weights', 'field-name': 'weights', 'type': 'string', 'section': 'transfer-learning'},
-
-    # machine learning
-    {'search': 'batch_size', 'field-name': 'batch-size', 'type': 'int', 'section': 'machine-learning'},
-    {'search': 'momentum', 'field-name': 'momentum', 'type': 'float', 'section': 'machine-learning'},
-    {'search': 'activation_function', 'field-name': 'activation-function', 'type': 'string', 'section': 'machine-learning'},
-    {'search': 'loss_function', 'field-name': 'loss-function', 'type': 'string', 'section': 'machine-learning'},
-    {'search': 'optimizer', 'field-name': 'optimizer', 'type': 'string', 'section': 'machine-learning'}
-]
-
-# check paths
-if not os.path.exists(path_experiment_absolute):
-    raise AssertionError('Path "%s" does not exist.' % path_experiment_absolute)
-if not os.path.exists(file_command_log_absolute):
-    raise AssertionError('Config file "%s" does not exists.' % file_command_log_absolute)
-
-
-def read_command_log_file(file_path):
-    error_text_command_log_file = 'Something is wrong with the command log file "%s"' % file_path
-
-    # read command log file
-    data = None
-    with open(file_path, 'r') as file:
-        data = file.readlines()
-
-    if data is None:
-        raise AssertionError('Could not read command log file')
-
-    experiment_data = {
-        'epochs': [],
-        'total': {
-            'config': {}
-        }
-    }
+    template_error_text_command_log_file = 'Something is wrong with the command log file "%s"'
 
     epochs = 0
     batches_total_learned = 0
@@ -83,220 +57,300 @@ def read_command_log_file(file_path):
     config_data = {}
     command = None
     layers = 0
-    deepth = 0
+    depth = 0
     trainable = 0
-    best_train = {
-        'val': {
-            'accuracy-top-1': 0.0
+    best_train = None
+    experiment_data = None
+    net_name = None
+    depth = 0
+
+    def __init__(self):
+
+        # read parameter
+        if len(sys.argv) > 1:
+            self.path_experiment_relative = sys.argv[1]
+
+        self.path_experiment_absolute = '%s/%s' % (self.path_root, self.path_experiment_relative)
+        self.path_experiment_absolute = '%s/%s' % (self.path_root, self.path_experiment_relative)
+        self.file_command_log_absolute = '%s/%s' % (self.path_experiment_absolute, self.file_command_log_name)
+        self.file_data_json_absolute = '%s/%s' % (self.path_experiment_absolute, self.file_data_json_name)
+
+        # check paths
+        if not os.path.exists(self.path_experiment_absolute):
+            raise AssertionError('Path "%s" does not exist.' % self.path_experiment_absolute)
+        if not os.path.exists(self.file_command_log_absolute):
+            raise AssertionError('Config file "%s" does not exists.' % self.file_command_log_absolute)
+
+    def parse_config_data(self, data):
+        self.experiment_data = {
+            'epochs': [],
+            'total': {
+                'config': {}
+            }
         }
-    }
 
-    # parse command file
-    idata = iter(data)
-    for line in idata:
+        self.best_train = {
+            'val': {
+                'accuracy-top-1': 0.0
+            }
+        }
 
-        # search for command line
-        pattern = re.compile('.+(ml[ ]+train.+)')
-        matches = pattern.match(line)
-        if matches:
-            command = matches.group(1)
-            continue
+        iter_data = iter(data)
+        for line in iter_data:
 
-        # search for command line
-        pattern = re.compile('[0-9]+[ ]:[ ]+(.+)[ ]+\\((not )?trainable\\)')
-        matches = pattern.match(line)
-        if matches:
-            layers += 1
-            pattern_layer = re.compile('.*_conv')
-            matches_layer = pattern_layer.match(matches.group(1))
-            if matches_layer:
-                deepth += 1
-            if matches.group(2) != 'not ':
-                trainable += 1
-            continue
-
-        # collect some total data
-        for config in total_data_config:
-            pattern = re.compile('%s:[ ]+(.+)' % config['search'])
+            # search for command line
+            pattern = re.compile('.+(ml[ ]+train.+)')
             matches = pattern.match(line)
             if matches:
-                value = matches.group(1)
-
-                if not config['section'] in config_data:
-                    config_data[config['section']] = {}
-
-                if config['type'] == 'int':
-                    config_data[config['section']][config['field-name']] = int(value)
-                elif config['type'] == 'float':
-                    config_data[config['section']][config['field-name']] = float(value)
-                else:
-                    if config['section'] == 'data':
-                        value = value.replace('%s/' % path_root, '')
-                    if config['section'] == 'general':
-                        if value == 'GPU' or value == 'GPU1':
-                            value = 'GTX 1060 (1)'
-                        if value == 'GPU2':
-                            value = 'GTX 1060 (2)'
-
-                    config_data[config['section']][config['field-name']] = str(value)
-
+                self.command = matches.group(1)
                 continue
 
-        # collect all epochs
-        pattern_first = re.compile('Epoch ([0-9]+):[ ]+LearningRateScheduler setting learning rate to ([0-9]+\\.[0-9]+)')
-        matches_first = pattern_first.match(line)
+            # search for command line
+            pattern = re.compile('[0-9]+[ ]:[ ]+(.+)[ ]+\\((not )?trainable\\)')
+            matches = pattern.match(line)
+            if matches:
+                self.layers += 1
+                pattern_layer = re.compile('.*_conv')
+                matches_layer = pattern_layer.match(matches.group(1))
+                if matches_layer:
+                    self.depth += 1
+                if matches.group(2) != 'not ':
+                    self.trainable += 1
+                continue
 
-        if matches_first:
-            epoch = int(matches_first.group(1))
-            learning_rate = float(matches_first.group(2))
+            # collect some total data
+            for config in self.total_data_config:
+                pattern = re.compile('%s:[ ]+(.+)' % config['search'])
+                matches = pattern.match(line)
+                if matches:
+                    value = matches.group(1)
 
-            pattern_second = re.compile(
-                '^([0-9]+)/([0-9]+).+[ ]-[ ]([0-9]+[\\.]?[0-9]*)([m]?s) ([0-9]+[\\.]?[0-9]*)([m]?s).+' +
-                'loss:[ ]*([0-9]+[\\.]?[0-9]*).+' +
-                'acc:[ ]*([0-9]+[\\.]?[0-9]*).+' +
-                'top_k_categorical_accuracy:[ ]*([0-9]+[\\.]?[0-9]*).+' +
-                'val_loss:[ ]*([0-9]+[\\.]?[0-9]*).+' +
-                'val_acc:[ ]*([0-9]+[\\.]?[0-9]*).+' +
-                'val_top_k_categorical_accuracy:[ ]*([0-9]+[\\.]?[0-9]*).+'
-            )
-            matches_second = pattern_second.match(next(idata))
+                    if not config['section'] in self.config_data:
+                        self.config_data[config['section']] = {}
 
-            if not matches_second:
-                raise AssertionError(error_text_command_log_file)
+                    if config['type'] == 'int':
+                        self.config_data[config['section']][config['field-name']] = int(value)
+                    elif config['type'] == 'float':
+                        self.config_data[config['section']][config['field-name']] = float(value)
+                    elif config['type'] == 'boolean':
+                        self.config_data[config['section']][config['field-name']] = True if value == 'True' else False
+                    else:
+                        if config['section'] == 'data':
+                            value = value.replace('%s/' % self.path_root, '')
+                        if config['section'] == 'general':
+                            if value == 'GPU' or value == 'GPU1':
+                                value = 'GTX 1060 (1)'
+                            if value == 'GPU2':
+                                value = 'GTX 1060 (2)'
 
-            batches_epoch_learned = int(matches_second.group(1))
-            batches_epoch_total = int(matches_second.group(2))
-            duration_epoch_total = float(int(matches_second.group(3)))
-            duration_epoch_total_unit = matches_second.group(4)
-            duration_epoch_batch_average = float(int(matches_second.group(5)))
-            duration_epoch_batch_average_unit = matches_second.group(6)
-            loss_train = float(matches_second.group(7))
-            accuracy_top_1_train = float(matches_second.group(8))
-            accuracy_top_5_train = float(matches_second.group(9))
-            loss_val = float(matches_second.group(10))
-            accuracy_top_1_val = float(matches_second.group(11))
-            accuracy_top_5_val = float(matches_second.group(12))
+                        self.config_data[config['section']][config['field-name']] = str(value)
 
-            # some assertions
-            if batches_epoch_learned != batches_epoch_total:
-                raise AssertionError(error_text_command_log_file)
+                    continue
 
-            if duration_epoch_total_unit == 'ms':
-                duration_epoch_total = duration_epoch_total / 1000
-                duration_epoch_total_unit = 's'
+            # collect all epochs
+            pattern_first = re.compile('Epoch ([0-9]+):[ ]+LearningRateScheduler setting learning rate to ([0-9]+\\.[0-9]+)')
+            matches_first = pattern_first.match(line)
 
-            if duration_epoch_batch_average_unit == 'ms':
-                duration_epoch_batch_average = duration_epoch_batch_average / 1000
-                duration_epoch_batch_average_unit = 's'
+            if matches_first:
+                epoch = int(matches_first.group(1))
+                learning_rate = float(matches_first.group(2))
 
-            # calculate total
-            epochs += 1
-            batches_total_learned += batches_epoch_learned
-            batches_total_total += batches_epoch_total
-            duration_total_total += duration_epoch_total
-            duration_total_batch_average += duration_epoch_batch_average
+                pattern_second = re.compile(
+                    '^([0-9]+)/([0-9]+).+[ ]-[ ]([0-9]+[\\.]?[0-9]*)([m]?s) ([0-9]+[\\.]?[0-9]*)([m]?s).+' +
+                    'loss:[ ]*([0-9]+[\\.]?[0-9]*).+' +
+                    'acc:[ ]*([0-9]+[\\.]?[0-9]*).+' +
+                    'top_k_categorical_accuracy:[ ]*([0-9]+[\\.]?[0-9]*).+' +
+                    'val_loss:[ ]*([0-9]+[\\.]?[0-9]*).+' +
+                    'val_acc:[ ]*([0-9]+[\\.]?[0-9]*).+' +
+                    'val_top_k_categorical_accuracy:[ ]*([0-9]+[\\.]?[0-9]*).+'
+                )
+                matches_second = pattern_second.match(next(iter_data))
 
-            if accuracy_top_1_val > best_train['val']['accuracy-top-1']:
-                best_train = {
-                    'epoch': epoch,
-                    'train': {
-                        'loss': loss_train,
-                        'accuracy-top-1': accuracy_top_1_train,
-                        'accuracy-top-5': accuracy_top_5_train
-                    },
-                    'val': {
-                        'loss': loss_val,
-                        'accuracy-top-1': accuracy_top_1_val,
-                        'accuracy-top-5': accuracy_top_5_val
+                if not matches_second:
+                    raise AssertionError(self.template_error_text_command_log_file % self.file_command_log_absolute)
+
+                batches_epoch_learned = int(matches_second.group(1))
+                batches_epoch_total = int(matches_second.group(2))
+                duration_epoch_total = float(int(matches_second.group(3)))
+                duration_epoch_total_unit = matches_second.group(4)
+                duration_epoch_batch_average = float(int(matches_second.group(5)))
+                duration_epoch_batch_average_unit = matches_second.group(6)
+                loss_train = float(matches_second.group(7))
+                accuracy_top_1_train = float(matches_second.group(8))
+                accuracy_top_5_train = float(matches_second.group(9))
+                loss_val = float(matches_second.group(10))
+                accuracy_top_1_val = float(matches_second.group(11))
+                accuracy_top_5_val = float(matches_second.group(12))
+
+                # some assertions
+                if batches_epoch_learned != batches_epoch_total:
+                    raise AssertionError(self.template_error_text_command_log_file % self.file_command_log_absolute)
+
+                if duration_epoch_total_unit == 'ms':
+                    duration_epoch_total = duration_epoch_total / 1000
+                    duration_epoch_total_unit = 's'
+
+                if duration_epoch_batch_average_unit == 'ms':
+                    duration_epoch_batch_average = duration_epoch_batch_average / 1000
+                    duration_epoch_batch_average_unit = 's'
+
+                # calculate total properties
+                self.epochs += 1
+                self.batches_total_learned += batches_epoch_learned
+                self.batches_total_total += batches_epoch_total
+                self.duration_total_total += duration_epoch_total
+                self.duration_total_batch_average += duration_epoch_batch_average
+
+                # get best val epoch
+                if accuracy_top_1_val > self.best_train['val']['accuracy-top-1']:
+                    self.best_train = {
+                        'epoch': epoch,
+                        'train': {
+                            'loss': loss_train,
+                            'accuracy-top-1': accuracy_top_1_train,
+                            'accuracy-top-5': accuracy_top_5_train
+                        },
+                        'val': {
+                            'loss': loss_val,
+                            'accuracy-top-1': accuracy_top_1_val,
+                            'accuracy-top-5': accuracy_top_5_val
+                        }
                     }
-                }
 
-            experiment_data['epochs'].append(
-                {
-                    'epoch': epoch,
-                    'learning-rate': learning_rate,
-                    'duration-total': duration_epoch_total,
-                    'duration-total-unit': duration_epoch_total_unit,
-                    'duration-batch-average': duration_epoch_batch_average,
-                    'duration-batch-average-unit': duration_epoch_batch_average_unit,
-                    'batches-learned': batches_epoch_learned,
-                    'batches-total': batches_epoch_total,
-                    'train': {
-                        'loss': loss_train,
-                        'accuracy-top-1': accuracy_top_1_train,
-                        'accuracy-top-5': accuracy_top_5_train
-                    },
-                    'val': {
-                        'loss': loss_val,
-                        'accuracy-top-1': accuracy_top_1_val,
-                        'accuracy-top-5': accuracy_top_5_val
+                # add epoch to json data variable
+                self.experiment_data['epochs'].append(
+                    {
+                        'epoch': epoch,
+                        'learning-rate': learning_rate,
+                        'duration-total': duration_epoch_total,
+                        'duration-total-unit': duration_epoch_total_unit,
+                        'duration-batch-average': duration_epoch_batch_average,
+                        'duration-batch-average-unit': duration_epoch_batch_average_unit,
+                        'batches-learned': batches_epoch_learned,
+                        'batches-total': batches_epoch_total,
+                        'train': {
+                            'loss': loss_train,
+                            'accuracy-top-1': accuracy_top_1_train,
+                            'accuracy-top-5': accuracy_top_5_train
+                        },
+                        'val': {
+                            'loss': loss_val,
+                            'accuracy-top-1': accuracy_top_1_val,
+                            'accuracy-top-5': accuracy_top_5_val
+                        }
                     }
-                }
-            )
+                )
 
-    net_name = None
-    if 'transfer-learning' in config_data and 'transfer-learning-model' in config_data['transfer-learning']:
-        net_name = config_data['transfer-learning']['transfer-learning-model']
+    def parse_json_from_command_log_file(self):
 
-    if net_name == 'DenseNet201':
-        deepth = 201
-    elif net_name == 'DenseNet169':
-        deepth = 169
-    elif net_name == 'DenseNet121':
-        deepth = 121
-    elif net_name == 'InceptionResNetV2':
-        deepth = 164
-    elif net_name == 'InceptionV3':
-        deepth = 48
-    #elif net_name == 'NASNet':
-    #    deepth = 0
-    #elif net_name == 'NASNetLarge':
-    #    deepth = 0
-    #elif net_name == 'NASNetMobile':
-    #    deepth = 0
-    #elif net_name == 'MobileNet':
-    #    deepth = 0
-    elif net_name == 'MobileNetV2':
-        deepth = 53
-    elif net_name == 'ResNet50':
-        deepth = 50
-    elif net_name == 'VGG19':
-        deepth = 19
-    elif net_name == 'Xception':
-        deepth = 71
+        # read command log file
+        with open(self.file_command_log_absolute, 'r') as file:
+            data = file.readlines()
 
-    experiment_data['total'] = {
-        'command': command,
-        'config': config_data,
-        'epochs': epochs,
-        'learning-rates': [],
-        'duration-total': duration_total_total,
-        'duration-total-unit': duration_total_total_unit,
-        'duration-batch-average': round(duration_total_batch_average / epochs, 3),
-        'duration-batch-average-unit': duration_total_batch_average_unit,
-        'batches-learned': batches_total_learned,
-        'batches-total': batches_total_total,
-        'best-train': best_train,
-        'net': {
-            'name': net_name,
-            'layers': layers,
-            'deepth': deepth,
-            'trainable': trainable
+        if data is None:
+            raise AssertionError('Could not read command log file')
+
+        # parse command file and write properties
+        self.parse_config_data(data)
+        self.write_net_name_and_depth()
+
+        data_path_absolute = None
+        if 'data' in self.config_data and 'data-path' in self.config_data['data']:
+            data_path_absolute = '%s/%s' % (self.path_root, self.config_data['data']['data-path'])
+
+        use_train_val = False
+        if 'data' in self.config_data and 'use-train-val' in self.config_data['data']:
+            use_train_val = self.config_data['data']['use-train-val']
+
+        if data_path_absolute is None or not os.path.exists(data_path_absolute):
+            raise AssertionError('Data path "%s" does not exist.')
+
+        if not use_train_val:
+            raise AssertionError('This script only works in use-train-val mode yet.')
+
+        self.config_data['data']['data-path-train'] = '%s/%s' % (self.config_data['data']['data-path'], 'train')
+        self.config_data['data']['data-path-val'] = '%s/%s' % (self.config_data['data']['data-path'], 'val')
+
+        data_path_train_absolute = '%s/%s' % (self.path_root, self.config_data['data']['data-path-train'])
+        data_path_val_absolute = '%s/%s' % (self.path_root, self.config_data['data']['data-path-val'])
+
+        if not os.path.exists(data_path_train_absolute):
+            raise AssertionError('Data train path "%s" does not exist.' % data_path_train_absolute)
+
+        if not os.path.exists(data_path_val_absolute):
+            raise AssertionError('Data val path "%s" does not exist.' % data_path_val_absolute)
+
+        self.experiment_data['total'] = {
+            'command': self.command,
+            'config': self.config_data,
+            'epochs': self.epochs,
+            'learning-rates': [],
+            'duration-total': self.duration_total_total,
+            'duration-total-unit': self.duration_total_total_unit,
+            'duration-batch-average': round(self.duration_total_batch_average / self.epochs, 3),
+            'duration-batch-average-unit': self.duration_total_batch_average_unit,
+            'batches-learned': self.batches_total_learned,
+            'batches-total': self.batches_total_total,
+            'best-train': self.best_train,
+            'net': {
+                'name': self.net_name,
+                'layers': self.layers,
+                'deepth': self.depth,
+                'trainable': self.trainable
+            }
         }
-    }
 
-    return experiment_data
+        return self.experiment_data
+
+    def build_json(self, print_data_json=False):
+        self.parse_json_from_command_log_file()
+
+        # print json
+        if print_data_json:
+            pp.pprint(self.experiment_data)
+
+        # write json file
+        print('')
+        print('Write json file to "%s"' % self.file_data_json_absolute)
+        with open(self.file_data_json_absolute, 'w') as outfile:
+            json.dump(self.experiment_data, outfile, indent=4)
+        print('Done...')
+
+    def write_net_name_and_depth(self):
+        self.net_name = None
+        if 'transfer-learning' in self.config_data and 'transfer-learning-model' in self.config_data['transfer-learning']:
+            self.net_name = self.config_data['transfer-learning']['transfer-learning-model']
+
+        if self.net_name == 'DenseNet201':
+            self.depth = 201
+        elif self.net_name == 'DenseNet169':
+            self.depth = 169
+        elif self.net_name == 'DenseNet121':
+            self.depth = 121
+        elif self.net_name == 'InceptionResNetV2':
+            self.depth = 164
+        elif self.net_name == 'InceptionV3':
+            self.depth = 48
+        #elif self.net_name == 'NASNet':
+        #    self.depth = 0
+        #elif self.net_name == 'NASNetLarge':
+        #    self.depth = 0
+        #elif self.net_name == 'NASNetMobile':
+        #    self.depth = 0
+        #elif self.net_name == 'MobileNet':
+        #    self.depth = 0
+        elif self.net_name == 'MobileNetV2':
+            self.depth = 53
+        elif self.net_name == 'ResNet50':
+            self.depth = 50
+        elif self.net_name == 'VGG19':
+            self.depth = 19
+        elif self.net_name == 'Xception':
+            self.depth = 71
 
 
-# convert command log file to json data
-data_json = read_command_log_file(file_command_log_absolute)
+# create converter
+converter_log_json = ConverterLogJson()
 
-# print json
-pp.pprint(data_json)
-
-# write json file
-print('')
-print('Write json file to "%s"' % file_data_json_absolute)
-with open(file_data_json_absolute, 'w') as outfile:
-    json.dump(data_json, outfile, indent=4)
-print('Done...')
+# build json file
+converter_log_json.build_json(True)

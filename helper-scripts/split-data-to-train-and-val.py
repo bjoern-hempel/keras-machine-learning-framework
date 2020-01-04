@@ -7,6 +7,7 @@ import subprocess
 pp = pprint.PrettyPrinter(indent=4)
 random.seed(123)
 
+
 class DataHolder:
     base_path: str = 'E:\\data'
     raw_data_path = 'raw'
