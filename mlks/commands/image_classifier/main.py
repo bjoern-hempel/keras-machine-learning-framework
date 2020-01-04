@@ -360,7 +360,7 @@ class ImageClassifier(Command):
 
     def get_train_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
-        data_path = self.config.get_data('data_path')
+        data_path = self.config.get_data('raw_data_path')
         batch_size = self.config.getml('batch_size')
 
         return image_generator.flow_from_directory(
@@ -375,7 +375,7 @@ class ImageClassifier(Command):
 
     def get_validation_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
-        data_path = self.config.get_data('data_path')
+        data_path = self.config.get_data('raw_data_path')
         batch_size = self.config.getml('batch_size')
 
         return image_generator.flow_from_directory(
@@ -444,7 +444,7 @@ class ImageClassifier(Command):
 
     def get_categories(self):
         # get some needed configuration parameters
-        data_path = self.config.get_data('data_path')
+        data_path = self.config.get_data('raw_data_path')
 
         # check folder
         if not os.path.isdir(data_path):
@@ -484,7 +484,7 @@ class ImageClassifier(Command):
 
         # descriptions, text and titles
         subtitle = '%s with %d classes' % (
-            os.path.basename(self.config.get_data('data_path')).capitalize(),
+            os.path.basename(self.config.get_data('raw_data_path')).capitalize(),
             len(self.config.get_environment('classes'))
         )
         title = '%s - #train:#val %s:%s - best acc. %.2f%%@ep.%d\nlr %s (drop rate %s every %d epochs) ' % (

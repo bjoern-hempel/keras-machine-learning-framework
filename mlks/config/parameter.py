@@ -601,7 +601,7 @@ set_config_translator({
     'model_file': data_config_writer,
     'config_file': data_config_writer,
     'config_file_2': data_config_writer,
-    'data_path': data_config_writer,
+    'raw_data_path': data_config_writer,
     'model_source': data_config_writer,
     'evaluation_path': data_config_writer,
 
