@@ -67,11 +67,12 @@ class Train(ImageClassifier):
             model = self.load_model(model_file)
             self.finish_timer('load model file %s' % model_file)
 
-        # preparations
+        # preparations (image generator, train & validation generator)
         self.start_timer('preparations')
-        image_generator = self.get_image_generator()
-        train_generator = self.get_train_generator(image_generator)
-        validation_generator = self.get_validation_generator(image_generator)
+        image_train_generator = self.get_image_generator()
+        image_val_generator = self.get_image_generator(image_train_generator)
+        train_generator = self.get_train_generator(image_train_generator)
+        validation_generator = self.get_validation_generator(image_val_generator)
 
         files = {
             'train': {},

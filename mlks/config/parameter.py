@@ -475,6 +475,14 @@ option_evaluation_path = click.option(
     required=False,
     type=str
 )
+option_use_train_val = click.option(
+    '--use-train-val',
+    expose_value=False,
+    is_flag=True,
+    help='Continue learning with given model file.',
+    callback=option_callback,
+    default=False
+)
 
 # some other parameters here
 option_x_0_1 = click.option(
@@ -539,7 +547,8 @@ option_set_train_process = [
     option_environment_path,
     option_model_file,
     option_data_path,
-    option_model_source
+    option_model_source,
+    option_use_train_val
 ]
 option_set_evaluation_process = [
     option_environment_path,
@@ -604,6 +613,7 @@ set_config_translator({
     'data_path': data_config_writer,
     'model_source': data_config_writer,
     'evaluation_path': data_config_writer,
+    'use_train_val': data_config_writer,
 
     # some other configs
     'x': nine_points_config_writer,
