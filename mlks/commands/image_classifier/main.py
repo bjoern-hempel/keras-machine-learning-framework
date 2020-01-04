@@ -30,12 +30,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import click
 import os
 import sys
 import math
 import numpy as np
 import sys
+import six
+import io
+import csv
+
+from collections import OrderedDict
+from collections import Iterable
 
 # initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
 np.random.seed(1337)
@@ -103,7 +113,96 @@ from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 from keras.optimizers import SGD
-from keras.callbacks import LearningRateScheduler, TensorBoard, CSVLogger, ModelCheckpoint
+from keras.callbacks import LearningRateScheduler, TensorBoard, ModelCheckpoint, Callback
+
+
+class CSVLogger2(Callback):
+    """Callback that streams epoch results to a csv file.
+
+    Supports all values that can be represented as a string,
+    including 1D iterables such as np.ndarray.
+
+    # Example
+
+    ```python
+    csv_logger = CSVLogger('training.log')
+    model.fit(X_train, Y_train, callbacks=[csv_logger])
+    ```
+
+    # Arguments
+        filename: filename of the csv file, e.g. 'run/log.csv'.
+        separator: string used to separate elements in the csv file.
+        append: True: append if file exists (useful for continuing
+            training). False: overwrite existing file,
+    """
+
+    def __init__(self, filename, separator=',', append=False):
+        self.sep = separator
+        self.filename = filename
+        self.append = append
+        self.writer = None
+        self.keys = None
+        self.append_header = True
+        if six.PY2:
+            self.file_flags = 'b'
+            self._open_args = {}
+        else:
+            self.file_flags = ''
+            self._open_args = {'newline': '\n'}
+        super(CSVLogger2, self).__init__()
+
+    def on_train_begin(self, logs=None):
+        if self.append:
+            if os.path.exists(self.filename):
+                with open(self.filename, 'r' + self.file_flags) as f:
+                    self.append_header = not bool(len(f.readline()))
+            mode = 'a'
+        else:
+            mode = 'w'
+
+        self.csv_file = io.open(self.filename,
+                                mode + self.file_flags,
+                                **self._open_args)
+
+    def on_epoch_end(self, epoch, logs=None):
+        logs = logs or {}
+
+        def handle_value(k):
+            is_zero_dim_ndarray = isinstance(k, np.ndarray) and k.ndim == 0
+            if isinstance(k, six.string_types):
+                return k
+            elif isinstance(k, Iterable) and not is_zero_dim_ndarray:
+                return '"[%s]"' % (', '.join(map(str, k)))
+            else:
+                return k
+
+        if self.keys is None:
+            self.keys = sorted(logs.keys())
+
+        if self.model.stop_training:
+            # We set NA so that csv parsers do not fail for this last epoch.
+            logs = dict([(k, logs[k] if k in logs else 'NA') for k in self.keys])
+
+        if not self.writer:
+            class CustomDialect(csv.excel):
+                delimiter = self.sep
+            fieldnames = ['epoch'] + self.keys
+            if six.PY2:
+                fieldnames = [unicode(x) for x in fieldnames]
+            self.writer = csv.DictWriter(self.csv_file,
+                                         fieldnames=fieldnames,
+                                         dialect=CustomDialect)
+            if self.append_header:
+                self.writer.writeheader()
+
+        row_dict = OrderedDict({'epoch': epoch})
+        row_dict.update((key, handle_value(logs[key])) for key in self.keys)
+        self.writer.writerow(row_dict)
+        self.csv_file.flush()
+
+    def on_train_end(self, logs=None):
+        self.csv_file.close()
+        self.writer = None
 
 
 class ImageClassifier(Command):
@@ -301,6 +400,21 @@ class ImageClassifier(Command):
             for layer in model.layers[number_not_trainable:]:
                 layer.trainable = True
 
+        # -1: train all
+        # -2: auto
+        if number_trainable == -2:
+            print('yes')
+            unfreeze = False
+            for layer in model.layers:
+                if unfreeze:
+                    layer.trainable = True
+                else:
+                    layer.trainable = False
+
+                # InceptionV3
+                if layer.name == 'mixed3':
+                    unfreeze = True
+
         # compile model
         self.compile_model(model)
 
@@ -344,13 +458,22 @@ class ImageClassifier(Command):
                 click.echo('Decay: %s' % decay)
                 click.echo('Nesterov: %s' % nesterov)
 
-        model.compile(optimizer=optimizer, loss=loss, metrics=[metrics])
+        model.compile(optimizer=optimizer, loss=loss, metrics=[metrics, 'top_k_categorical_accuracy'])
 
-    def get_image_generator(self):
+    def get_image_generator(self, image_generator=None):
         validation_split = self.config.getml('validation_split')
         transfer_learning_model = self.config.gettl('transfer_learning_model')
+        use_train_val = self.config.get_data('use_train_val')
 
-        if self.config.get('verbose'):
+        # if no train and validation folder were given -> use the same image generator for training and evalution
+        if not use_train_val and image_generator is not None:
+            return image_generator
+
+        # disable validation_split if train and validation folder given
+        if use_train_val:
+            validation_split = 0.0
+
+        if not use_train_val and self.config.get('verbose'):
             click.echo('Validation split: %s' % validation_split)
 
         return ImageDataGenerator(
@@ -362,6 +485,14 @@ class ImageClassifier(Command):
         dim = self.config.gettl('input_dimension')
         data_path = self.config.get_data('raw_data_path')
         batch_size = self.config.getml('batch_size')
+        use_train_val = self.config.get_data('use_train_val')
+        shuffle = True
+
+        if use_train_val:
+            data_path = '%s/%s' % (data_path, 'train')
+
+        if self.config.get('verbose'):
+            print('Used training path "%s".' % data_path)
 
         return image_generator.flow_from_directory(
             data_path,
@@ -369,14 +500,22 @@ class ImageClassifier(Command):
             color_mode='rgb',
             batch_size=batch_size,
             class_mode='categorical',
-            subset='training',
-            shuffle=True
+            subset=None if use_train_val else 'training',
+            shuffle=shuffle
         )
 
     def get_validation_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
         data_path = self.config.get_data('raw_data_path')
         batch_size = self.config.getml('batch_size')
+        use_train_val = self.config.get_data('use_train_val')
+        shuffle = True
+
+        if use_train_val:
+            data_path = '%s/%s' % (data_path, 'val')
+
+        if self.config.get('verbose'):
+            print('Used validation path "%s".' % data_path)
 
         return image_generator.flow_from_directory(
             data_path,
@@ -384,8 +523,8 @@ class ImageClassifier(Command):
             color_mode='rgb',
             batch_size=batch_size,
             class_mode='categorical',
-            subset='validation',
-            shuffle=True
+            subset=None if use_train_val else 'validation',
+            shuffle=shuffle
         )
 
     def train(self, model, train_generator, validation_generator):
@@ -412,7 +551,7 @@ class ImageClassifier(Command):
             embeddings_data=None,
             update_freq='epoch'
         )
-        csv_logger = CSVLogger(
+        csv_logger = CSVLogger2(
             csv_file,
             separator=',',
             append=False
@@ -430,10 +569,13 @@ class ImageClassifier(Command):
         return model.fit_generator(
             generator=train_generator,
             steps_per_epoch=step_size_train,
+
             validation_data=validation_generator,
             validation_steps=step_size_validation,
+
             epochs=epochs,
             verbose=verbose,
+
             callbacks=[
                 learning_rate_scheduler,
                 #tensor_board,
@@ -445,6 +587,10 @@ class ImageClassifier(Command):
     def get_categories(self):
         # get some needed configuration parameters
         data_path = self.config.get_data('raw_data_path')
+        use_train_val = self.config.get_data('use_train_val')
+
+        if use_train_val:
+            data_path = '%s/%s' % (data_path, 'train')
 
         # check folder
         if not os.path.isdir(data_path):
