@@ -241,6 +241,23 @@ class ConverterLogJson:
                     }
                 )
 
+    @staticmethod
+    def get_number_of_folder(absolute_path):
+        return len(next(os.walk(absolute_path))[1])
+
+    @staticmethod
+    def get_number_of_files(absolute_path):
+        return len([name for name in os.listdir(absolute_path) if os.path.isfile(os.path.join(absolute_path, name))])
+
+    def get_classes_of_folder(self, absolute_path):
+        class_names = [dI for dI in os.listdir(absolute_path) if os.path.isdir(os.path.join(absolute_path, dI))]
+
+        folders = {}
+        for class_name in class_names:
+            folders[class_name] = self.get_number_of_files('%s/%s' % (absolute_path, class_name))
+
+        return folders
+
     def parse_json_from_command_log_file(self):
 
         # read command log file
@@ -292,10 +309,20 @@ class ConverterLogJson:
             'batches-learned': self.batches_total_learned,
             'batches-total': self.batches_total_total,
             'best-train': self.best_train,
+            'classes': {
+                'train': {
+                    'count': self.get_number_of_folder(data_path_train_absolute),
+                    'files': self.get_classes_of_folder(data_path_train_absolute)
+                },
+                'val': {
+                    'count': self.get_number_of_folder(data_path_val_absolute),
+                    'files': self.get_classes_of_folder(data_path_val_absolute)
+                }
+            },
             'net': {
                 'name': self.net_name,
                 'layers': self.layers,
-                'deepth': self.depth,
+                'depth': self.depth,
                 'trainable': self.trainable
             }
         }
