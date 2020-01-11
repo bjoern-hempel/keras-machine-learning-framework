@@ -115,7 +115,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
-from keras.optimizers import SGD
+from keras.optimizers import SGD, RMSprop, Adagrad, Adadelta, Adam, Adamax, Nadam
 from keras.callbacks import LearningRateScheduler, TensorBoard, ModelCheckpoint, Callback
 
 # initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
@@ -602,14 +602,29 @@ class ImageClassifier(Command):
         return initial_learning_rate * math.pow(drop, math.floor(epoch / epochs_drop))
 
     def compile_model(self, model):
-        if self.config.getml('optimizer') == 'sgd':
-            learning_rate = self.config.getml('learning_rate')
-            momentum = self.config.getml('momentum')
-            decay = self.config.getml('decay')
-            nesterov = self.config.getml('nesterov')
+        optimizer_name = self.config.getml('optimizer')
+        learning_rate = self.config.getml('learning_rate')
+        momentum = self.config.getml('momentum')
+        decay = self.config.getml('decay')
+        nesterov = self.config.getml('nesterov')
+
+        # build optimizer
+        if optimizer_name == 'sgd':
             optimizer = SGD(lr=learning_rate, momentum=momentum, decay=decay, nesterov=nesterov)
+        elif optimizer_name == 'rmsprop':
+            optimizer = RMSprop(lr=learning_rate)
+        elif optimizer_name == 'adagrad':
+            optimizer = Adagrad(lr=learning_rate)
+        elif optimizer_name == 'adadelta':
+            optimizer = Adadelta(lr=learning_rate)
+        elif optimizer_name == 'adam':
+            optimizer = Adam(lr=learning_rate)
+        elif optimizer_name == 'adamax':
+            optimizer = Adamax(lr=learning_rate)
+        elif optimizer_name == 'nadam':
+            optimizer = Nadam(lr=learning_rate)
         else:
-            optimizer = 'Adam'
+            raise AssertionError('Unexpected optimizer name "%s"' % optimizer_name)
 
         loss = self.config.getml('loss_function')
         metrics = self.config.getml('metrics')

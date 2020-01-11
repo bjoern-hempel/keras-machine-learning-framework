@@ -179,10 +179,10 @@ option_optimizer = click.option(
     '--optimizer', '-o',
     expose_value=False,
     is_flag=False,
-    help='Sets the optimizer.',
+    help='Sets the optimizer (sgd, rmsprop, adagrad, adadelta, adam, adamax, nadam).',
     callback=option_callback,
     default='sgd',
-    type=click.Choice(['adam', 'sgd'])
+    type=click.Choice(['sgd', 'rmsprop', 'adagrad', 'adadelta', 'adam', 'adamax', 'nadam'])
 )
 option_learning_rate = click.option(
     '--learning-rate', '-l',
