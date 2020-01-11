@@ -67,22 +67,45 @@ class Evaluate(ImageClassifier):
         # check model file
         check_if_file_exists(model_file)
 
-        # find given files
+        # the given evaluation path is a folder with file inside
         if os.path.isdir(self.config.get_data('evaluation_path')):
-            for evaluation_path in Path(self.config.get_data('evaluation_path')).glob('**/*.jpg'):
-                check_if_file_exists(evaluation_path)
-                evaluation_files.append(evaluation_path)
+            # load model
+            self.start_timer('load model file "%s"' % model_file)
+            model = self.load_model(model_file)
+            self.finish_timer('load model file "%s"' % model_file)
+
+            # build the generators
+            self.start_timer('preparations')
+            image_val_generator = self.get_image_generator()
+            validation_generator = self.get_validation_generator(image_val_generator)
+            self.finish_timer('preparations')
+
+            # evaluate the given path
+            self.start_timer('evaluation')
+            self.evaluate_path(
+                model,
+                validation_generator,
+                self.config.get_data('evaluation_path'),
+                show_image,
+                save_image
+            )
+            self.finish_timer('evaluation')
+
+            return
+
+        # the given evaluation path is a single file
         elif os.path.isfile(self.config.get_data('evaluation_path')):
+
             check_if_file_exists(self.config.get_data('evaluation_path'))
             evaluation_files.append(self.config.get_data('evaluation_path'))
+
+            # load model
+            self.start_timer('load model file "%s"' % model_file)
+            model = self.load_model(model_file)
+            self.finish_timer('load model file "%s"' % model_file)
         else:
             raise AssertionError('Unknown given path "%s"' % self.config.get_data('evaluation_path'))
 
-        # load model
-        self.start_timer('load model file "%s"' % model_file)
-        model = self.load_model(model_file)
-        self.finish_timer('load model file "%s"' % model_file)
-
-        # evaluate given files
+        # evaluate all collected files
         for evaluation_file in evaluation_files:
             self.evaluate_file(model, evaluation_file, show_image, save_image)

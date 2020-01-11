@@ -3,7 +3,7 @@
 # This is the basic image classifier class from which all train, evaluate and prepare classes inherit.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   02.10.2019
+# Date:   11.01.2020
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
@@ -30,25 +30,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# some future imports
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+# some basic imports
 import click
 import os
 import sys
 import math
 import numpy as np
-import sys
 import six
 import io
 import csv
+import pickle
+import seaborn as sn
+import pandas as pd
+import pprint
 
+# some other from imports
 from collections import OrderedDict
 from collections import Iterable
-
-# initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
-np.random.seed(1337)
+from sklearn.metrics import confusion_matrix
 
 # some own libraries and helper
 from mlks.commands.main import Command
@@ -105,7 +109,6 @@ from keras.applications.vgg19 import preprocess_input as VGG19PreprocessInput
 from keras.applications.xception import Xception
 from keras.applications.xception import preprocess_input as XceptionPreprocessInput
 
-
 # some other keras imports
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Activation
 from keras.preprocessing.image import ImageDataGenerator
@@ -114,6 +117,12 @@ from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 from keras.optimizers import SGD
 from keras.callbacks import LearningRateScheduler, TensorBoard, ModelCheckpoint, Callback
+
+# initialize the random generator to always get the same files in the same order (validation vs. trained data, etc.)
+np.random.seed(1337)
+
+# pretty printer setup
+pp = pprint.PrettyPrinter(indent=4)
 
 
 class CSVLogger2(Callback):
@@ -206,6 +215,14 @@ class CSVLogger2(Callback):
 
 
 class ImageClassifier(Command):
+    """
+    The image classifier class.
+
+    Methods
+    -------
+    evaluate_path(model, validation_generator, evaluation_path, show_image=True, save_image=False, force_train=False)
+        Evaluate the given path and build a confusion matrix.
+    """
 
     def __init__(self, config):
         self.config = config
@@ -267,6 +284,155 @@ class ImageClassifier(Command):
 
         # initialize the parent class
         super().__init__(config)
+
+    def evaluate_path(self, model, validation_generator, evaluation_path, show_image=True, save_image=False,
+                      force_train=False):
+        """Evaluate the given path and build a confusion matrix.
+
+        Caches the first evaluation result within the evaluation.pkl file to increase the execution speed.
+
+        Parameters
+        ----------
+        model : compiled model (h5py)
+            The compiled keras model.
+        validation_generator : str, optional
+            The compiled keras validation generator.
+        evaluation_path : str
+            The path to be evaluated.
+        show_image : bool, optional
+            Specifies whether the graph should be displayed. (default is True)
+        save_image : bool, optional
+            Specifies whether the graph should be saved. (default is False)
+        force_train : bool, optional
+            Ignore the caching (default is False)
+
+        Raises
+        ------
+        AssertionError
+            If the given evaluation path was not found or is not a folder.
+        """
+        if not os.path.exists(evaluation_path):
+            raise AssertionError('The given path "%s" was not found.' % evaluation_path)
+        if not os.path.isdir(evaluation_path):
+            raise AssertionError('The given path "%s" is not a folder.' % evaluation_path)
+
+        # some vars
+        classes = self.config.get_environment('classes')
+        evaluation_file = '%s/%s' % (os.path.dirname(self.config.get_data('config_file')), 'evaluation.pkl')
+        evaluation_file_png = '%s/%s' % (os.path.dirname(self.config.get_data('config_file')), 'evaluation.png')
+        verbose = self.config.get('verbose')
+
+        # skip training if we already do have an evaluation file
+        if not os.path.exists(evaluation_file) or force_train:
+            step_size_validation = validation_generator.n // validation_generator.batch_size + 1
+            Y_pred = model.predict_generator(validation_generator, step_size_validation, verbose=verbose)
+            y_pred = np.argmax(Y_pred, axis=1)
+
+            # save evaluation file
+            with open(evaluation_file, 'wb') as output:
+                pickle.dump(y_pred, output, pickle.HIGHEST_PROTOCOL)
+        else:
+            # open evaluation file
+            with open(evaluation_file, 'rb') as input_file:
+                y_pred = pickle.load(input_file)
+
+        data_confusion_matrix = confusion_matrix(validation_generator.classes, y_pred)
+
+        data_evaluated = {
+            'classes': {},
+            'all': {
+                'positive': 0,
+                'negative': 0,
+                'all': 0
+            }
+        }
+
+        # mask zero fields
+        mask = np.zeros_like(data_confusion_matrix)
+        for row in range(len(data_confusion_matrix)):
+            data_evaluated['classes'][classes[row]] = {
+                'positive': 0,
+                'negative': 0,
+                'all': 0
+            }
+            for col in range(len(data_confusion_matrix[row])):
+                if row == col:
+                    data_evaluated['classes'][classes[row]]['positive'] += data_confusion_matrix[row][col]
+                    data_evaluated['all']['positive'] += data_confusion_matrix[row][col]
+                else:
+                    data_evaluated['classes'][classes[row]]['negative'] += data_confusion_matrix[row][col]
+                    data_evaluated['all']['negative'] += data_confusion_matrix[row][col]
+
+                data_evaluated['classes'][classes[row]]['all'] += data_confusion_matrix[row][col]
+                data_evaluated['all']['all'] += data_confusion_matrix[row][col]
+
+                if data_confusion_matrix[row][col] == 0:
+                    mask[row][col] = True
+
+        # calculate the accuracy
+        for class_name in data_evaluated['classes']:
+            data_evaluated['classes'][class_name]['accuracy'] = round(
+                data_evaluated['classes'][class_name]['positive'] / data_evaluated['classes'][class_name]['all'],
+                8
+            )
+        data_evaluated['all']['accuracy'] = round(
+            data_evaluated['all']['positive'] / data_evaluated['all']['all'],
+            8
+        )
+
+        pp.pprint(data_evaluated)
+
+        title = 'Confusion Matrix "%s" (acc. %.2f%%)' % (
+            os.path.basename(os.path.dirname(evaluation_path)),
+            data_evaluated['all']['accuracy'] * 100
+        )
+
+        labeled_classes_index = []
+        for class_name in data_evaluated['classes']:
+            labeled_classes_index.append(
+                '%s (%6.2f%%)' % (
+                    class_name.replace('_', ' ').title(),
+                    data_evaluated['classes'][class_name]['accuracy'] * 100
+                )
+            )
+        labeled_classes_columns = []
+        for class_name in data_evaluated['classes']:
+            labeled_classes_columns.append(
+                class_name.replace('_', ' ').title()
+            )
+
+        df_cm = pd.DataFrame(data_confusion_matrix, index=labeled_classes_index, columns=labeled_classes_columns)
+        plt.figure(figsize=(10, 7))
+        plt.title(title)
+        plt.xlabel("Values on X axis")
+        sn.set(font_scale=0.5)
+
+        g = sn.heatmap(
+            df_cm,
+            annot=True,
+            cbar=False,
+            annot_kws={"size": 4},
+            linewidths=0.2,
+            linecolor='gray',
+            mask=mask,
+            cmap='coolwarm',
+            center=0,
+            xticklabels=True,
+            yticklabels=True
+        )
+        g.set_yticklabels(g.get_yticklabels(), rotation=0, fontsize=4, horizontalalignment='right')
+        g.set_xticklabels(g.get_xticklabels(), rotation=30, fontsize=4, horizontalalignment='right')
+
+        plt.rcParams['figure.figsize'] = 12, 9
+        plt.rcParams['savefig.dpi'] = 'figure'
+        fig1 = plt.gcf()
+
+        if show_image:
+            plt.show()
+
+        if save_image:
+            plt.draw()
+            fig1.savefig(evaluation_file_png, dpi=1200)
 
     def evaluate_file(self, model, evaluation_file, show_image=True, save_image=False):
         classes = self.config.get_environment('classes')
@@ -483,7 +649,7 @@ class ImageClassifier(Command):
 
     def get_train_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
-        data_path = self.config.get_data('raw_data_path')
+        data_path = self.config.get_data('data_path')
         batch_size = self.config.getml('batch_size')
         use_train_val = self.config.get_data('use_train_val')
         shuffle = True
@@ -506,10 +672,10 @@ class ImageClassifier(Command):
 
     def get_validation_generator(self, image_generator):
         dim = self.config.gettl('input_dimension')
-        data_path = self.config.get_data('raw_data_path')
+        data_path = self.config.get_data('data_path')
         batch_size = self.config.getml('batch_size')
         use_train_val = self.config.get_data('use_train_val')
-        shuffle = True
+        shuffle = False
 
         if use_train_val:
             data_path = '%s/%s' % (data_path, 'val')
@@ -586,7 +752,7 @@ class ImageClassifier(Command):
 
     def get_categories(self):
         # get some needed configuration parameters
-        data_path = self.config.get_data('raw_data_path')
+        data_path = self.config.get_data('data_path')
         use_train_val = self.config.get_data('use_train_val')
 
         if use_train_val:
@@ -630,7 +796,7 @@ class ImageClassifier(Command):
 
         # descriptions, text and titles
         subtitle = '%s with %d classes' % (
-            os.path.basename(self.config.get_data('raw_data_path')).capitalize(),
+            os.path.basename(self.config.get_data('data_path')).capitalize(),
             len(self.config.get_environment('classes'))
         )
         title = '%s - #train:#val %s:%s - best acc. %.2f%%@ep.%d\nlr %s (drop rate %s every %d epochs) ' % (
