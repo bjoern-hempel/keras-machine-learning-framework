@@ -1,6 +1,6 @@
 # Example:
 #
-# user$ python helper-scripts/convert-log-to-json.py processed/number_train_files/inceptionv3/food-50-80-20-all-16
+# user$ python helper-scripts/convert-log-to-json.py processed/experiments/best_optimizer/inceptionv3/food-50-80-20-rmsprop-0.01-0.5-7-0.0-0.0
 #
 
 import re
@@ -280,7 +280,7 @@ class ConverterLogJson:
             use_train_val = self.config_data['data']['use-train-val']
 
         if data_path_absolute is None or not os.path.exists(data_path_absolute):
-            raise AssertionError('Data path "%s" does not exist.')
+            raise AssertionError('Data path "%s" does not exist.' % data_path_absolute)
 
         if not use_train_val:
             raise AssertionError('This script only works in use-train-val mode yet.')
