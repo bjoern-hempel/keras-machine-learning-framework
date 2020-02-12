@@ -52,6 +52,13 @@ option_verbose = click.option(
     help='Switches the script to verbose mode.',
     callback=option_callback
 )
+option_log_verbose = click.option(
+    '--log-verbose',
+    expose_value=False,
+    is_flag=True,
+    help='Switches the script to verbose mode when logging.',
+    callback=option_callback
+)
 option_debug = click.option(
     '--debug', '-d',
     expose_value=False,
@@ -508,6 +515,7 @@ option_y_0_1 = click.option(
 # Configure some option sets
 option_set_general = [
     option_verbose,
+    option_log_verbose,
     option_debug,
     option_yes,
     option_service,
@@ -570,6 +578,7 @@ option_set_nine_points = [
 set_config_translator({
     # general config
     'verbose': general_config_writer,
+    'log_verbose': general_config_writer,
     'debug': general_config_writer,
     'yes': general_config_writer,
     'service': general_config_writer,

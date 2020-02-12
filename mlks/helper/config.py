@@ -245,7 +245,12 @@ class Config(object):
             if self.get('verbose'):
                 click.echo('Write config file to %s' % config_file)
             with open(config_file, 'w') as json_file:
-                json.dump(self.get_dict(), json_file, sort_keys=True, indent=4, separators=(',', ': '))
+                dict_content = self.get_dict()
+
+                if not self.get('log_verbose'):
+                    if 'files' in dict_content['environment']:
+                        del dict_content['environment']['files']
+                json.dump(dict_content, json_file, sort_keys=True, indent=4, separators=(',', ': '))
 
     def save_model(self, model):
         model_file = self.get_data('model_file')
