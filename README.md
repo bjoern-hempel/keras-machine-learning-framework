@@ -37,6 +37,7 @@ Here is an overview of the demos:
 
 ## First attempts to train an image classifier
 
+* [Arguments](/markdown/image-classification/arguments.md)
 * [Train, build and save the model](/markdown/image-classification/train-build-save.md)
 * Preparations to make training more efficient
 * [Evaluate a given image](/markdown/image-classification/evaluate.md)
