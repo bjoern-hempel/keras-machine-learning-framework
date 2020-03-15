@@ -1,6 +1,6 @@
 # GPU vs CPU
 
-Performance comparison based on the Kaggle floral data set training: https://www.kaggle.com/alxmamaev/flowers-recognition This picture set consists of 5 classes with about 4350 training pictures.
+Performance comparison based on the Kaggle floral data set training: https://www.kaggle.com/alxmamaev/flowers-recognition This picture set consists of 5 classes with about 4332 training pictures.
 
 The training time includes 10 training epochs, whereby InceptionV3 was used as a transfer learning model. The times were determined with the following standard command:
 
