@@ -607,6 +607,7 @@ class ImageClassifier(Command):
         momentum = self.config.getml('momentum')
         decay = self.config.getml('decay')
         nesterov = self.config.getml('nesterov')
+        use_plaidml_keras_backend = self.config.get('plaidml_keras_backend')
 
         # build optimizer
         if optimizer_name == 'sgd':
@@ -639,7 +640,11 @@ class ImageClassifier(Command):
                 click.echo('Decay: %s' % decay)
                 click.echo('Nesterov: %s' % nesterov)
 
-        model.compile(optimizer=optimizer, loss=loss, metrics=[metrics, 'top_k_categorical_accuracy'])
+        metrics_array = [metrics]
+        if not use_plaidml_keras_backend:
+            metrics_array.append('top_k_categorical_accuracy')
+
+        model.compile(optimizer=optimizer, loss=loss, metrics=metrics_array)
 
     def get_image_generator(self, image_generator=None):
         validation_split = self.config.getml('validation_split')

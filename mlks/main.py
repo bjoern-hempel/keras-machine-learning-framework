@@ -30,6 +30,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+import sys
+
+
+"""
+Checks the plaidml parameter and sets the plaidml keras backend if needed.
+"""
+use_plaidml_keras_backend = False
+parameter_plaidml_keras_backend = '--plaidml-keras-backend'
+
+if parameter_plaidml_keras_backend in sys.argv:
+    use_plaidml_keras_backend = True
+
+if use_plaidml_keras_backend:
+    os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
+
+
 import click
 
 from mlks.commands.info.main import Info as CliInfo

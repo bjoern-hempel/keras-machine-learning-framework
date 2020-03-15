@@ -101,7 +101,14 @@ option_render_device = click.option(
     default='AUTO',
     type=click.Choice(['AUTO', 'CPU', 'CPU1', 'CPU2', 'CPU3', 'GPU', 'GPU1', 'GPU2', 'GPU3', 'PARALLEL'])
 )
-
+option_plaidml_keras_backend = click.option(
+    '--plaidml-keras-backend',
+    expose_value=False,
+    is_flag=True,
+    help='Skip demands.',
+    callback=option_callback,
+    default=False
+)
 
 # Configure the http parameters here
 option_bind_ip = click.option(
@@ -137,7 +144,6 @@ option_port_ssl = click.option(
     type=int,
     callback=option_callback
 )
-
 
 # Configure the machine learning parameters here
 option_epochs = click.option(
@@ -520,7 +526,8 @@ option_set_general = [
     option_yes,
     option_service,
     option_http,
-    option_render_device
+    option_render_device,
+    option_plaidml_keras_backend
 ]
 option_set_http = [
     option_bind_ip,
@@ -584,6 +591,7 @@ set_config_translator({
     'service': general_config_writer,
     'http': general_config_writer,
     'render_device': general_config_writer,
+    'plaidml_keras_backend': general_config_writer,
 
     # http config
     'bind_ip': http_config_writer,
