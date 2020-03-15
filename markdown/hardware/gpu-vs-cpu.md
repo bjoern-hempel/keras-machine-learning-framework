@@ -44,13 +44,16 @@ Are these configurations correct? Continue? [Y/n] y
 
 The exact output of the mentioned commands can be viewed here: [Train, build and save the model](/markdown/image-classification/train-build-save.md)
 
+Test command: `ml train --environment-path ~/data --data-path raw/flowers --model-file processed/inceptionv3-trained.h5 --verbose --epochs 10 --yes`
+
 |                                                                   | Preparation | Train       | Train (Factor) | Save model |
 |-------------------------------------------------------------------|-------------|-------------|----------------|------------|
-| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5s    | 303.5s 00:05:03.5   |  1.00x        | 33.8s   |
-| NVIDIA GeForce GT 750M 2GB (Notebook) - Windows                   | 18.4s    | 2415.0s 00:40:15.0  |  7.96x        | 29.8s   |
-| Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - MacOS   | 19.1s    | 6393.7s 01:46:33.7  | 21.07x        | 41.4s   |
-| Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows | 16.9s    | 9016.8s 02:30:16.8  | 29.71x        | 28.7s   |
-| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows   | 16.3s    | 25183.4s 06:59:43.4 | 82.97x        | 28.3s   |
+| NVIDIA GeForce GTX 1060 6GB (Desktop) - Windows                   | 17.5s    | 303.5s 00:05:03.5   |  1.00x        | 33.8s |
+| AMD Radeon Pro 450 (MacBook) - macOS                              | 18.1s    | 2884.9s 00:48:04.9  |  9.51x        | 41.2s |
+| NVIDIA GeForce GT 750M 2GB (Notebook) - Windows                   | 18.4s    | 2415.0s 00:40:15.0  |  7.96x        | 29.8s |
+| Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz (Single Core) - macOS   | 19.1s    | 6393.7s 01:46:33.7  | 21.07x        | 41.4s |
+| Intel(R) Core(TM) i7-4712HQ CPU @ 2.30GHz (Single Core) - Windows | 16.9s    | 9016.8s 02:30:16.8  | 29.71x        | 28.7s |
+| Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz (Single Core) - Windows   | 16.3s    | 25183.4s 06:59:43.4 | 82.97x        | 28.3s |
 
 ## A. Further Tutorials
 
