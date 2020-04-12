@@ -72,6 +72,7 @@ from mlks.config.parameter import option_set_general, \
     option_set_graph_process, \
     option_set_nine_points
 
+
 @click.group(name='cli')
 @add_options(option_set_general)
 def cli():

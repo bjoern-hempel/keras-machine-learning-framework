@@ -33,9 +33,11 @@
 import click
 import time
 import sys
+import pprint
 
 from mlks.helper.log import disable_warnings
 from mlks.helper.hardware import set_render_device
+from mlks.helper.logger import LoggerClass
 
 
 class Command:
@@ -43,15 +45,15 @@ class Command:
     def __init__(self, config):
         self.config = config
 
+        # check config
+        if not self.is_config_correct(self.config):
+            sys.exit()
+
         # set render device
         set_render_device(self.config.get('render_device'))
 
         # disable warnings
         disable_warnings()
-
-        # check config
-        if not self.is_config_correct(self.config):
-            sys.exit()
 
         # start timer
         self.start_time = {}
@@ -120,26 +122,34 @@ class Command:
             raise ValueError("invalid default answer: '%s'" % default)
 
         while True:
-            sys.stdout.write(question + prompt)
+            str = question + prompt
+            sys.stdout.write(str + '\n')
             choice = input().lower()
             if default is not None and choice == '':
                 return valid[default]
             elif choice in valid:
                 return valid[choice]
             else:
-                sys.stdout.write("Please respond with 'yes' or 'no' "
-                                 "(or 'y' or 'n').\n")
+                sys.stdout.write('Please respond with "yes" or "no" (or "y" or "n").\n')
 
     @staticmethod
     def repeat_to_length(string_to_expand, length):
         return (string_to_expand * (int(length / len(string_to_expand)) + 1))[:length]
 
     @staticmethod
-    def show_config(config):
+    def show_config(config, register_logger=True):
         """Prints out all configuration settings of given config class."""
 
         # build data config
         config.build_data()
+
+        # # Register logger class
+        pp = None
+        if register_logger:
+            logger = LoggerClass(config.get_data('log_file'))
+            sys.stdout = logger
+            sys.stderr = logger
+            pp = pprint.PrettyPrinter(indent=4, stream=logger)
 
         if len(config.configs) > 0:
             click.echo('')
@@ -153,13 +163,15 @@ class Command:
             click.echo('')
         click.echo('')
 
+        return pp
+
     def is_config_correct(self, configs,
                           question='Are these configurations correct? Continue?',
                           negative='Cancelled by user.'):
         """Shows all configuration classes and asks if this is correct."""
 
         # prints out the given configuration
-        self.show_config(configs)
+        self.pp = self.show_config(configs)
 
         # skip demand
         if self.config.get('yes'):
