@@ -42,10 +42,11 @@ from mlks.helper.filesystem import check_if_file_exists
 
 class Train(ImageClassifier):
 
-    def __init__(self, config):
+    def __init__(self, config, question='Are these configurations correct? Continue?',
+            negative='Cancelled by user.', check_empty_folder=True):
 
         # initialize the parent class
-        super().__init__(config)
+        super().__init__(config, question, negative, check_empty_folder)
 
     def do(self):
 

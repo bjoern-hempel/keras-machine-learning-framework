@@ -34,6 +34,8 @@ import click
 import time
 import sys
 import pprint
+import os
+import shutil
 
 from mlks.helper.log import disable_warnings
 from mlks.helper.hardware import set_render_device
@@ -42,11 +44,12 @@ from mlks.helper.logger import LoggerClass
 
 class Command:
 
-    def __init__(self, config):
+    def __init__(self, config, question='Are these configurations correct? Continue?',
+            negative='Cancelled by user.', check_empty_folder=False):
         self.config = config
 
         # check config
-        if not self.is_config_correct(self.config):
+        if not self.is_config_correct(self.config, question, negative, check_empty_folder):
             sys.exit()
 
         # set render device
@@ -100,7 +103,7 @@ class Command:
                    format(name, time_needed))
 
     @staticmethod
-    def query_yes_no(question, default="yes"):
+    def query_yes_no(question, default='yes', next_line=True):
         """Ask a yes/no question via raw_input() and return their answer.
 
         "question" is a string that is presented to the user.
@@ -123,7 +126,11 @@ class Command:
 
         while True:
             str = question + prompt
-            sys.stdout.write(str + '\n')
+
+            if next_line:
+                str += '\n'
+
+            sys.stdout.write(str)
             choice = input().lower()
             if default is not None and choice == '':
                 return valid[default]
@@ -137,11 +144,69 @@ class Command:
         return (string_to_expand * (int(length / len(string_to_expand)) + 1))[:length]
 
     @staticmethod
-    def show_config(config, register_logger=True):
+    def delete_all_files_in_given_folder(folder, force=False):
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    if force or Command.query_yes_no(
+                        'Do you really want to delete the file "%s"' % file_path.replace('\\', '/'),
+                        'no',
+                        False
+                    ):
+                        os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    if force or Command.query_yes_no(
+                        'Do you really want to delte the folder "%s"' % file_path.replace('\\', '/'),
+                        'no',
+                        False
+                    ):
+                        shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+    @staticmethod
+    def get_number_of_files_in_given_folder(folder):
+        return len([name for name in os.listdir(folder)])
+
+    @staticmethod
+    def show_config(config, register_logger=True, check_empty_folder=True):
         """Prints out all configuration settings of given config class."""
 
         # build data config
         config.build_data()
+
+        if check_empty_folder:
+            config.configs['data']['process_folder'] = os.path.dirname(config.configs['data']['model_file'])
+
+            # create folder if it not already exists
+            if not os.path.exists(config.configs['data']['process_folder']):
+                os.makedirs(config.configs['data']['process_folder'])
+
+            number_of_files = Command.get_number_of_files_in_given_folder(config.configs['data']['process_folder'])
+
+            if number_of_files > 0:
+                question = 'The given path "%s" is not empty (%d elements). Do you want to empty the directory and continue?' % (
+                    config.configs['data']['process_folder'],
+                    number_of_files
+                )
+                positive = Command.query_yes_no(question, 'no', False)
+
+                if not positive:
+                    print('Canceled by user.')
+                    sys.exit()
+
+                # delete all files in
+                Command.delete_all_files_in_given_folder(config.configs['data']['process_folder'])
+
+            number_of_files = Command.get_number_of_files_in_given_folder(config.configs['data']['process_folder'])
+
+            if number_of_files > 0:
+                print('The given path "%s" is not empty (%d elements). Abort.' % (
+                    config.configs['data']['process_folder'],
+                    number_of_files
+                ))
+                sys.exit()
 
         # # Register logger class
         pp = None
@@ -167,11 +232,12 @@ class Command:
 
     def is_config_correct(self, configs,
                           question='Are these configurations correct? Continue?',
-                          negative='Cancelled by user.'):
+                          negative='Cancelled by user.',
+                          check_empty_folder=False):
         """Shows all configuration classes and asks if this is correct."""
 
         # prints out the given configuration
-        self.pp = self.show_config(configs)
+        self.pp = self.show_config(configs, True, check_empty_folder)
 
         # skip demand
         if self.config.get('yes'):

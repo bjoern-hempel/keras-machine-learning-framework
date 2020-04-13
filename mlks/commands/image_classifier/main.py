@@ -224,7 +224,8 @@ class ImageClassifier(Command):
         Evaluate the given path and build a confusion matrix.
     """
 
-    def __init__(self, config):
+    def __init__(self, config, question='Are these configurations correct? Continue?',
+            negative='Cancelled by user.', check_empty_folder=False):
         self.config = config
 
         self.transfer_learning_wrapper = {
@@ -283,7 +284,7 @@ class ImageClassifier(Command):
         }
 
         # initialize the parent class
-        super().__init__(config)
+        super().__init__(config, question, negative, check_empty_folder)
 
     def evaluate_path(self, model, validation_generator, evaluation_path, show_image=True, save_image=False,
                       force_train=False):

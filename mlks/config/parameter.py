@@ -492,7 +492,15 @@ option_use_train_val = click.option(
     '--use-train-val',
     expose_value=False,
     is_flag=True,
-    help='Continue learning with given model file.',
+    help='Use separate training and validation folder.',
+    callback=option_callback,
+    default=False
+)
+option_add_transfer_learning_name = click.option(
+    '--add-transfer-learning-name',
+    expose_value=False,
+    is_flag=True,
+    help='Add the name of the transfer learning model.',
     callback=option_callback,
     default=False
 )
@@ -563,7 +571,8 @@ option_set_train_process = [
     option_model_file,
     option_data_path,
     option_model_source,
-    option_use_train_val
+    option_use_train_val,
+    option_add_transfer_learning_name
 ]
 option_set_evaluation_process = [
     option_environment_path,
@@ -631,6 +640,7 @@ set_config_translator({
     'model_source': data_config_writer,
     'evaluation_path': data_config_writer,
     'use_train_val': data_config_writer,
+    'add_transfer_learning_name': data_config_writer,
 
     # some other configs
     'x': nine_points_config_writer,

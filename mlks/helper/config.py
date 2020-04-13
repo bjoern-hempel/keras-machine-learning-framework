@@ -98,10 +98,12 @@ class Config(object):
         return self.get(name, 'transfer_learning')
 
     def build_data(self):
-        if 'transfer_learning' not in self.configs:
-            transfer_learning_model = None
-        else:
+        add_transfer_learning_name = self.configs['data']['add_transfer_learning_name']
+
+        if 'transfer_learning' in self.configs and add_transfer_learning_name:
             transfer_learning_model = self.gettl('transfer_learning_model').lower()
+        else:
+            transfer_learning_model = None
 
         data_files = [
             'model_file',
