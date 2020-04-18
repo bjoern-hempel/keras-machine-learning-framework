@@ -435,7 +435,10 @@ class ImageClassifier(Command):
             plt.draw()
             fig1.savefig(evaluation_file_png, dpi=1200)
 
-    def evaluate_file(self, model, evaluation_file, show_image=True, save_image=False):
+    def evaluate_file(self, model, evaluation_file, show_image=True, save_image=False, do_not_save_data=False):
+        verbose = self.config.get('verbose')
+        verbose = False
+
         classes = self.config.get_environment('classes')
 
         # load image
@@ -445,7 +448,24 @@ class ImageClassifier(Command):
 
         # predict image
         self.start_timer('predict image file')
-        predicted_array = model.predict(image)
+
+        # data file
+        data_file = '%s/%s' % (os.path.dirname(self.config.get_data('config_file')), 'data.pkl')
+
+        # skip training if we already do have an evaluation file
+        if not os.path.exists(data_file) or do_not_save_data:
+            print('Evaluate file: "%s"' % evaluation_file)
+            predicted_array = model.predict(image)
+
+            # save evaluation file
+            if not do_not_save_data:
+                with open(data_file, 'wb') as output:
+                    pickle.dump(predicted_array, output, pickle.HIGHEST_PROTOCOL)
+        else:
+            # open evaluation file
+            with open(data_file, 'rb') as input_file:
+                predicted_array = pickle.load(input_file)
+
         predicted_values = predicted_array.argmax(axis=-1)
         predicted_array_sorted = sorted(
             range(len(predicted_array[0])), key=lambda i: predicted_array[0][i],
@@ -470,39 +490,52 @@ class ImageClassifier(Command):
             })
         prediction_overview += '-------\n'
 
-        if self.config.get('verbose'):
+        if verbose:
             click.echo('\n\n' + prediction_overview)
 
         # print predicted class
         prediction_class = classes[predicted_values[0]]
         prediction_accuracy = predicted_array[0][predicted_values[0]] * 100
-        click.echo('\n\npredicted class:')
-        click.echo('----------------')
-        click.echo(
-            'predicted: %s (%.2f%%)' % (prediction_class, prediction_accuracy)
-        )
-        click.echo('----------------')
+        if verbose:
+            click.echo('\n\npredicted class:')
+            click.echo('----------------')
+            click.echo(
+                'predicted: %s (%.2f%%)' % (prediction_class, prediction_accuracy)
+            )
+            click.echo('----------------')
 
         # build the top 5 text for the image
         text = ""
         counter = 0
+        real_class = os.path.basename(os.path.dirname(evaluation_file))
+        is_top_1 = real_class == prediction_class
+        is_top_5 = False
         for index in predicted_array_sorted_top_5:
             counter += 1
-            class_name = classes[index] + ':'
+            class_name = classes[index]
             text += "\n" if text != "" else ""
-            text += '%02d) %s %10.2f%%' % (counter, class_name, predicted_array[0][index] * 100)
+            text += '%02d) %s %10.2f%%' % (counter, '%s:' % class_name, predicted_array[0][index] * 100)
+
+            if class_name == real_class:
+                is_top_5 = True
 
         title = 'predicted: %s (%.2f%%)' % (
             classes[predicted_values[0]],
             predicted_array[0][predicted_values[0]] * 100
         )
-        print_image(evaluation_file, title, text, show_image, save_image)
+
+        #print_image(evaluation_file, title, text, show_image, save_image)
 
         return {
+            'classes': classes,
             'prediction_overview': prediction_overview,
-            'prediction_overview_array': prediction_overview_array,
+            'prediction_overview_array': predicted_array.tolist()[0],
             'prediction_class': prediction_class,
-            'prediction_accuracy': prediction_accuracy
+            'prediction_accuracy': prediction_accuracy,
+            'real_class': real_class,
+            'is_top_1': is_top_1,
+            'is_top_5': is_top_5,
+            'evaluation_file': evaluation_file
         }
 
     def get_tl_model(self):

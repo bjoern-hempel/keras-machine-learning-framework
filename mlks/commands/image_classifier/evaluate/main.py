@@ -31,6 +31,7 @@
 # SOFTWARE.
 
 import os
+import json
 import sys
 from pathlib import Path
 from mlks.commands.image_classifier.main import ImageClassifier
@@ -46,8 +47,13 @@ class Evaluate(ImageClassifier):
 
     def do(self):
 
+        # some configs
         show_image = True
         save_image = True
+        evaluate_type = 'validation' # validation or train
+        save_evaluation_file = True
+        do_not_cache = False
+        rebuild_model_dict = False
 
         # load config file
         self.start_timer('load json config file')
@@ -55,57 +61,79 @@ class Evaluate(ImageClassifier):
         self.finish_timer('load json config file')
 
         # rebuild model dict
-        self.config.rebuild_model_dict()
-        self.start_timer('save json config file')
-        self.config.save_json()
-        self.finish_timer('save json config file')
+        if rebuild_model_dict:
+            self.config.rebuild_model_dict()
+            self.start_timer('save json config file')
+            self.config.save_json()
+            self.finish_timer('save json config file')
 
         # get some configs
         model_file = self.config.get_data('model_file_best')['model_file']
+        files_all = self.config.get_environment('files')
+        files_validation = files_all[evaluate_type]
+        data_path = self.config.get_data('data_path')
+        root_path = os.path.dirname(self.config.get_data('config_file'))
         evaluation_files = []
+
+        # data array
+        data = {
+            'root_path': root_path,
+            'classes': [],
+            'data': {},
+            'top_k': {
+                'correctly_classified_top_1': [],
+                'incorrectly_classified_top_1': [],
+                'correctly_classified_top_5': [],
+                'incorrectly_classified_top_5': []
+            }
+        }
+
+        # bulid evaluation file array
+        for class_name in files_validation:
+            for file_name in files_validation[class_name]:
+                evaluation_files.append(os.path.join(data_path, class_name, file_name))
 
         # check model file
         check_if_file_exists(model_file)
 
-        # the given evaluation path is a folder with file inside
-        if os.path.isdir(self.config.get_data('evaluation_path')):
-            # load model
-            self.start_timer('load model file "%s"' % model_file)
-            model = self.load_model(model_file)
-            self.finish_timer('load model file "%s"' % model_file)
-
-            # build the generators
-            self.start_timer('preparations')
-            image_val_generator = self.get_image_generator()
-            validation_generator = self.get_validation_generator(image_val_generator)
-            self.finish_timer('preparations')
-
-            # evaluate the given path
-            self.start_timer('evaluation')
-            self.evaluate_path(
-                model,
-                validation_generator,
-                self.config.get_data('evaluation_path'),
-                show_image,
-                save_image
-            )
-            self.finish_timer('evaluation')
-
-            return
-
-        # the given evaluation path is a single file
-        elif os.path.isfile(self.config.get_data('evaluation_path')):
-
-            check_if_file_exists(self.config.get_data('evaluation_path'))
-            evaluation_files.append(self.config.get_data('evaluation_path'))
-
-            # load model
-            self.start_timer('load model file "%s"' % model_file)
-            model = self.load_model(model_file)
-            self.finish_timer('load model file "%s"' % model_file)
-        else:
-            raise AssertionError('Unknown given path "%s"' % self.config.get_data('evaluation_path'))
+        # load model
+        self.start_timer('load model file "%s"' % model_file)
+        model = self.load_model(model_file)
+        self.finish_timer('load model file "%s"' % model_file)
 
         # evaluate all collected files
         for evaluation_file in evaluation_files:
             self.evaluate_file(model, evaluation_file, show_image, save_image)
+
+        # evaluate all collected files
+        for evaluation_file in evaluation_files:
+            evaluation_data = self.evaluate_file(model, evaluation_file, show_image, save_image, do_not_cache)
+            data['classes'] = evaluation_data['classes']
+
+            del evaluation_data['prediction_overview']
+            del evaluation_data['classes']
+
+            evaluation_data['evaluation_file'] = evaluation_data['evaluation_file'].replace(
+                '%s/' % data['root_path'], ''
+            )
+            index_key = evaluation_data['evaluation_file']
+
+            data['data'][index_key] = evaluation_data
+
+            if evaluation_data['is_top_1']:
+                data['top_k']['correctly_classified_top_1'].append(index_key)
+            else:
+                data['top_k']['incorrectly_classified_top_1'].append(index_key)
+
+            if evaluation_data['is_top_5']:
+                data['top_k']['correctly_classified_top_5'].append(index_key)
+            else:
+                data['top_k']['incorrectly_classified_top_5'].append(index_key)
+
+        # save evaluation file
+        if save_evaluation_file:
+            json_file = os.path.join(root_path, 'evaluation-file-%s.json' % evaluate_type)
+            self.start_timer('Write json file "%s"' % json_file)
+            with open(json_file, 'w') as outfile:
+                json.dump(data, outfile, indent=4)
+            self.finish_timer('Write json file "%s"' % json_file)
