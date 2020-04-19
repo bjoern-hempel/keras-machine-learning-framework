@@ -49,6 +49,7 @@ import pickle
 import seaborn as sn
 import pandas as pd
 import pprint
+import matplotlib
 
 # some other from imports
 from collections import OrderedDict
@@ -987,7 +988,18 @@ class ImageClassifier(Command):
 
         return y_true, y_pred
 
-    def build_confusion_matrix(self, data, show_image=False, save_image=True, save_svg=True, save_pdf=True):
+    @staticmethod
+    def non_lin_cdict(steps, hexcol_array):
+        cdict = {'red': (), 'green': (), 'blue': ()}
+        for s, hexcol in zip(steps, hexcol_array):
+            rgb = matplotlib.colors.hex2color(hexcol)
+            cdict['red'] = cdict['red'] + ((s, rgb[0], rgb[0]),)
+            cdict['green'] = cdict['green'] + ((s, rgb[1], rgb[1]),)
+            cdict['blue'] = cdict['blue'] + ((s, rgb[2], rgb[2]),)
+        return cdict
+
+    def build_confusion_matrix(self, data, show_image=False, save_image=True, save_svg=True, save_pdf=True,
+                               use_percentage=True):
         """Builds a confusion matrix with given data
         ----------
         data : array
@@ -1022,6 +1034,7 @@ class ImageClassifier(Command):
         labeled_classes_index = []
         for class_name in data_evaluated['classes']:
             labeled_classes_index.append(
+                class_name.replace('_', ' ').title() if use_percentage else
                 '%s (%6.2f%%)' % (
                     class_name.replace('_', ' ').title(),
                     data_evaluated['classes'][class_name]['accuracy'] * 100
@@ -1033,25 +1046,38 @@ class ImageClassifier(Command):
                 class_name.replace('_', ' ').title()
             )
 
+        # recalculate data_confusion_matrix to percentage
+        if use_percentage:
+            data_confusion_matrix = data_confusion_matrix.astype(float)
+            for row in range(len(data_confusion_matrix)):
+                for col in range(len(data_confusion_matrix[row])):
+                    data_confusion_matrix[row][col] = data_confusion_matrix[row][col] / data_evaluated['classes'][classes[row]]['all']
+
         df_cm = pd.DataFrame(data_confusion_matrix, index=labeled_classes_index, columns=labeled_classes_columns)
         plt.figure(figsize=(10, 7))
         plt.title(title)
         plt.xlabel("Values on X axis")
         sn.set(font_scale=0.5)
 
+        hc = ['#228080', '#f9d9d9', '#ebebeb', '#638787', '#228080']
+        th = [0, 0.1, 0.5, 0.9, 1]
+        cdict = self.non_lin_cdict(th, hc)
+        cm = matplotlib.colors.LinearSegmentedColormap('test', cdict)
+
+        format = '.1%' if use_percentage else 'g'
         g = sn.heatmap(
             df_cm,
             annot=True,
             cbar=False,
-            annot_kws={"size": 4},
+            annot_kws={"size": 3},
             linewidths=0.2,
             linecolor='gray',
             mask=mask,
-            cmap='coolwarm',
+            cmap=cm, #sn.color_palette("BrBG", 100, desat=1),
             center=0,
             xticklabels=True,
             yticklabels=True,
-            fmt='g'
+            fmt=format
         )
         g.set_yticklabels(g.get_yticklabels(), rotation=0, fontsize=4, horizontalalignment='right')
         g.set_xticklabels(g.get_xticklabels(), rotation=30, fontsize=4, horizontalalignment='right')
@@ -1063,7 +1089,7 @@ class ImageClassifier(Command):
         if show_image:
             plt.show()
 
-        if save_image:
+        if save_image or True:
             plt.draw()
             fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.png'), dpi=1200)
         if save_pdf:
