@@ -38,6 +38,7 @@ from __future__ import print_function
 # some basic imports
 import click
 import os
+import json
 import sys
 import math
 import numpy as np
@@ -60,6 +61,7 @@ from mlks.helper.filesystem import get_number_of_folders_and_files
 from mlks.helper.graph import print_image
 from mlks.helper.dict import get_best_value, get_best_index, count_len_recursive, get_sort_index_array
 from mlks.helper.ml import get_epoch_array
+from mlks.helper.filesystem import check_if_file_exists
 
 # matplotlib libraries
 from matplotlib import pyplot as plt
@@ -220,8 +222,8 @@ class ImageClassifier(Command):
 
     Methods
     -------
-    evaluate_path(model, validation_generator, evaluation_path, show_image=True, save_image=False, force_train=False)
-        Evaluate the given path and build a confusion matrix.
+    build_confusion_matrix(data, show_image=False, save_image=True, save_svg=True, save_pdf=True)
+        Builds a confusion matrix with given data.
     """
 
     def __init__(self, config, question='Are these configurations correct? Continue?',
@@ -286,156 +288,7 @@ class ImageClassifier(Command):
         # initialize the parent class
         super().__init__(config, question, negative, check_empty_folder)
 
-    def evaluate_path(self, model, validation_generator, evaluation_path, show_image=True, save_image=False,
-                      force_train=False):
-        """Evaluate the given path and build a confusion matrix.
-
-        Caches the first evaluation result within the evaluation.pkl file to increase the execution speed.
-
-        Parameters
-        ----------
-        model : compiled model (h5py)
-            The compiled keras model.
-        validation_generator : str, optional
-            The compiled keras validation generator.
-        evaluation_path : str
-            The path to be evaluated.
-        show_image : bool, optional
-            Specifies whether the graph should be displayed. (default is True)
-        save_image : bool, optional
-            Specifies whether the graph should be saved. (default is False)
-        force_train : bool, optional
-            Ignore the caching (default is False)
-
-        Raises
-        ------
-        AssertionError
-            If the given evaluation path was not found or is not a folder.
-        """
-        if not os.path.exists(evaluation_path):
-            raise AssertionError('The given path "%s" was not found.' % evaluation_path)
-        if not os.path.isdir(evaluation_path):
-            raise AssertionError('The given path "%s" is not a folder.' % evaluation_path)
-
-        # some vars
-        classes = self.config.get_environment('classes')
-        evaluation_file = '%s/%s' % (os.path.dirname(self.config.get_data('config_file')), 'evaluation.pkl')
-        evaluation_file_png = '%s/%s' % (os.path.dirname(self.config.get_data('config_file')), 'evaluation.png')
-        verbose = self.config.get('verbose')
-
-        # skip training if we already do have an evaluation file
-        if not os.path.exists(evaluation_file) or force_train:
-            step_size_validation = validation_generator.n // validation_generator.batch_size + 1
-            Y_pred = model.predict_generator(validation_generator, step_size_validation, verbose=verbose)
-            y_pred = np.argmax(Y_pred, axis=1)
-
-            # save evaluation file
-            with open(evaluation_file, 'wb') as output:
-                pickle.dump(y_pred, output, pickle.HIGHEST_PROTOCOL)
-        else:
-            # open evaluation file
-            with open(evaluation_file, 'rb') as input_file:
-                y_pred = pickle.load(input_file)
-
-        data_confusion_matrix = confusion_matrix(validation_generator.classes, y_pred)
-
-        data_evaluated = {
-            'classes': {},
-            'all': {
-                'positive': 0,
-                'negative': 0,
-                'all': 0
-            }
-        }
-
-        # mask zero fields
-        mask = np.zeros_like(data_confusion_matrix)
-        for row in range(len(data_confusion_matrix)):
-            data_evaluated['classes'][classes[row]] = {
-                'positive': 0,
-                'negative': 0,
-                'all': 0
-            }
-            for col in range(len(data_confusion_matrix[row])):
-                if row == col:
-                    data_evaluated['classes'][classes[row]]['positive'] += data_confusion_matrix[row][col]
-                    data_evaluated['all']['positive'] += data_confusion_matrix[row][col]
-                else:
-                    data_evaluated['classes'][classes[row]]['negative'] += data_confusion_matrix[row][col]
-                    data_evaluated['all']['negative'] += data_confusion_matrix[row][col]
-
-                data_evaluated['classes'][classes[row]]['all'] += data_confusion_matrix[row][col]
-                data_evaluated['all']['all'] += data_confusion_matrix[row][col]
-
-                if data_confusion_matrix[row][col] == 0:
-                    mask[row][col] = True
-
-        # calculate the accuracy
-        for class_name in data_evaluated['classes']:
-            data_evaluated['classes'][class_name]['accuracy'] = round(
-                data_evaluated['classes'][class_name]['positive'] / data_evaluated['classes'][class_name]['all'],
-                8
-            )
-        data_evaluated['all']['accuracy'] = round(
-            data_evaluated['all']['positive'] / data_evaluated['all']['all'],
-            8
-        )
-
-        pp.pprint(data_evaluated)
-
-        title = 'Confusion Matrix "%s" (acc. %.2f%%)' % (
-            os.path.basename(os.path.dirname(evaluation_path)),
-            data_evaluated['all']['accuracy'] * 100
-        )
-
-        labeled_classes_index = []
-        for class_name in data_evaluated['classes']:
-            labeled_classes_index.append(
-                '%s (%6.2f%%)' % (
-                    class_name.replace('_', ' ').title(),
-                    data_evaluated['classes'][class_name]['accuracy'] * 100
-                )
-            )
-        labeled_classes_columns = []
-        for class_name in data_evaluated['classes']:
-            labeled_classes_columns.append(
-                class_name.replace('_', ' ').title()
-            )
-
-        df_cm = pd.DataFrame(data_confusion_matrix, index=labeled_classes_index, columns=labeled_classes_columns)
-        plt.figure(figsize=(10, 7))
-        plt.title(title)
-        plt.xlabel("Values on X axis")
-        sn.set(font_scale=0.5)
-
-        g = sn.heatmap(
-            df_cm,
-            annot=True,
-            cbar=False,
-            annot_kws={"size": 4},
-            linewidths=0.2,
-            linecolor='gray',
-            mask=mask,
-            cmap='coolwarm',
-            center=0,
-            xticklabels=True,
-            yticklabels=True
-        )
-        g.set_yticklabels(g.get_yticklabels(), rotation=0, fontsize=4, horizontalalignment='right')
-        g.set_xticklabels(g.get_xticklabels(), rotation=30, fontsize=4, horizontalalignment='right')
-
-        plt.rcParams['figure.figsize'] = 12, 9
-        plt.rcParams['savefig.dpi'] = 'figure'
-        fig1 = plt.gcf()
-
-        if show_image:
-            plt.show()
-
-        if save_image:
-            plt.draw()
-            fig1.savefig(evaluation_file_png, dpi=1200)
-
-    def evaluate_file(self, model, evaluation_file, show_image=True, save_image=False, do_not_save_data=False):
+    def evaluate_file(self, model, evaluation_file, do_not_save_data=True):
         verbose = self.config.get('verbose')
         verbose = False
 
@@ -993,3 +846,229 @@ class ImageClassifier(Command):
             'absolute_path': self.config.get_data('accuracy_file'),
             'url_path': self.config.get_data('accuracy_file')
         }
+
+    def get_evaluation_files(self, data_path, files_validation):
+        evaluation_files = []
+
+        # bulid evaluation file array
+        for class_name in files_validation:
+            for file_name in files_validation[class_name]:
+                evaluation_files.append(os.path.join(data_path, class_name, file_name))
+
+        return evaluation_files
+
+    def get_evaluation_data(self, model_file, data_path, files_validation, evaluate_type, save_evaluation_file=True):
+
+        # some needed variables
+        root_path = os.path.dirname(self.config.get_data('config_file'))
+        json_file = os.path.join(root_path, 'evaluation-file-%s.json' % evaluate_type)
+
+        # use already calculated json file if it exists
+        if os.path.isfile(json_file):
+            with open(json_file) as f:
+                return json.load(f)
+
+        # collect all evaluation files
+        evaluation_files = self.get_evaluation_files(data_path, files_validation)
+
+        # data array
+        data = {
+            'root_path': root_path,
+            'classes': [],
+            'data': {},
+            'top_k': {
+                'correctly_classified_top_1': [],
+                'incorrectly_classified_top_1': [],
+                'correctly_classified_top_5': [],
+                'incorrectly_classified_top_5': []
+            }
+        }
+
+        # check model file
+        check_if_file_exists(model_file)
+
+        # load model
+        self.start_timer('load model file "%s"' % model_file)
+        model = self.load_model(model_file)
+        self.finish_timer('load model file "%s"' % model_file)
+
+        # evaluate all collected files
+        for evaluation_file in evaluation_files:
+            self.evaluate_file(model, evaluation_file)
+
+        # evaluate all collected files
+        for evaluation_file in evaluation_files:
+            evaluation_data = self.evaluate_file(model, evaluation_file)
+            data['classes'] = evaluation_data['classes']
+
+            del evaluation_data['prediction_overview']
+            del evaluation_data['classes']
+
+            evaluation_data['evaluation_file'] = evaluation_data['evaluation_file'].replace(
+                '%s/' % data['root_path'], ''
+            )
+            index_key = evaluation_data['evaluation_file']
+
+            data['data'][index_key] = evaluation_data
+
+            if evaluation_data['is_top_1']:
+                data['top_k']['correctly_classified_top_1'].append(index_key)
+            else:
+                data['top_k']['incorrectly_classified_top_1'].append(index_key)
+
+            if evaluation_data['is_top_5']:
+                data['top_k']['correctly_classified_top_5'].append(index_key)
+            else:
+                data['top_k']['incorrectly_classified_top_5'].append(index_key)
+
+        # save evaluation file
+        if save_evaluation_file:
+            self.start_timer('Write json file "%s"' % json_file)
+            with open(json_file, 'w') as outfile:
+                json.dump(data, outfile, indent=4)
+            self.finish_timer('Write json file "%s"' % json_file)
+
+        return data
+
+    def get_evaluated_data(self, data_confusion_matrix, classes):
+        data_evaluated = {
+            'classes': {},
+            'all': {
+                'positive': 0,
+                'negative': 0,
+                'all': 0
+            }
+        }
+
+        # mask zero fields
+        mask = np.zeros_like(data_confusion_matrix)
+        for row in range(len(data_confusion_matrix)):
+            data_evaluated['classes'][classes[row]] = {
+                'positive': 0,
+                'negative': 0,
+                'all': 0
+            }
+            for col in range(len(data_confusion_matrix[row])):
+                if row == col:
+                    data_evaluated['classes'][classes[row]]['positive'] += data_confusion_matrix[row][col]
+                    data_evaluated['all']['positive'] += data_confusion_matrix[row][col]
+                else:
+                    data_evaluated['classes'][classes[row]]['negative'] += data_confusion_matrix[row][col]
+                    data_evaluated['all']['negative'] += data_confusion_matrix[row][col]
+
+                data_evaluated['classes'][classes[row]]['all'] += data_confusion_matrix[row][col]
+                data_evaluated['all']['all'] += data_confusion_matrix[row][col]
+
+                if data_confusion_matrix[row][col] == 0:
+                    mask[row][col] = True
+
+        # calculate the accuracy
+        for class_name in data_evaluated['classes']:
+            data_evaluated['classes'][class_name]['accuracy'] = round(
+                data_evaluated['classes'][class_name]['positive'] / data_evaluated['classes'][class_name]['all'],
+                8
+            )
+        data_evaluated['all']['accuracy'] = round(
+            data_evaluated['all']['positive'] / data_evaluated['all']['all'],
+            8
+        )
+
+        return data_evaluated, mask
+
+    def get_true_prediction_data(self, data):
+        y_true = []
+        y_pred = []
+
+        for path in data['data']:
+            element = data['data'][path]
+
+            y_true.append(element['prediction_class'])
+            y_pred.append(element['real_class'])
+
+        return y_true, y_pred
+
+    def build_confusion_matrix(self, data, show_image=False, save_image=True, save_svg=True, save_pdf=True):
+        """Builds a confusion matrix with given data
+        ----------
+        data : array
+            The data array
+        show_image : bool, optional
+            Specifies whether the graph should be displayed. (default is False)
+        save_image : bool, optional
+            Specifies whether the graph should be saved. (default is True)
+        save_svg : bool, optional
+            Specifies whether the graph should be saved. (default is True)
+        save_pdf : bool, optional
+            Specifies whether the graph should be saved. (default is True)
+        Raises
+        ------
+        AssertionError
+            If the given evaluation path was not found or is not a folder.
+        """
+        y_true, y_pred = self.get_true_prediction_data(data)
+        data_confusion_matrix = confusion_matrix(y_true, y_pred)
+        classes = data['classes']
+        data_evaluated, mask = self.get_evaluated_data(data_confusion_matrix, classes)
+
+        name = os.path.basename(os.path.dirname(data['root_path']))
+        name = name.replace('-2', '')
+
+        title = 'Confusion Matrix "%s" %d classes (acc. %.2f%%)' % (
+            name,
+            len(classes),
+            data_evaluated['all']['accuracy'] * 100
+        )
+
+        labeled_classes_index = []
+        for class_name in data_evaluated['classes']:
+            labeled_classes_index.append(
+                '%s (%6.2f%%)' % (
+                    class_name.replace('_', ' ').title(),
+                    data_evaluated['classes'][class_name]['accuracy'] * 100
+                )
+            )
+        labeled_classes_columns = []
+        for class_name in data_evaluated['classes']:
+            labeled_classes_columns.append(
+                class_name.replace('_', ' ').title()
+            )
+
+        df_cm = pd.DataFrame(data_confusion_matrix, index=labeled_classes_index, columns=labeled_classes_columns)
+        plt.figure(figsize=(10, 7))
+        plt.title(title)
+        plt.xlabel("Values on X axis")
+        sn.set(font_scale=0.5)
+
+        g = sn.heatmap(
+            df_cm,
+            annot=True,
+            cbar=False,
+            annot_kws={"size": 4},
+            linewidths=0.2,
+            linecolor='gray',
+            mask=mask,
+            cmap='coolwarm',
+            center=0,
+            xticklabels=True,
+            yticklabels=True,
+            fmt='g'
+        )
+        g.set_yticklabels(g.get_yticklabels(), rotation=0, fontsize=4, horizontalalignment='right')
+        g.set_xticklabels(g.get_xticklabels(), rotation=30, fontsize=4, horizontalalignment='right')
+
+        plt.rcParams['figure.figsize'] = 12, 9
+        plt.rcParams['savefig.dpi'] = 'figure'
+        fig1 = plt.gcf()
+
+        if show_image:
+            plt.show()
+
+        if save_image:
+            plt.draw()
+            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.png'), dpi=1200)
+        if save_pdf:
+            plt.draw()
+            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.pdf'), dpi=1200)
+        if save_svg:
+            plt.draw()
+            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.svg'), dpi=1200)

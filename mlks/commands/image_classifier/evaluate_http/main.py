@@ -70,7 +70,7 @@ class EvaluateHttp(ImageClassifier):
         graph_file_web = add_file_extension(add_file_extension(evaluation_file_web, 'graph', True), PNG_EXTENSION)
 
         self.start_timer('prediction')
-        evaluation_data = self.evaluate_file(model, evaluation_file, show_image, save_image)
+        evaluation_data = self.evaluate_file(model, evaluation_file)
         self.finish_timer('prediction')
 
         prediction_overview_array = evaluation_data['prediction_overview_array']

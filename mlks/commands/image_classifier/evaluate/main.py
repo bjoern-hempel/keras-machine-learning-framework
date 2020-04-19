@@ -35,7 +35,6 @@ import json
 import sys
 from pathlib import Path
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists
 
 
 class Evaluate(ImageClassifier):
@@ -48,11 +47,10 @@ class Evaluate(ImageClassifier):
     def do(self):
 
         # some configs
-        show_image = True
+        show_image = False
         save_image = True
         evaluate_type = 'validation' # validation or train
         save_evaluation_file = True
-        do_not_cache = False
         rebuild_model_dict = False
 
         # load config file
@@ -72,68 +70,8 @@ class Evaluate(ImageClassifier):
         files_all = self.config.get_environment('files')
         files_validation = files_all[evaluate_type]
         data_path = self.config.get_data('data_path')
-        root_path = os.path.dirname(self.config.get_data('config_file'))
-        evaluation_files = []
 
-        # data array
-        data = {
-            'root_path': root_path,
-            'classes': [],
-            'data': {},
-            'top_k': {
-                'correctly_classified_top_1': [],
-                'incorrectly_classified_top_1': [],
-                'correctly_classified_top_5': [],
-                'incorrectly_classified_top_5': []
-            }
-        }
+        # get evaluated data
+        data = self.get_evaluation_data(model_file, data_path, files_validation, evaluate_type, save_evaluation_file)
 
-        # bulid evaluation file array
-        for class_name in files_validation:
-            for file_name in files_validation[class_name]:
-                evaluation_files.append(os.path.join(data_path, class_name, file_name))
-
-        # check model file
-        check_if_file_exists(model_file)
-
-        # load model
-        self.start_timer('load model file "%s"' % model_file)
-        model = self.load_model(model_file)
-        self.finish_timer('load model file "%s"' % model_file)
-
-        # evaluate all collected files
-        for evaluation_file in evaluation_files:
-            self.evaluate_file(model, evaluation_file, show_image, save_image)
-
-        # evaluate all collected files
-        for evaluation_file in evaluation_files:
-            evaluation_data = self.evaluate_file(model, evaluation_file, show_image, save_image, do_not_cache)
-            data['classes'] = evaluation_data['classes']
-
-            del evaluation_data['prediction_overview']
-            del evaluation_data['classes']
-
-            evaluation_data['evaluation_file'] = evaluation_data['evaluation_file'].replace(
-                '%s/' % data['root_path'], ''
-            )
-            index_key = evaluation_data['evaluation_file']
-
-            data['data'][index_key] = evaluation_data
-
-            if evaluation_data['is_top_1']:
-                data['top_k']['correctly_classified_top_1'].append(index_key)
-            else:
-                data['top_k']['incorrectly_classified_top_1'].append(index_key)
-
-            if evaluation_data['is_top_5']:
-                data['top_k']['correctly_classified_top_5'].append(index_key)
-            else:
-                data['top_k']['incorrectly_classified_top_5'].append(index_key)
-
-        # save evaluation file
-        if save_evaluation_file:
-            json_file = os.path.join(root_path, 'evaluation-file-%s.json' % evaluate_type)
-            self.start_timer('Write json file "%s"' % json_file)
-            with open(json_file, 'w') as outfile:
-                json.dump(data, outfile, indent=4)
-            self.finish_timer('Write json file "%s"' % json_file)
+        self.build_confusion_matrix(data, show_image, save_image)

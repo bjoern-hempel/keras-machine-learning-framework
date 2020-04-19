@@ -130,5 +130,5 @@ class EvaluateService(ImageClassifier):
                 if 'crdownload' in evaluation_file:
                     continue
 
-                self.evaluate_file(model, evaluation_file, show_image)
+                self.evaluate_file(model, evaluation_file)
                 os.remove(evaluation_file)
