@@ -46,6 +46,11 @@ if parameter_plaidml_keras_backend in sys.argv:
 if use_plaidml_keras_backend:
     os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 
+"""
+Disable tensorflow logging
+"""
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 import click
 

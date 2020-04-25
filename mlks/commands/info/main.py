@@ -87,12 +87,6 @@ class Info:
         click.echo('------------------')
 
         click.echo('')
-        click.echo('Default device:')
-        click.echo('---------------')
-        sess = tf.Session(config=tf.ConfigProto(log_device_placement=True, allow_soft_placement=True))
-        click.echo('---------------')
-
-        click.echo('')
         if number_of_gpus > 0:
             click.echo('Information: You are running this script with GPU support.')
         else:

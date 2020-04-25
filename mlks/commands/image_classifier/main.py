@@ -63,6 +63,7 @@ from mlks.helper.graph import print_image
 from mlks.helper.dict import get_best_value, get_best_index, count_len_recursive, get_sort_index_array
 from mlks.helper.ml import get_epoch_array
 from mlks.helper.filesystem import check_if_file_exists
+from tensorflow import keras
 
 # matplotlib libraries
 from matplotlib import pyplot as plt
@@ -97,8 +98,8 @@ from keras_applications.mobilenet import MobileNet
 from keras.applications.mobilenet import preprocess_input as MobileNetPreprocessInput
 
 # MobileNetV2
-from keras.applications.mobilenetv2 import MobileNetV2
-from keras.applications.mobilenetv2 import preprocess_input as MobileNetV2PreprocessInput
+from keras.applications.mobilenet_v2 import MobileNetV2
+from keras.applications.mobilenet_v2 import preprocess_input as MobileNetV2PreprocessInput
 
 # ResNet50
 from keras.applications.resnet50 import ResNet50
@@ -615,7 +616,6 @@ class ImageClassifier(Command):
         tensor_board = TensorBoard(
             log_dir=log_file,
             histogram_freq=0,
-            batch_size=batch_size,
             write_graph=True,
             write_grads=False,
             write_images=False,
