@@ -5,7 +5,7 @@ setup(
     version='1.0',
     py_modules=['mlks.main'],
     install_requires=[
-        'Click', 'matplotlib', 'numpy', 'tensorflow', 'scikit-learn', 'pandas', 'seaborn', 'six'
+        'click', 'matplotlib', 'numpy', 'tensorflow', 'scikit-learn', 'pandas', 'seaborn', 'six', 'pillow'
     ],
     entry_points='''
         [console_scripts]
