@@ -131,14 +131,14 @@ class Train(ImageClassifier):
         self.config.rebuild_model_dict()
         self.start_timer('save config')
         self.config.set_environment('classes', train_generator.class_indices, flip=True, flip_as_array=True)
-        self.config.set_environment('accuracies_trained', history.history['acc'], flip=True, flip_as_array=True)
-        self.config.set_environment('accuracies_validated', history.history['val_acc'], flip=True, flip_as_array=True)
+        self.config.set_environment('accuracies_trained', history.history['accuracy'], flip=True, flip_as_array=True)
+        self.config.set_environment('accuracies_validated', history.history['val_accuracy'], flip=True, flip_as_array=True)
         self.config.save_json()
         self.finish_timer('save config')
 
         # save accuracy diagram
-        plt.plot(history.history['acc'], label='train')
-        plt.plot(history.history['val_acc'], label='test')
+        plt.plot(history.history['accuracy'], label='train')
+        plt.plot(history.history['val_accuracy'], label='test')
         plt.legend()
         plt.savefig(self.config.get_data('accuracy_file'))
 

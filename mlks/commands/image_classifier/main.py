@@ -632,7 +632,7 @@ class ImageClassifier(Command):
         )
         model_checkpoint = ModelCheckpoint(
             best_model_file,
-            monitor='val_acc',
+            monitor='val_accuracy',
             verbose=verbose,
             save_best_only=True,
             save_weights_only=False,

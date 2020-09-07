@@ -38,10 +38,24 @@ import re
 import sys
 from typing import Dict
 from mlks.helper.filesystem import add_file_extension
+import numpy as np
+from functools import singledispatch
 
 # some general variables
 debug = False
 config_translator: Dict[str, str] = {}
+
+
+@singledispatch
+def to_serializable(val):
+    """Used by default."""
+    return str(val)
+
+
+@to_serializable.register(np.float32)
+def ts_float32(val):
+    """Used if *val* is an instance of numpy.float32."""
+    return np.float64(val)
 
 
 def set_config_translator(ct):
@@ -117,7 +131,7 @@ class Config(object):
         extension_wrapper = {
             'config_file': 'json',
             'model_file': 'h5',
-            'best_model_file': 'best.{epoch:02d}-{val_acc:.2f}.h5',
+            'best_model_file': 'best.{epoch:02d}-{val_accuracy:.2f}.h5',
             'accuracy_file': 'png',
             'log_file': 'log',
             'csv_file': 'csv'
@@ -252,7 +266,7 @@ class Config(object):
                 if not self.get('log_verbose'):
                     if 'files' in dict_content['environment']:
                         del dict_content['environment']['files']
-                json.dump(dict_content, json_file, sort_keys=True, indent=4, separators=(',', ': '))
+                json.dump(dict_content, json_file, sort_keys=True, indent=4, separators=(',', ': '), default=to_serializable)
 
     def save_model(self, model):
         model_file = self.get_data('model_file')
