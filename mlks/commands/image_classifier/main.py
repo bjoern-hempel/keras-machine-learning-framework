@@ -102,8 +102,28 @@ from keras.applications.mobilenet_v2 import MobileNetV2
 from keras.applications.mobilenet_v2 import preprocess_input as MobileNetV2PreprocessInput
 
 # ResNet50
-from keras.applications.resnet50 import ResNet50
-from keras.applications.resnet50 import preprocess_input as ResNet50PreprocessInput
+from keras.applications.resnet import ResNet50
+from keras.applications.resnet import preprocess_input as ResNet50PreprocessInput
+
+# ResNet101
+from keras.applications.resnet import ResNet101
+from keras.applications.resnet import preprocess_input as ResNet101PreprocessInput
+
+# ResNet152
+from keras.applications.resnet import ResNet152
+from keras.applications.resnet import preprocess_input as ResNet152PreprocessInput
+
+# ResNet50V2
+from keras.applications.resnet_v2 import ResNet50V2
+from keras.applications.resnet_v2 import preprocess_input as ResNet50V2PreprocessInput
+
+# ResNet101V2
+from keras.applications.resnet_v2 import ResNet101V2
+from keras.applications.resnet_v2 import preprocess_input as ResNet101V2PreprocessInput
+
+# ResNet152V2
+from keras.applications.resnet_v2 import ResNet152V2
+from keras.applications.resnet_v2 import preprocess_input as ResNet152V2PreprocessInput
 
 # VGG19
 from keras.applications.vgg19 import VGG19
@@ -276,6 +296,26 @@ class ImageClassifier(Command):
             'resnet50': {
                 'class': ResNet50,
                 'preprocess_input': ResNet50PreprocessInput
+            },
+            'resnet101': {
+                'class': ResNet101,
+                'preprocess_input': ResNet101PreprocessInput
+            },
+            'resnet152': {
+                'class': ResNet152,
+                'preprocess_input': ResNet152PreprocessInput
+            },
+            'resnet50v2': {
+                'class': ResNet50V2,
+                'preprocess_input': ResNet50V2PreprocessInput
+            },
+            'resnet101v2': {
+                'class': ResNet101V2,
+                'preprocess_input': ResNet101V2PreprocessInput
+            },
+            'resnet152v2': {
+                'class': ResNet152V2,
+                'preprocess_input': ResNet152V2PreprocessInput
             },
             'vgg19': {
                 'class': VGG19,

@@ -292,6 +292,11 @@ option_transfer_learning_model = click.option(
         'MobileNet',
         'MobileNetV2',
         'ResNet50',
+        'ResNet101',
+        'ResNet152',
+        'ResNet50V2',
+        'ResNet101V2',
+        'ResNet152V2',
         'VGG19',
         'Xception'
     ])
