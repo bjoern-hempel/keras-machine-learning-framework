@@ -6,14 +6,21 @@
 
 ### Simple run
 
-The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains the specified data folder `F:/data/raw/plants/flowers` and will produce the following files:
+The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition.
+
+```bash
+(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
+  --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 --verbose
+```
+
+The above mentioned command trains the specified data folder `F:/data/raw/plants/flowers` and will produce the following files:
 
 * `F:/data/processed/flower-MobileNetV2/model.h5` → The last model after the end of the learning process.
 * `F:/data/processed/flower-MobileNetV2/model.best.{epoch:02d}-{val_accuracy:.2f}.h5` → The best model after each epoch (ModelCheckpoint).
 * `F:/data/processed/flower-MobileNetV2/model.json` → A JSON file containing a set of collected metrics.
 * `F:/data/processed/flower-MobileNetV2/model.log` → This file contains all outputs during the training process.
 * `F:/data/processed/flower-MobileNetV2/model.csv` → Saves simple metrics as CSV data during the training process per epoch (per line): epoch, learning_rate, train data (accuracy, top_5_categorical_accuracy, loss), validation data (accuracy, top_5_categorical_accuracy, loss).
-* `F:/data/processed/flower-MobileNetV2/model.png` → A simple evaluation graph with a validation and training graph (`x` → epochs, `y` → accuracy).           
+* `F:/data/processed/flower-MobileNetV2/model.png` → A simple evaluation graph with a validation and training graph (`x` → epochs, `y` → accuracy).
 
 ```bash
 (keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
