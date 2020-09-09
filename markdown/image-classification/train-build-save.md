@@ -6,7 +6,7 @@
 
 ### Simple run
 
-The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition.
+The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. A simple train example:
 
 ```bash
 (keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
@@ -22,9 +22,36 @@ The above mentioned command trains the specified data folder `F:/data/raw/plants
 * `F:/data/processed/flower-MobileNetV2/model.csv` → Saves simple metrics as CSV data during the training process per epoch (per line): epoch, learning_rate, train data (accuracy, top_5_categorical_accuracy, loss), validation data (accuracy, top_5_categorical_accuracy, loss).
 * `F:/data/processed/flower-MobileNetV2/model.png` → A simple evaluation graph with a validation and training graph (`x` → epochs, `y` → accuracy).
 
+The default settings are:
+
+|parameter (long)           |parameter (short)|name                   |value      |comment                                                                                      |
+|---------------------------|-----------------|-----------------------|-----------|---------------------------------------------------------------------------------------------|
+|`--transfer-learning-model`|`-m`             |**transfer_learning_model**|InceptionV3|In this case MobileNetV2 was choosen.                                                        |
+|`--number-trainable-layers`|                 |**number_trainable_layers**|         -1|-1 means → train all layers of used CNN.                                                     |
+|`--input-dimension`        |                 |**input_dimension**        |        224|Sets the size of input dimension.                                                            |
+|`--dense-size`             |                 |**dense_size**             |       1024|Sets the dense size of the neural network after the CNN.                                     |
+|`--dropout`                |                 |**dropout**                |        0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                                 |
+|`--weights`                |                 |**weights**                |imagenet   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
+|`--continue`               |                 |**continue**               |False      |Continue learning with given model file.                                                     |
+|`--epochs`                 |`-e`             |**epochs**                 |         21|Sets the number of epochs to be learned.                                                     |
+
+batch_size:                    16
+activation_function:           relu
+loss_function:                 categorical_crossentropy
+optimizer:                     sgd
+learning_rate:                 0.001
+learning_rate_drop:            0.5
+learning_rate_epochs_drop:     7
+momentum:                      0.9
+decay:                         0.0
+nesterov:                      True
+metrics:                       accuracy
+validation_split:              0.2
+* 
+
+As an example output:
+
 ```bash
-(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
-  --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 --verbose
 Using TensorFlow backend.
 
 general
