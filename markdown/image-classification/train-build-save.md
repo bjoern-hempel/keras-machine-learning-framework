@@ -4,38 +4,58 @@
 
 ## Train, build and save the model
 
-The data set `./data/raw/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains the specified data folder `./data/raw/flowers` and writes the calculated model to `./data/inceptionv3-trained.h5`.
+The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains the specified data folder `F:/data/raw/plants/flowers` and writes the calculated model to `F:/data/processed/flower-MobileNetV2/model.h5`.
 
 ```bash
-(keras-gpu) C:\Users> ml train --data-path=./data/raw/flowers --model-file=./data/inceptionv3-trained.h5
+(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 --verbose
 Using TensorFlow backend.
 
 general
 -------
-verbose:                  False
-debug:                    False
+verbose:                       True
+debug:                         False
+render_device:                 AUTO
+
+data
+----
+environment_path:              F:/data
+data_path:                     F:/data/raw/plants/flowers-12
+model_file:                    F:/data/processed/flower-MobileNetV2/model.h5
+model_source:                  None
+use_train_val:                 False
+add_transfer_learning_name:    False
+config_file:                   F:/data/processed/flower-MobileNetV2/model.json
+best_model_file:               F:/data/processed/flower-MobileNetV2/model.best.{epoch:02d}-{val_accuracy:.2f}.h5
+accuracy_file:                 F:/data/processed/flower-MobileNetV2/model.png
+log_file:                      F:/data/processed/flower-MobileNetV2/model.log
+csv_file:                      F:/data/processed/flower-MobileNetV2/model.csv
+process_folder:                F:/data/processed/flower-MobileNetV2
 
 transfer_learning
 -----------------
-data_path:                ./Data/raw/flowers
-transfer_learning_model:  InceptionV3
-number_trainable_layers:  305
-input_dimension:          299
-dense_size:               512
-dropout:                  0.5
-weights:                  imagenet
+transfer_learning_model:       MobileNetV2
+number_trainable_layers:       -1
+input_dimension:               224
+dense_size:                    1024
+dropout:                       0.0
+weights:                       imagenet
+continue:                      False
 
 machine_learning
 ----------------
-model_file:               ./Data/inceptionv3-trained.h5
-model_config:             ./Data/inceptionv3-trained.json
-epochs:                   10
-learning_rate:            0.001
-activation_function:      tanh
-loss_function:            mean_squared_error
-optimizer:                adam
-metrics:                  accuracy
-environment_path:         None
+epochs:                        21
+batch_size:                    16
+activation_function:           relu
+loss_function:                 categorical_crossentropy
+optimizer:                     sgd
+learning_rate:                 0.001
+learning_rate_drop:            0.5
+learning_rate_epochs_drop:     7
+momentum:                      0.9
+decay:                         0.0
+nesterov:                      True
+metrics:                       accuracy
+validation_split:              0.2
 
 
 Are these configurations correct? Continue? [Y/n] y
