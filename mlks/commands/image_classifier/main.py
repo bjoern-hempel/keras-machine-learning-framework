@@ -468,23 +468,29 @@ class ImageClassifier(Command):
         dense_size = self.config.gettl('dense_size')
         dropout = self.config.gettl('dropout')
         categories = self.get_categories()
-        activation = 'relu'
+        activation = self.config.getml('activation_function')
 
-        # get the transfer learning model
+        # create the transfer learning model (base pre-trained model)
         base_model = self.get_tl_model()
 
+        # add a global spatial average pooling layer
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
+
+        # let's add a fully-connected layer
         x = Dense(dense_size, activation=activation)(x)
-        x = Dropout(dropout)(x)
 
+        # drop out layer if needed
+        if dropout > .0:
+            x = Dropout(dropout)(x)
+
+        # logistic layer: 2 categories - sigmoid / > 2 categories - softmax
         if categories == 2:
-            probabilities = Dense(1)(x)
-            predictions = Activation('sigmoid')(probabilities)
+            predictions = Dense(1, activation='sigmoid')(x)
         else:
-            probabilities = Dense(categories)(x)
-            predictions = Activation('softmax')(probabilities)
+            predictions = Dense(categories, activation='softmax')(x)
 
+        # this is the model we will train
         model = Model(inputs=base_model.input, outputs=predictions)
 
         # set the first number_trainable layers of the network to be non-trainable
@@ -496,9 +502,8 @@ class ImageClassifier(Command):
                 layer.trainable = True
 
         # -1: train all
-        # -2: auto
+        # -2: auto (try to find out the best number of trainable layers
         if number_trainable == -2:
-            print('yes')
             unfreeze = False
             for layer in model.layers:
                 if unfreeze:

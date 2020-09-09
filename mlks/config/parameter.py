@@ -149,7 +149,7 @@ option_port_ssl = click.option(
 option_epochs = click.option(
     '--epochs', '-e',
     cls=OptionHelper,
-    default_options={'default': 10, 'demo_nine_points_train': 10000, 'demo_mnist': 20, 'train': 20},
+    default_options={'default': 10, 'demo_nine_points_train': 10000, 'demo_mnist': 20, 'train': 21},
     option_type='default_by_command',
     expose_value=False,
     is_flag=False,
@@ -176,8 +176,8 @@ option_activation_function = click.option(
     is_flag=False,
     help='Sets the activation function.',
     callback=option_callback,
-    default='tanh',
-    type=click.Choice(['tanh', 'sigmoid'])
+    default='relu',
+    type=click.Choice(['elu', 'exponential', 'relu', 'selu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh'])
 )
 option_loss_function = click.option(
     '--loss-function',
@@ -306,7 +306,7 @@ option_number_trainable_layers = click.option(
     cls=OptionHelper,
     option_type='default_by_parameter',
     dependent='transfer_learning_model',
-    default_options={'default': 10, 'InceptionV3': 11, 'ResNet50': 5, 'VGG19': 5, 'InceptionResNetV2': 5},
+    default_options={'default': -1, 'InceptionV3': -1, 'ResNet50': -1, 'VGG19': -1, 'InceptionResNetV2': -1},
     expose_value=False,
     is_flag=False,
     help='Sets the number trainable layers.',
@@ -333,7 +333,7 @@ option_dense_size = click.option(
     is_flag=False,
     help='Sets the dense size.',
     callback=option_callback,
-    default=512,
+    default=1024,
     type=int
 )
 option_dropout = click.option(
@@ -342,7 +342,7 @@ option_dropout = click.option(
     is_flag=False,
     help='Sets the dropout value.',
     callback=option_callback,
-    default=0.5,
+    default=0.0,
     type=click.FloatRange(min=0, max=1, clamp=False)
 )
 option_weights = click.option(
