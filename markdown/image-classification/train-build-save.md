@@ -7,7 +7,8 @@
 The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains the specified data folder `F:/data/raw/plants/flowers` and writes the calculated model to `F:/data/processed/flower-MobileNetV2/model.h5`.
 
 ```bash
-(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 --verbose
+(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
+  --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 --verbose
 Using TensorFlow backend.
 
 general
