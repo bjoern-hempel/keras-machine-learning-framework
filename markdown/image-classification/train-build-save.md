@@ -28,15 +28,15 @@ The default settings are:
 
 |parameter (long)             |parameter (short)|name                       |value        |comment                                                                          |
 |-----------------------------|-----------------|---------------------------|-------------|---------------------------------------------------------------------------------|
-|`--verbose`                  |`-v`             |*verbose*                  |False        |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
-|`--debug`                    |`-d`             |*debug*                    |False        |Sets the script to a debug mode.                                                 |
+|`--verbose`                  |`-v`             |*verbose*                  |***False***  |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
+|`--debug`                    |`-d`             |*debug*                    |***False***  |Sets the script to a debug mode.                                                 |
 |`--transfer-learning-model`  |`-m`             |*transfer_learning_model*  |`InceptionV3`|In this case `MobileNetV2` was choosen.                                          |
 |`--number-trainable-layers`  |                 |*number_trainable_layers*  |           -1|-1 means → train all layers of used CNN.                                         |
 |`--input-dimension`          |                 |*input_dimension*          |          224|Sets the size of input dimension.                                                |
 |`--dense-size`               |                 |*dense_size*               |         1024|Sets the dense size of the neural network after the CNN.                         |
 |`--dropout`                  |                 |*dropout*                  |          0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                     |
 |`--weights`                  |                 |*weights*                  |`imagenet`   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
-|`--continue`                 |                 |*continue*                 |False        |Continue learning with given model file.                                         |
+|`--continue`                 |                 |*continue*                 |***False***  |Continue learning with given model file.                                         |
 |`--epochs`                   |`-e`             |*epochs*                   |           21|Sets the number of epochs to be learned.                                         |
 |`--batch-size`               |                 |*batch_size*               |           16|Sets the number of images for the forward propagation before use of the backward propagation.|
 |`--activation-function`      |`-a`             |*activation_function*      |`relu`       |Sets the activation function (`elu`, `exponential`, `relu`, `selu`, `sigmoid`, `softmax`, `softplus`, `softsign`, `tanh`).|
@@ -45,11 +45,11 @@ The default settings are:
 |`--learning-rate`            |`-l`             |*learning_rate*            |        0.001|Sets the learning rate value.                                                    |
 |`--learning-rate-drop`       |                 |*learning_rate_drop*       |          0.5|Sets the learning rate drop value.                                               |
 |`--learning-rate-epochs-drop`|                 |*learning_rate_epochs_drop*|            7|Sets the number of epochs after which the learning rate should decrease.         |
-|`--momentum`                 |                 |*momentum*                 |          0.9||
-|`--decay`                    |                 |*decay*                    |          0.0||
-|`--nesterov`                 |                 |*nesterov*                 |         True||
-|`--metrics`                  |                 |*metrics*                  |`accuracy`   ||
-|`--validation-split`         |                 |*validation_split*         |          0.2||
+|`--momentum`                 |                 |*momentum*                 |          0.9|Sets the momentum value.|
+|`--decay`                    |                 |*decay*                    |          0.0|Sets the decay value.|
+|`--nesterov`                 |                 |*nesterov*                 |***True***   |Switches on the nesterov mode.|
+|`--metrics`                  |                 |*metrics*                  |`accuracy`   |Sets the metrics.|
+|`--validation-split`         |                 |*validation_split*         |          0.2|Sets the validation split (training data vs. validation data).|
 
 As an example output:
 
