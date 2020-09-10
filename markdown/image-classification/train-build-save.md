@@ -40,7 +40,7 @@ The default settings are:
 |`--weights`                  |                 |*weights*                  |`imagenet`   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
 |`--continue`                 |                 |*continue*                 |***False***  |Continue learning with given model file.                                         |
 |`--epochs`                   |`-e`             |*epochs*                   |           21|Sets the number of epochs to be learned.                                         |
-|`--batch-size`               |                 |*batch_size*               |           16|Sets the number of images for the forward propagation before using of the backward propagation.|
+|`--batch-size`               |                 |*batch_size*               |           16|Sets the number of images to be used for forward propagation before using of the backward propagation.|
 |`--activation-function`      |`-a`             |*activation_function*      |`relu`       |Sets the activation function (`elu`, `exponential`, `relu`, `selu`, `sigmoid`, `softmax`, `softplus`, `softsign`, `tanh`).|
 |`--loss-function`            |                 |*loss_function*            |`categorical_crossentropy`|Sets the loss function (`mean_squared_error`, `categorical_crossentropy`)|
 |`--optimizer`                |`-o`             |*optimizer*                |`sgd`        |Sets the optimizer (`sgd`, `rmsprop`, `adagrad`, `adadelta`, `adam`, `adamax`, `nadam`).|
