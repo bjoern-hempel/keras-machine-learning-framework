@@ -1,5 +1,7 @@
 # Train, build and save the model
 
+## Prepare the data folder
+
 ...
 
 ## Train, build and save the model
