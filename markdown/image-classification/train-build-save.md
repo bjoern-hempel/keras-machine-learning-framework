@@ -26,20 +26,21 @@ The above mentioned command trains the specified data folder `F:/data/raw/plants
 
 The default settings are:
 
-|parameter (long)           |parameter (short)|name                     |value      |comment                                                                          |
-|---------------------------|-----------------|-------------------------|-----------|---------------------------------------------------------------------------------|
-|`--verbose`                |`-v`             |*verbose*                |False      |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
-|`--debug`                  |`-d`             |*debug*                  |False      |Sets the script to a debug mode.                                                 |
-|`--transfer-learning-model`|`-m`             |*transfer_learning_model*|InceptionV3|In this case MobileNetV2 was choosen.                                            |
-|`--number-trainable-layers`|                 |*number_trainable_layers*|         -1|-1 means → train all layers of used CNN.                                         |
-|`--input-dimension`        |                 |*input_dimension*        |        224|Sets the size of input dimension.                                                |
-|`--dense-size`             |                 |*dense_size*             |       1024|Sets the dense size of the neural network after the CNN.                         |
-|`--dropout`                |                 |*dropout*                |        0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                     |
-|`--weights`                |                 |*weights*                |imagenet   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
-|`--continue`               |                 |*continue*               |False      |Continue learning with given model file.                                         |
-|`--epochs`                 |`-e`             |*epochs*                 |         21|Sets the number of epochs to be learned.                                                     |`--batch-size`             |                 |*batch_size*             |         16|Sets the number of images for the forward propagation before use of the backward propagation.|
-|`--activation-function`    |`-a`             |*activation_function*    |relu       |Sets the activation function ('elu', 'exponential', 'relu', 'selu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh').|
-|`--`||*loss_function*|categorical_crossentropy||
+|parameter (long)           |parameter (short)|name                     |value        |comment                                                                          |
+|---------------------------|-----------------|-------------------------|-------------|---------------------------------------------------------------------------------|
+|`--verbose`                |`-v`             |*verbose*                |False        |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
+|`--debug`                  |`-d`             |*debug*                  |False        |Sets the script to a debug mode.                                                 |
+|`--transfer-learning-model`|`-m`             |*transfer_learning_model*|`InceptionV3`|In this case MobileNetV2 was choosen.                                            |
+|`--number-trainable-layers`|                 |*number_trainable_layers*|           -1|-1 means → train all layers of used CNN.                                         |
+|`--input-dimension`        |                 |*input_dimension*        |          224|Sets the size of input dimension.                                                |
+|`--dense-size`             |                 |*dense_size*             |         1024|Sets the dense size of the neural network after the CNN.                         |
+|`--dropout`                |                 |*dropout*                |          0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                     |
+|`--weights`                |                 |*weights*                |`imagenet`   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
+|`--continue`               |                 |*continue*               |False        |Continue learning with given model file.                                         |
+|`--epochs`                 |`-e`             |*epochs*                 |           21|Sets the number of epochs to be learned.                                         |
+|`--batch-size`             |                 |*batch_size*             |           16|Sets the number of images for the forward propagation before use of the backward propagation.|
+|`--activation-function`    |`-a`             |*activation_function*    |`relu`       |Sets the activation function (`elu`, `exponential`, `relu`, `selu`, `sigmoid`, `softmax`, `softplus`, `softsign`, `tanh`).|
+|`--loss-function`          |                 |*loss_function*          |`categorical_crossentropy`|Sets the loss function (`mean_squared_error`, `categorical_crossentropy`)|
 |`--`||*optimizer*|sgd||
 |`--`||*learning_rate*|0.001||
 |`--`||*learning_rate_drop*|0.5||
