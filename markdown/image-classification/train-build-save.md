@@ -30,7 +30,7 @@ The default settings are:
 |-----------------------------|-----------------|---------------------------|-------------|---------------------------------------------------------------------------------|
 |`--verbose`                  |`-v`             |*verbose*                  |***False***  |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
 |`--debug`                    |`-d`             |*debug*                    |***False***  |Sets the script to a debug mode.                                                 |
-|`--transfer-learning-model`  |`-m`             |*transfer_learning_model*  |`InceptionV3`|In this case `MobileNetV2` was choosen.                                          |
+|`--transfer-learning-model`  |`-m`             |*transfer_learning_model*  |`InceptionV3`|Sets the used transfer learning model (`DenseNet121`, `DenseNet169`, `DenseNet201`, `InceptionResNetV2`, `InceptionV3`, `NASNet`, `NASNetLarge`, `NASNetMobile`, `MobileNet`, `MobileNetV2`, `ResNet50`, `ResNet101`, `ResNet152`, `ResNet50V2`, `ResNet101V2`, `ResNet152V2`, `VGG19`, `Xception`). In this case `MobileNetV2` was choosen.                                          |
 |`--number-trainable-layers`  |                 |*number_trainable_layers*  |           -1|-1 means → train all layers of used CNN.                                         |
 |`--input-dimension`          |                 |*input_dimension*          |          224|Sets the size of input dimension.                                                |
 |`--dense-size`               |                 |*dense_size*               |         1024|Sets the dense size of the neural network after the CNN.                         |
