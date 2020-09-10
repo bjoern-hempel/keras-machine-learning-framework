@@ -45,11 +45,11 @@ The default settings are:
 |`--learning-rate`            |`-l`             |*learning_rate*            |        0.001|Sets the learning rate value.                                                    |
 |`--learning-rate-drop`       |                 |*learning_rate_drop*       |          0.5|Sets the learning rate drop value.                                               |
 |`--learning-rate-epochs-drop`|                 |*learning_rate_epochs_drop*|            7|Sets the number of epochs after which the learning rate should decrease.         |
-|`--`||*momentum*|0.9||
-|`--`||*decay*|0.0||
-|`--`||*nesterov*|True||
-|`--`||*metrics*|accuracy||
-|`--`||*validation_split*|0.2||
+|`--momentum`                 |                 |*momentum*                 |          0.9||
+|`--decay`                    |                 |*decay*                    |          0.0||
+|`--nesterov`                 |                 |*nesterov*                 |         True||
+|`--metrics`                  |                 |*metrics*                  |`accuracy`   ||
+|`--validation-split`         |                 |*validation_split*         |          0.2||
 
 As an example output:
 
