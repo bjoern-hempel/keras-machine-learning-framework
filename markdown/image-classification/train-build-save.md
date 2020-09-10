@@ -37,20 +37,18 @@ The default settings are:
 |`--dropout`                |                 |*dropout*                |        0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                     |
 |`--weights`                |                 |*weights*                |imagenet   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
 |`--continue`               |                 |*continue*               |False      |Continue learning with given model file.                                         |
-|`--epochs`                 |`-e`             |*epochs*                 |         21|Sets the number of epochs to be learned.                                                     |
-
-batch_size:                    16
-activation_function:           relu
-loss_function:                 categorical_crossentropy
-optimizer:                     sgd
-learning_rate:                 0.001
-learning_rate_drop:            0.5
-learning_rate_epochs_drop:     7
-momentum:                      0.9
-decay:                         0.0
-nesterov:                      True
-metrics:                       accuracy
-validation_split:              0.2
+|`--epochs`                 |`-e`             |*epochs*                 |         21|Sets the number of epochs to be learned.                                                     |`--batch-size`             |                 |*batch_size*             |         16|Sets the number of images for the forward propagation before use of the backward propagation.|
+|`--activation-function`    |`-a`             |*activation_function*    |relu       |Sets the activation function ('elu', 'exponential', 'relu', 'selu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh').|
+|`--`||*loss_function*|categorical_crossentropy||
+|`--`||*optimizer*|sgd||
+|`--`||*learning_rate*|0.001||
+|`--`||*learning_rate_drop*|0.5||
+|`--`||*learning_rate_epochs_drop*|7||
+|`--`||*momentum*|0.9||
+|`--`||*decay*|0.0||
+|`--`||*nesterov*|True||
+|`--`||*metrics*|accuracy||
+|`--`||*validation_split*|0.2||
 
 As an example output:
 
