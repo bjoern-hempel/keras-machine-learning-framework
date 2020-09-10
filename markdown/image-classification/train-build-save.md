@@ -1,10 +1,10 @@
-# Train, build and save the model
+# Train, build and save the model (`ml train`)
 
 ## Prepare the data folder
 
 ...
 
-## Train, build and save the model (`ml train`)
+## Train, build and save the model
 
 ### Simple run
 
