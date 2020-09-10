@@ -4,7 +4,7 @@
 
 ...
 
-## Train, build and save the model
+## Train, build and save the model (`ml train`)
 
 ### Simple run
 
