@@ -30,7 +30,7 @@ The default settings are:
 |---------------------------|-----------------|-------------------------|-------------|---------------------------------------------------------------------------------|
 |`--verbose`                |`-v`             |*verbose*                |False        |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
 |`--debug`                  |`-d`             |*debug*                  |False        |Sets the script to a debug mode.                                                 |
-|`--transfer-learning-model`|`-m`             |*transfer_learning_model*|`InceptionV3`|In this case MobileNetV2 was choosen.                                            |
+|`--transfer-learning-model`|`-m`             |*transfer_learning_model*|`InceptionV3`|In this case `MobileNetV2` was choosen.                                          |
 |`--number-trainable-layers`|                 |*number_trainable_layers*|           -1|-1 means → train all layers of used CNN.                                         |
 |`--input-dimension`        |                 |*input_dimension*        |          224|Sets the size of input dimension.                                                |
 |`--dense-size`             |                 |*dense_size*             |         1024|Sets the dense size of the neural network after the CNN.                         |
@@ -41,7 +41,7 @@ The default settings are:
 |`--batch-size`             |                 |*batch_size*             |           16|Sets the number of images for the forward propagation before use of the backward propagation.|
 |`--activation-function`    |`-a`             |*activation_function*    |`relu`       |Sets the activation function (`elu`, `exponential`, `relu`, `selu`, `sigmoid`, `softmax`, `softplus`, `softsign`, `tanh`).|
 |`--loss-function`          |                 |*loss_function*          |`categorical_crossentropy`|Sets the loss function (`mean_squared_error`, `categorical_crossentropy`)|
-|`--`||*optimizer*|sgd||
+|`--optimizer`              |`-o`             |*optimizer*              |`sgd`        |Sets the optimizer (`sgd`, `rmsprop`, `adagrad`, `adadelta`, `adam`, `adamax`, `nadam`).|
 |`--`||*learning_rate*|0.001||
 |`--`||*learning_rate_drop*|0.5||
 |`--`||*learning_rate_epochs_drop*|7||
