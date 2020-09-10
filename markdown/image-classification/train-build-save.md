@@ -10,7 +10,7 @@ The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: 
 
 ```bash
 (keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
-  --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 --verbose
+  --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 -v
 ```
 
 The above mentioned command trains the specified data folder `F:/data/raw/plants/flowers` and will produce the following files:
@@ -26,15 +26,17 @@ The above mentioned command trains the specified data folder `F:/data/raw/plants
 
 The default settings are:
 
-|parameter (long)           |parameter (short)|name                     |value      |comment                                                                                      |
-|---------------------------|-----------------|-------------------------|-----------|---------------------------------------------------------------------------------------------|
-|`--transfer-learning-model`|`-m`             |*transfer_learning_model*|InceptionV3|In this case MobileNetV2 was choosen.                                                        |
-|`--number-trainable-layers`|                 |*number_trainable_layers*|         -1|-1 means → train all layers of used CNN.                                                     |
-|`--input-dimension`        |                 |*input_dimension*        |        224|Sets the size of input dimension.                                                            |
-|`--dense-size`             |                 |*dense_size*             |       1024|Sets the dense size of the neural network after the CNN.                                     |
-|`--dropout`                |                 |*dropout*                |        0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                                 |
+|parameter (long)           |parameter (short)|name                     |value      |comment                                                                          |
+|---------------------------|-----------------|-------------------------|-----------|---------------------------------------------------------------------------------|
+|`--verbose`                |`-v`             |*verbose*                |False      |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
+|`--debug`                  |`-d`             |*debug*                  |False      |Sets the script to a debug mode.                                                 |
+|`--transfer-learning-model`|`-m`             |*transfer_learning_model*|InceptionV3|In this case MobileNetV2 was choosen.                                            |
+|`--number-trainable-layers`|                 |*number_trainable_layers*|         -1|-1 means → train all layers of used CNN.                                         |
+|`--input-dimension`        |                 |*input_dimension*        |        224|Sets the size of input dimension.                                                |
+|`--dense-size`             |                 |*dense_size*             |       1024|Sets the dense size of the neural network after the CNN.                         |
+|`--dropout`                |                 |*dropout*                |        0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                     |
 |`--weights`                |                 |*weights*                |imagenet   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
-|`--continue`               |                 |*continue*               |False      |Continue learning with given model file.                                                     |
+|`--continue`               |                 |*continue*               |False      |Continue learning with given model file.                                         |
 |`--epochs`                 |`-e`             |*epochs*                 |         21|Sets the number of epochs to be learned.                                                     |
 
 batch_size:                    16
@@ -49,7 +51,6 @@ decay:                         0.0
 nesterov:                      True
 metrics:                       accuracy
 validation_split:              0.2
-* 
 
 As an example output:
 
