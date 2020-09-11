@@ -11,7 +11,7 @@ Trains the data path F:/data/path/to/data with the included classes and saves th
   --model-file=processed/model.h5 -m MobileNetV2 -v
 ```
 
-See [Train, build and save the model (`ml train`)](/markdown/image-classification/train-build-save.md) for more details.
+See [Train, build and save the model (`ml train`)](/markdown/image-classification/train.md) for more details.
 
 ## Install Keras with GPU Support (Preparation)
 
@@ -48,7 +48,8 @@ Here is an overview of the demos:
 
 ## First attempts to train an image classifier
 
-* [Train, build and save the model (`ml train`)](/markdown/image-classification/train-build-save.md)
+* [Train, build and save the model (`ml train`)](/markdown/image-classification/train.md)
+* [Analyse the train or validation data - confusion matrix (`ml analyse`)](/markdown/image-classification/analyse.md)
 * [Evaluate a given image](/markdown/image-classification/evaluate.md)
 * [Transfer learning](/markdown/image-classification/transfer-learning.md)
 * [Arguments](/markdown/image-classification/arguments.md)
