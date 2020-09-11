@@ -1,41 +1,109 @@
-# Train, build and save the model
+# Train, build and save the model (`ml train`)
+
+## Prepare the data folder
 
 ...
 
 ## Train, build and save the model
 
-The data set `./data/raw/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. The following command trains the specified data folder `./data/raw/flowers` and writes the calculated model to `./data/inceptionv3-trained.h5`.
+### Simple run
+
+The data set `F:/data/raw/plants/flowers` is based on Kaggle's floral data set: https://www.kaggle.com/alxmamaev/flowers-recognition. A simple train example:
 
 ```bash
-(keras-gpu) C:\Users> ml train --data-path=./data/raw/flowers --model-file=./data/inceptionv3-trained.h5
+(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=raw/plants/flowers \
+  --model-file=processed/flower-MobileNetV2/model.h5 -m MobileNetV2 -v
+```
+
+The above mentioned command trains the specified data folder `F:/data/raw/plants/flowers` and will produce the following files:
+
+|path                                           |comment|
+|-----------------------------------------------|-------|
+|`F:/data/processed/flower-MobileNetV2/model.h5`|The last model after the end of the learning process.|
+|`F:/data/processed/flower-MobileNetV2/model.best.{epoch:02d}-{val_accuracy:.2f}.h5`|The best model after each epoch (ModelCheckpoint).|
+|`F:/data/processed/flower-MobileNetV2/model.json`|A JSON file containing a set of collected metrics.|
+|`F:/data/processed/flower-MobileNetV2/model.log`|This file contains all outputs during the training process.|
+|`F:/data/processed/flower-MobileNetV2/model.csv`|Saves simple metrics as CSV data during the training process per epoch (per line): epoch, learning_rate, train data (accuracy, top_5_categorical_accuracy, loss), validation data (accuracy, top_5_categorical_accuracy, loss).|
+|`F:/data/processed/flower-MobileNetV2/model.png`|A simple evaluation graph with a validation and training graph (`x` → epochs, `y` → accuracy).|
+
+The default settings are:
+
+|parameter (long)             |parameter (short)|name                       |value        |comment                                                                          |
+|-----------------------------|-----------------|---------------------------|-------------|---------------------------------------------------------------------------------|
+|`--verbose`                  |`-v`             |*verbose*                  |***False***  |Sets the script to a verbose mode. In this case the verbose mode was set to True.|
+|`--debug`                    |`-d`             |*debug*                    |***False***  |Sets the script to a debug mode.                                                 |
+|`--transfer-learning-model`  |`-m`             |*transfer_learning_model*  |`InceptionV3`|Sets the used transfer learning model (`DenseNet121`, `DenseNet169`, `DenseNet201`, `InceptionResNetV2`, `InceptionV3`, `NASNet`, `NASNetLarge`, `NASNetMobile`, `MobileNet`, `MobileNetV2`, `ResNet50`, `ResNet101`, `ResNet152`, `ResNet50V2`, `ResNet101V2`, `ResNet152V2`, `VGG19`, `Xception`). In this case `MobileNetV2` was choosen.                                          |
+|`--number-trainable-layers`  |                 |*number_trainable_layers*  |           -1|-1 means → train all layers of used CNN.                                         |
+|`--input-dimension`          |                 |*input_dimension*          |          224|Sets the size of input dimension.                                                |
+|`--dense-size`               |                 |*dense_size*               |         1024|Sets the dense size of the neural network after the CNN.                         |
+|`--dropout`                  |                 |*dropout*                  |          0.0|Sets the value of dropout and adds a dropout layer if > 0.0.                     |
+|`--weights`                  |                 |*weights*                  |`imagenet`   |Sets the database with which the weights are to be set (pre-trained transfer learning model).|
+|`--continue`                 |                 |*continue*                 |***False***  |Continue learning with given model file.                                         |
+|`--epochs`                   |`-e`             |*epochs*                   |           21|Sets the number of epochs to be learned.                                         |
+|`--batch-size`               |                 |*batch_size*               |           16|Sets the number of images to be used for forward propagation before reverse propagation is applied.|
+|`--activation-function`      |`-a`             |*activation_function*      |`relu`       |Sets the activation function (`elu`, `exponential`, `relu`, `selu`, `sigmoid`, `softmax`, `softplus`, `softsign`, `tanh`).|
+|`--loss-function`            |                 |*loss_function*            |`categorical_crossentropy`|Sets the loss function (`mean_squared_error`, `categorical_crossentropy`)|
+|`--optimizer`                |`-o`             |*optimizer*                |`sgd`        |Sets the optimizer (`sgd`, `rmsprop`, `adagrad`, `adadelta`, `adam`, `adamax`, `nadam`).|
+|`--learning-rate`            |`-l`             |*learning_rate*            |        0.001|Sets the learning rate value.                                                    |
+|`--learning-rate-drop`       |                 |*learning_rate_drop*       |          0.5|Sets the learning rate drop value.                                               |
+|`--learning-rate-epochs-drop`|                 |*learning_rate_epochs_drop*|            7|Sets the number of epochs after which the learning rate should decrease.         |
+|`--momentum`                 |                 |*momentum*                 |          0.9|Sets the momentum value.|
+|`--decay`                    |                 |*decay*                    |          0.0|Sets the decay value.|
+|`--nesterov`                 |                 |*nesterov*                 |***True***   |Switches on the nesterov mode.|
+|`--metrics`                  |                 |*metrics*                  |`accuracy`   |Sets the metrics.|
+|`--validation-split`         |                 |*validation_split*         |          0.2|Sets the validation split (training data vs. validation data).|
+
+As an example output:
+
+```bash
 Using TensorFlow backend.
 
 general
 -------
-verbose:                  False
-debug:                    False
+verbose:                       True
+debug:                         False
+render_device:                 AUTO
+
+data
+----
+environment_path:              F:/data
+data_path:                     F:/data/raw/plants/flowers
+model_file:                    F:/data/processed/flower-MobileNetV2/model.h5
+model_source:                  None
+use_train_val:                 False
+add_transfer_learning_name:    False
+config_file:                   F:/data/processed/flower-MobileNetV2/model.json
+best_model_file:               F:/data/processed/flower-MobileNetV2/model.best.{epoch:02d}-{val_accuracy:.2f}.h5
+accuracy_file:                 F:/data/processed/flower-MobileNetV2/model.png
+log_file:                      F:/data/processed/flower-MobileNetV2/model.log
+csv_file:                      F:/data/processed/flower-MobileNetV2/model.csv
+process_folder:                F:/data/processed/flower-MobileNetV2
 
 transfer_learning
 -----------------
-data_path:                ./Data/raw/flowers
-transfer_learning_model:  InceptionV3
-number_trainable_layers:  305
-input_dimension:          299
-dense_size:               512
-dropout:                  0.5
-weights:                  imagenet
+transfer_learning_model:       MobileNetV2
+number_trainable_layers:       -1
+input_dimension:               224
+dense_size:                    1024
+dropout:                       0.0
+weights:                       imagenet
+continue:                      False
 
 machine_learning
 ----------------
-model_file:               ./Data/inceptionv3-trained.h5
-model_config:             ./Data/inceptionv3-trained.json
-epochs:                   10
-learning_rate:            0.001
-activation_function:      tanh
-loss_function:            mean_squared_error
-optimizer:                adam
-metrics:                  accuracy
-environment_path:         None
+epochs:                        21
+batch_size:                    16
+activation_function:           relu
+loss_function:                 categorical_crossentropy
+optimizer:                     sgd
+learning_rate:                 0.001
+learning_rate_drop:            0.5
+learning_rate_epochs_drop:     7
+momentum:                      0.9
+decay:                         0.0
+nesterov:                      True
+metrics:                       accuracy
+validation_split:              0.2
 
 
 Are these configurations correct? Continue? [Y/n] y

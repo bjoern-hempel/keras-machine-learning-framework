@@ -2,6 +2,17 @@
 
 This machine learning framework prepares, trains and validates an image classifier.
 
+## In short
+
+Trains the data path F:/data/path/to/data with the included classes and saves the model to F:/data/processed/model.h5.
+
+```bash
+(keras-gpu) C:\Users> ml train --environment-path=F:/data --data-path=path/to/data \
+  --model-file=processed/model.h5 -m MobileNetV2 -v
+```
+
+See [Train, build and save the model (`ml train`)](/markdown/image-classification/train.md) for more details.
+
 ## Install Keras with GPU Support (Preparation)
 
 * [Keras GPU Installation on Windows](/markdown/installation/keras-gpu-windows.md)
@@ -37,11 +48,12 @@ Here is an overview of the demos:
 
 ## First attempts to train an image classifier
 
-* [Arguments](/markdown/image-classification/arguments.md)
-* [Train, build and save the model](/markdown/image-classification/train-build-save.md)
-* Preparations to make training more efficient
-* [Evaluate a given image](/markdown/image-classification/evaluate.md)
+* [Train, build and save the model (`ml train`)](/markdown/image-classification/train.md)
+* [Analyse the trained model - confusion matrix (`ml analyse`)](/markdown/image-classification/analyse.md)
+* [Evaluate a given image (`ml evaluate`)](/markdown/image-classification/evaluate.md)
 * [Transfer learning](/markdown/image-classification/transfer-learning.md)
+* [Arguments](/markdown/image-classification/arguments.md)
+* Preparations to make training more efficient
 * ...
 
 ## Further attempts
