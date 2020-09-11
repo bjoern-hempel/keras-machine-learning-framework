@@ -49,7 +49,7 @@ Here is an overview of the demos:
 ## First attempts to train an image classifier
 
 * [Train, build and save the model (`ml train`)](/markdown/image-classification/train.md)
-* [Analyse the train or validation data - confusion matrix (`ml analyse`)](/markdown/image-classification/analyse.md)
+* [Analyse the trained model - confusion matrix (`ml analyse`)](/markdown/image-classification/analyse.md)
 * [Evaluate a given image](/markdown/image-classification/evaluate.md)
 * [Transfer learning](/markdown/image-classification/transfer-learning.md)
 * [Arguments](/markdown/image-classification/arguments.md)
