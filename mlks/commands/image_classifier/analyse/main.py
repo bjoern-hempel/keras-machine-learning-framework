@@ -3,14 +3,14 @@
 # A Python submodule that evaluate the given data structure.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   02.10.2019
+# Date:   11.09.2020
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
 #
 # MIT License
 #
-# Copyright (c) 2019 Björn Hempel <bjoern@hempel.li>
+# Copyright (c) 2020 Björn Hempel <bjoern@hempel.li>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,14 +30,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
-import json
 import sys
-from pathlib import Path
 from mlks.commands.image_classifier.main import ImageClassifier
 
 
-class Evaluate(ImageClassifier):
+class Analyse(ImageClassifier):
 
     def __init__(self, config):
 
@@ -48,22 +45,18 @@ class Evaluate(ImageClassifier):
 
         # some configs
         show_image = False
+
         save_image = True
-        evaluate_type = 'validation' # validation or train
+        save_svg = True
+        save_pdf = True
+
         save_evaluation_file = True
-        rebuild_model_dict = False
+        evaluate_type = self.config.get_data('analyse_type')
 
         # load config file
         self.start_timer('load json config file')
         self.config.load_json_from_config_file(self.config.get_data('config_file'))
         self.finish_timer('load json config file')
-
-        # rebuild model dict
-        if rebuild_model_dict:
-            self.config.rebuild_model_dict()
-            self.start_timer('save json config file')
-            self.config.save_json()
-            self.finish_timer('save json config file')
 
         # get some configs
         model_file = self.config.get_data('model_file_best')['model_file']
@@ -71,10 +64,8 @@ class Evaluate(ImageClassifier):
         files_validation = files_all[evaluate_type]
         data_path = self.config.get_data('data_path')
 
-        print('Todo')
-
         # get evaluated data
-        #data = self.get_evaluation_data(model_file, data_path, files_validation, evaluate_type, save_evaluation_file)
+        data = self.get_evaluation_data(model_file, data_path, files_validation, evaluate_type, save_evaluation_file)
 
         # build confusion matrix
-        #self.build_confusion_matrix(data, show_image, save_image)
+        self.build_confusion_matrix(data, evaluate_type, show_image, save_image, save_svg, save_pdf)

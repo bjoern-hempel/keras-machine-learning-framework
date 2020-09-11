@@ -59,11 +59,9 @@ from sklearn.metrics import confusion_matrix
 # some own libraries and helper
 from mlks.commands.main import Command
 from mlks.helper.filesystem import get_number_of_folders_and_files
-from mlks.helper.graph import print_image
-from mlks.helper.dict import get_best_value, get_best_index, count_len_recursive, get_sort_index_array
+from mlks.helper.dict import count_len_recursive, get_sort_index_array
 from mlks.helper.ml import get_epoch_array
 from mlks.helper.filesystem import check_if_file_exists
-from tensorflow import keras
 
 # matplotlib libraries
 from matplotlib import pyplot as plt
@@ -1043,12 +1041,14 @@ class ImageClassifier(Command):
             cdict['blue'] = cdict['blue'] + ((s, rgb[2], rgb[2]),)
         return cdict
 
-    def build_confusion_matrix(self, data, show_image=False, save_image=True, save_svg=True, save_pdf=True,
+    def build_confusion_matrix(self, data, evaluate_type, show_image=False, save_image=True, save_svg=True, save_pdf=True,
                                use_percentage=True):
         """Builds a confusion matrix with given data
         ----------
         data : array
             The data array
+        evaluate_type : string
+            The evaluation type
         show_image : bool, optional
             Specifies whether the graph should be displayed. (default is False)
         save_image : bool, optional
@@ -1136,10 +1136,10 @@ class ImageClassifier(Command):
 
         if save_image or True:
             plt.draw()
-            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.png'), dpi=1200)
+            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix_%s.png' % evaluate_type), dpi=1200)
         if save_pdf:
             plt.draw()
-            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.pdf'), dpi=1200)
+            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix_%s.pdf' % evaluate_type), dpi=1200)
         if save_svg:
             plt.draw()
-            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix.svg'), dpi=1200)
+            fig1.savefig(os.path.join(data['root_path'], 'confusion_matrix_%s.svg' % evaluate_type), dpi=1200)

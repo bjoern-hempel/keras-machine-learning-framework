@@ -55,12 +55,24 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import click
 
 from mlks.commands.info.main import Info as CliInfo
+
+# prepare
 from mlks.commands.image_classifier.prepare.main import Prepare as CliImageClassifierPrepare
+
+# train
+from mlks.commands.image_classifier.train.main import Train as CliImageClassifierTrain
+
+# analyse
+from mlks.commands.image_classifier.analyse.main import Analyse as CliImageClassifierAnalyse
+
+# graph
+from mlks.commands.image_classifier.graph.main import Graph as CliImageClassifierGraph
+
+# evaluate
 from mlks.commands.image_classifier.evaluate.main import Evaluate as CliImageClassifierEvaluate
 from mlks.commands.image_classifier.evaluate_service.main import EvaluateService as CliImageClassifierEvaluateService
 from mlks.commands.image_classifier.evaluate_http.main import EvaluateHttp as CliImageClassifierEvaluateHttp
-from mlks.commands.image_classifier.train.main import Train as CliImageClassifierTrain
-from mlks.commands.image_classifier.graph.main import Graph as CliImageClassifierGraph
+
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
 from mlks.commands.demo.xor_perceptron.main import XorPerceptron as CliDemoXorPerceptron
@@ -73,6 +85,7 @@ from mlks.config.parameter import option_set_general, \
     option_set_machine_learning, \
     option_set_transfer_learning, \
     option_set_train_process, \
+    option_set_analysis_process, \
     option_set_evaluation_process, \
     option_set_graph_process, \
     option_set_nine_points
@@ -109,6 +122,17 @@ def cli_train(config):
     """This subcommand trains a classifier."""
 
     train_class = CliImageClassifierTrain(config)
+    train_class.do()
+
+
+@cli.command(name='analyse')
+@add_options(option_set_analysis_process)
+@add_options(option_set_general)
+@pass_config
+def cli_train(config):
+    """This subcommand trains a classifier."""
+
+    train_class = CliImageClassifierAnalyse(config)
     train_class.do()
 
 

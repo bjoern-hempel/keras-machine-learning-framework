@@ -3,14 +3,14 @@
 # A configuration file for parameters and arguments.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   23.09.2019
+# Date:   11.09.2020
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
 #
 # MIT License
 #
-# Copyright (c) 2019 Björn Hempel <bjoern@hempel.li>
+# Copyright (c) 2020 Björn Hempel <bjoern@hempel.li>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -90,6 +90,17 @@ option_http = click.option(
     callback=option_callback,
     default=False
 )
+option_analyse_type = click.option(
+    '--analyse-type',
+    expose_value=False,
+    is_flag=False,
+    help='Specifies the type of analysis.',
+    callback=option_callback,
+    required=False,
+    show_default=True,
+    default='validation',
+    type=click.Choice(['validation', 'train'])
+)
 option_render_device = click.option(
     '--render-device', '-r',
     expose_value=False,
@@ -109,6 +120,7 @@ option_plaidml_keras_backend = click.option(
     callback=option_callback,
     default=False
 )
+
 
 # Configure the http parameters here
 option_bind_ip = click.option(
@@ -144,6 +156,7 @@ option_port_ssl = click.option(
     type=int,
     callback=option_callback
 )
+
 
 # Configure the machine learning parameters here
 option_epochs = click.option(
@@ -579,6 +592,11 @@ option_set_train_process = [
     option_use_train_val,
     option_add_transfer_learning_name
 ]
+option_set_analysis_process = [
+    option_environment_path,
+    option_config_file,
+    option_analyse_type
+]
 option_set_evaluation_process = [
     option_environment_path,
     option_config_file,
@@ -646,6 +664,7 @@ set_config_translator({
     'evaluation_path': data_config_writer,
     'use_train_val': data_config_writer,
     'add_transfer_learning_name': data_config_writer,
+    'analyse_type': data_config_writer,
 
     # some other configs
     'x': nine_points_config_writer,
