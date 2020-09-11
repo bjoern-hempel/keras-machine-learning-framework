@@ -8,13 +8,13 @@
 
 Analyzes the specified model (configuration file) and creates a confusion matrix:
 
-* confusion_matrix_validation.pdf
-* confusion_matrix_validation.png
-* confusion_matrix_validation.svg
+* `confusion_matrix_validation.pdf`
+* `confusion_matrix_validation.png`
+* `confusion_matrix_validation.svg`
 
 It also creates a temp file:
 
-* evaluation-file-validation.json
+* `evaluation-file-validation.json`
 
 The temporary file is used to speed up the creation of analysis files.
 
@@ -26,13 +26,13 @@ The temporary file is used to speed up the creation of analysis files.
 
 Analyzes the specified model (configuration file) and creates a confusion matrix:
 
-* confusion_matrix_train.pdf
-* confusion_matrix_train.png
-* confusion_matrix_train.svg
+* `confusion_matrix_train.pdf`
+* `confusion_matrix_train.png`
+* `confusion_matrix_train.svg`
 
 It also creates a temp file:
 
-* evaluation-file-train.json
+* `evaluation-file-train.json`
 
 The temporary file is used to speed up the creation of analysis files.
 
