@@ -1,4 +1,4 @@
-# Evaluate the model
+# Evaluate the model (`ml evaluate`)
 
 ...
 
