@@ -2,11 +2,15 @@
 
 ## Validation part
 
-...
+```bash
+(keras-gpu) C:\Users> ml analyse --environment-path=F:/data --config-file=processed/flower-12-MobileNetV2/model.json --yes
+```
 
-## Evaluation part
+## Train part
 
-...
+```bash
+(keras-gpu) C:\Users> ml analyse --analyse-type=train --config-file=F:/data/processed/flower-12-MobileNetV2/model.json --yes
+```
 
 ## A. Further Tutorials
 
