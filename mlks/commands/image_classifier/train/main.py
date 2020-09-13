@@ -39,6 +39,9 @@ from matplotlib import pyplot as plt
 from mlks.commands.image_classifier.main import ImageClassifier
 from mlks.helper.filesystem import check_if_file_exists
 
+from PIL import ImageFile
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class Train(ImageClassifier):
 
