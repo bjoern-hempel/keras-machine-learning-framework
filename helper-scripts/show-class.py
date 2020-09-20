@@ -8,7 +8,7 @@ import json
 # configure ppprint
 pp = pprint.PrettyPrinter(indent=4)
 
-config_path_json: str = '/Users/bjoern/Development/keras-machine-learning-framework-json-editor/data/mushrooms.json'
+config_path_json: str = 'C:/Users/bjoern/Development/keras-machine-learning-framework-json-editor/data/mushrooms.json'
 
 if len(sys.argv) < 2:
     print('Missing class name in argument')
@@ -36,7 +36,7 @@ class JsonDataReader:
             sys.exit(1)
 
         # read file
-        with open(config_path_json, 'r') as file_handler:
+        with open(config_path_json, 'r', encoding='utf-8') as file_handler:
             self.json = file_handler.read()
 
         # parse file
@@ -62,7 +62,28 @@ class JsonDataReader:
             'wikipedia': data['urls']['wikipedia'][language]
         }
 
-    def get_json_wrapper(self, classes, class_name, language='DE', version='v1.0'):
+    def get_category_path(self, categories, classes, class_name):
+        category_path = []
+
+        if len(classes[class_name]['categories']) <= 0:
+            return category_path
+
+        # Get first category from current class
+        category_name = classes[class_name]['categories'][0]
+        category = categories[category_name]
+
+        # Collect category name
+        category_path.append(category['category'])
+
+        while len(category['parent-categories']) > 0:
+            category_name = category['parent-categories'][0]
+            category = categories[category_name]
+
+            category_path.append(category['category'])
+
+        return category_path
+
+    def get_json_wrapper(self, classes, categories, class_name, language='DE', version='v1.0'):
         return_data = {
             'success': False,
             'version': version
@@ -71,10 +92,13 @@ class JsonDataReader:
         if class_name not in classes:
             return return_data
 
-        data = classes[class_name]
+        data_class = classes[class_name]
+
+        data = self.convert_data(data_class, language)
+        data['category_path'] = self.get_category_path(categories, classes, class_name)
 
         return_data['success'] = True
-        return_data['data'] = self.convert_data(data, language)
+        return_data['data'] = data
 
         return return_data
 
@@ -83,7 +107,7 @@ class JsonDataReader:
         classes = self.convert_array(self.data['classes'], 'class')
         categories = self.convert_array(self.data['categories'], 'category')
 
-        return self.get_json_wrapper(classes, class_name, language, self.data['version'])
+        return self.get_json_wrapper(classes, categories, class_name, language, self.data['version'])
 
 
 # show data from config file
