@@ -330,7 +330,7 @@ class ImageClassifier(Command):
 
     def evaluate_file(self, model, evaluation_file, do_not_save_data=True):
         verbose = self.config.get('verbose')
-        verbose = False
+        #verbose = True
 
         classes = self.config.get_environment('classes')
 

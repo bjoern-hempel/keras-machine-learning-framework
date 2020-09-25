@@ -49,7 +49,7 @@ class Evaluate(ImageClassifier):
         # some configs
         show_image = False
         save_image = True
-        evaluate_type = 'validation' # validation or train
+        evaluate_type = 'validation'
         save_evaluation_file = True
         rebuild_model_dict = False
 
@@ -67,14 +67,6 @@ class Evaluate(ImageClassifier):
 
         # get some configs
         model_file = self.config.get_data('model_file_best')['model_file']
-        files_all = self.config.get_environment('files')
-        files_validation = files_all[evaluate_type]
-        data_path = self.config.get_data('data_path')
+        evaluation_path = self.config.get_data('evaluation_path')
 
-        print('Todo')
 
-        # get evaluated data
-        #data = self.get_evaluation_data(model_file, data_path, files_validation, evaluate_type, save_evaluation_file)
-
-        # build confusion matrix
-        #self.build_confusion_matrix(data, show_image, save_image)
