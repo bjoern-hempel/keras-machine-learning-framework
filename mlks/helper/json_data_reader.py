@@ -89,7 +89,79 @@ class JsonDataReader:
         return associative_array
 
     @staticmethod
-    def convert_data(class_data: object, language: str = 'DE', verbose: bool = True) -> object:
+    def get_category_path(categories: object, class_name: str, classes: object = None) -> List:
+        """Builds the category path from given class_name.
+
+        Parameters
+        ----------
+        categories : object
+        classes : object
+        class_prediction : object
+
+        Returns
+        -------
+        object
+
+        """
+
+        category_path: List = []
+
+        if classes is not None:
+            if len(classes[class_name]['categories']) <= 0:
+                return category_path
+
+            # Get first category from current class
+            category_name = classes[class_name]['categories'][0]
+            category = categories[category_name]
+
+            # Collect category name
+            category_path.insert(0, category['category'])
+        else:
+            # Get first category from current class
+            category_name = class_name
+            category = categories[category_name]
+
+        while len(category['parent-categories']) > 0:
+            category_name = category['parent-categories'][0]
+            category = categories[category_name]
+
+            category_path.insert(0, category['category'])
+
+        return category_path
+
+    @staticmethod
+    def get_category_names(classes: object) -> List:
+        """Returns all category names from given classes.
+
+        Parameters
+        ----------
+        classes : object
+
+        Returns
+        -------
+        List
+
+        """
+
+        category_names = {}
+
+        for class_name in classes:
+            class_element = classes[class_name]
+            if 'category_path' in class_element:
+                for category_name in class_element['category_path']:
+                    category_names[category_name] = True
+            else:
+                if len(class_element['categories']) == 0:
+                    print(class_element)
+                    sys.exit()
+
+                category_names[class_element['categories'][0]] = True
+
+        return list(category_names.keys())
+
+    @staticmethod
+    def convert_class_data(class_data: object, class_prediction: object, language: str = 'DE',
+                           verbose: bool = True) -> object:
         """Builds a data object from given class data.
 
         Parameters
@@ -107,7 +179,8 @@ class JsonDataReader:
         return_data = {
             'class': class_data['class'],
             'name': class_data['name'][language],
-            'categories': class_data['categories']
+            'categories': class_data['categories'],
+            'prediction': class_prediction['prediction'],
         }
 
         if verbose:
@@ -122,14 +195,127 @@ class JsonDataReader:
         return return_data
 
     @staticmethod
-    def get_category_path(categories: object, classes: object, class_prediction: object) -> List:
-        """Builds the category path from given class_name.
+    def convert_category_data(category_data: object, language: str = 'DE', verbose: bool = True) -> object:
+        """Builds a data object from given category data.
 
         Parameters
         ----------
-        categories : object
+        category_data : object
+        language : str
+        verbose : bool
+
+        Returns
+        -------
+        object
+
+        """
+        return_data = {
+            'category': category_data['category'],
+            'name': category_data['name'][language],
+        }
+
+        if verbose:
+            extra_data = {
+                'description': category_data['description'][language],
+                'wikipedia': category_data['urls']['wikipedia'][language]
+            }
+
+            return_data.update(extra_data)
+
+        return return_data
+
+    def combine_class_data(self, classes: object, categories: object, class_prediction: object, language: str = 'DE',
+                           verbose: bool = True) -> object:
+        """Builds the combined data object from given json classes object and class prediction object.
+
+        Parameters
+        ----------
         classes : object
+        categories : object
         class_prediction : object
+        language : str
+        verbose : bool
+
+        Returns
+        -------
+        object
+
+        """
+        class_name: str = class_prediction['name']
+        class_data: object = classes[class_name]
+
+        class_data = self.convert_class_data(class_data=class_data, class_prediction=class_prediction,
+                                             language=language,
+                                             verbose=verbose)
+
+        if verbose:
+            class_data.update({'category_path': self.get_category_path(categories, class_name, classes)})
+            class_data.update({'category_path_string': ' > '.join(class_data['category_path'])})
+
+        return class_data
+
+    def combine_category_data(self, categories: object, category_name: object, language: str = 'DE',
+                              verbose: bool = True) -> object:
+
+        category_data: object = categories[category_name]
+
+        category_data = self.convert_category_data(category_data=category_data, language=language, verbose=verbose)
+
+        if verbose:
+            category_data.update({'category_path': self.get_category_path(categories, category_name)})
+            category_data.update({'category_path_string': ' > '.join(category_data['category_path'])})
+
+        return category_data
+
+    def build_classes_object(self, number: int, classes: object, categories: object, language: str = 'DE',
+                             verbose: bool = True) -> object:
+        """Builds data object.
+
+        Parameters
+        ----------
+        number : int
+        classes : object
+        categories : object
+        language : str
+        verbose : bool
+
+        Returns
+        -------
+        object
+
+        """
+        # data dict
+        data = {
+            'data': {
+                'classes': {},
+                'categories': {},
+            },
+            'prediction_order': [],
+        }
+
+        # check the number of returned data elements
+        if number > len(self.prediction['data']):
+            raise Exception('The wanted class numbers %d is higher than the length of prediction array.' % number)
+
+        # add each data element
+        for i in range(number):
+            class_prediction: object = self.prediction['data'][i]
+            class_name: str = class_prediction['name']
+            data['data']['classes'][class_name] = self.combine_class_data(classes=classes, categories=categories,
+                                                                          class_prediction=class_prediction,
+                                                                          language=language, verbose=verbose)
+            data['prediction_order'].append(class_name)
+
+        return data
+
+    def build_categories_object(self, data: object, categories: object, language: str = 'DE',
+                                verbose: bool = True) -> object:
+        """Build a dict of categories.
+
+        Parameters
+        ----------
+        data : object
+        categories : object
 
         Returns
         -------
@@ -137,27 +323,17 @@ class JsonDataReader:
 
         """
 
-        class_name: str = class_prediction['name']
+        categories_object = {}
+        classes = data['data']['classes']
 
-        category_path: List = []
+        category_names = self.get_category_names(classes=classes)
 
-        if len(classes[class_name]['categories']) <= 0:
-            return category_path
+        for category_name in category_names:
+            categories_object[category_name] = self.combine_category_data(categories=categories,
+                                                                          category_name=category_name,
+                                                                          language=language, verbose=verbose)
 
-        # Get first category from current class
-        category_name = classes[class_name]['categories'][0]
-        category = categories[category_name]
-
-        # Collect category name
-        category_path.insert(0, category['category'])
-
-        while len(category['parent-categories']) > 0:
-            category_name = category['parent-categories'][0]
-            category = categories[category_name]
-
-            category_path.insert(0, category['category'])
-
-        return category_path
+        return categories_object
 
     def get_json_wrapper(self, data: object, language: str = 'DE') -> object:
         """Builds the whole json wrapper.
@@ -180,36 +356,6 @@ class JsonDataReader:
             'prediction_order': data['prediction_order'],
         }
 
-    def combine_data(self, classes: object, categories: object, class_prediction: object, language: str = 'DE',
-                     verbose: bool = True) -> object:
-        """Builds the combined data object from given json classes object and class prediction object.
-
-        Parameters
-        ----------
-        classes : object
-        categories : object
-        class_prediction : object
-        language : str
-        verbose : bool
-
-        Returns
-        -------
-        object
-
-        """
-        class_name: str = class_prediction['name']
-        data_class: object = classes[class_name]
-
-        data = self.convert_data(class_data=data_class, language=language, verbose=verbose)
-
-        data.update({'prediction': class_prediction['prediction']})
-
-        if verbose:
-            data.update({'category_path': self.get_category_path(categories, classes, class_prediction)})
-            data.update({'category_path_string': ' > '.join(data['category_path'])})
-
-        return data
-
     def get_info_as_json(self, number: int = 1, language: str = 'DE', verbose: bool = True) -> object:
         """Builds the whole json object and returns it.
 
@@ -230,26 +376,13 @@ class JsonDataReader:
         classes = self.build_associative_array(self.data['classes'], 'class')
         categories = self.build_associative_array(self.data['categories'], 'category')
 
-        # data dict
-        data = {
-            'data': {
-                'classes': {}
-            },
-            'prediction_order': [],
-        }
+        # build classes
+        data = self.build_classes_object(number=number, classes=classes, categories=categories, language=language,
+                                         verbose=verbose)
 
-        # check the number of returned data elements
-        if number > len(self.prediction['data']):
-            raise Exception('The wanted class numbers %d is higher than the length of prediction array.' % number)
-
-        # add each data element
-        for i in range(number):
-            class_prediction: object = self.prediction['data'][i]
-            class_name: str = class_prediction['name']
-            data['data']['classes'][class_name] = self.combine_data(classes=classes, categories=categories,
-                                                 class_prediction=class_prediction,
-                                                 language=language, verbose=verbose)
-            data['prediction_order'].append(class_name)
+        # add categories
+        data['data']['categories'] = self.build_categories_object(data=data, categories=categories, language=language,
+                                                                  verbose=verbose)
 
         # return complete json object
         return self.get_json_wrapper(data, language)
