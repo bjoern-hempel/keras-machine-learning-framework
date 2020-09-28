@@ -38,8 +38,11 @@ import json
 from typing import List
 
 
-class JsonDataReader:
+class JsonDataBuilder:
     """A json data reader class"""
+
+    CONST_ERROR_NUMBER_HIGHER_THAN_ARRAY_COUNT = 'The wanted class numbers %d is higher than the length of prediction array.'
+
     data: object
     json_path: str
 
@@ -161,14 +164,14 @@ class JsonDataReader:
 
     @staticmethod
     def convert_class_data(class_data: object, class_prediction: object, language: str = 'DE',
-                           verbose: bool = True) -> object:
+                           output_type: str = 'simple') -> object:
         """Builds a data object from given class data.
 
         Parameters
         ----------
         class_data : object
         language : str
-        verbose : bool
+        output_type : str
 
         Returns
         -------
@@ -183,7 +186,7 @@ class JsonDataReader:
             'prediction': class_prediction['prediction'],
         }
 
-        if verbose:
+        if output_type == 'full':
             extra_data = {
                 'edibility': class_data['edibility'],
                 'description': class_data['description'][language],
@@ -195,14 +198,14 @@ class JsonDataReader:
         return return_data
 
     @staticmethod
-    def convert_category_data(category_data: object, language: str = 'DE', verbose: bool = True) -> object:
+    def convert_category_data(category_data: object, language: str = 'DE', output_type: str = 'simple') -> object:
         """Builds a data object from given category data.
 
         Parameters
         ----------
         category_data : object
         language : str
-        verbose : bool
+        output_type : str
 
         Returns
         -------
@@ -214,7 +217,7 @@ class JsonDataReader:
             'name': category_data['name'][language],
         }
 
-        if verbose:
+        if output_type == 'full':
             extra_data = {
                 'description': category_data['description'][language],
                 'wikipedia': category_data['urls']['wikipedia'][language]
@@ -225,7 +228,7 @@ class JsonDataReader:
         return return_data
 
     def combine_class_data(self, classes: object, categories: object, class_prediction: object, language: str = 'DE',
-                           verbose: bool = True) -> object:
+                           output_type: str = 'simple') -> object:
         """Builds the combined data object from given json classes object and class prediction object.
 
         Parameters
@@ -234,7 +237,7 @@ class JsonDataReader:
         categories : object
         class_prediction : object
         language : str
-        verbose : bool
+        output_type : str
 
         Returns
         -------
@@ -246,29 +249,29 @@ class JsonDataReader:
 
         class_data = self.convert_class_data(class_data=class_data, class_prediction=class_prediction,
                                              language=language,
-                                             verbose=verbose)
+                                             output_type=output_type)
 
-        if verbose:
+        if output_type == 'full':
             class_data.update({'category_path': self.get_category_path(categories, class_name, classes)})
             class_data.update({'category_path_string': ' > '.join(class_data['category_path'])})
 
         return class_data
 
     def combine_category_data(self, categories: object, category_name: object, language: str = 'DE',
-                              verbose: bool = True) -> object:
+                              output_type: str = 'simple') -> object:
 
         category_data: object = categories[category_name]
 
-        category_data = self.convert_category_data(category_data=category_data, language=language, verbose=verbose)
+        category_data = self.convert_category_data(category_data=category_data, language=language, output_type=output_type)
 
-        if verbose:
+        if output_type == 'full':
             category_data.update({'category_path': self.get_category_path(categories, category_name)})
             category_data.update({'category_path_string': ' > '.join(category_data['category_path'])})
 
         return category_data
 
     def build_classes_object(self, number: int, classes: object, categories: object, language: str = 'DE',
-                             verbose: bool = True) -> object:
+                             output_type: str = 'simple') -> object:
         """Builds data object.
 
         Parameters
@@ -277,7 +280,7 @@ class JsonDataReader:
         classes : object
         categories : object
         language : str
-        verbose : bool
+        output_type : str
 
         Returns
         -------
@@ -295,7 +298,7 @@ class JsonDataReader:
 
         # check the number of returned data elements
         if number > len(self.prediction['data']):
-            raise Exception('The wanted class numbers %d is higher than the length of prediction array.' % number)
+            raise Exception(self.CONST_ERROR_NUMBER_HIGHER_THAN_ARRAY_COUNT % number)
 
         # add each data element
         for i in range(number):
@@ -303,13 +306,13 @@ class JsonDataReader:
             class_name: str = class_prediction['name']
             data['data']['classes'][class_name] = self.combine_class_data(classes=classes, categories=categories,
                                                                           class_prediction=class_prediction,
-                                                                          language=language, verbose=verbose)
+                                                                          language=language, output_type=output_type)
             data['prediction_order'].append(class_name)
 
         return data
 
     def build_categories_object(self, data: object, categories: object, language: str = 'DE',
-                                verbose: bool = True) -> object:
+                                output_type: str = 'simple') -> object:
         """Build a dict of categories.
 
         Parameters
@@ -331,17 +334,16 @@ class JsonDataReader:
         for category_name in category_names:
             categories_object[category_name] = self.combine_category_data(categories=categories,
                                                                           category_name=category_name,
-                                                                          language=language, verbose=verbose)
+                                                                          language=language, output_type=output_type)
 
         return categories_object
 
-    def get_json_wrapper(self, data: object, language: str = 'DE') -> object:
+    def get_json_wrapper(self, data: object) -> object:
         """Builds the whole json wrapper.
 
         Parameters
         ----------
         data : object
-        language : str
 
         Returns
         -------
@@ -349,21 +351,52 @@ class JsonDataReader:
 
         """
 
-        return {
+        return_data = {
             'success': True,
             'version': self.data['version'],
-            'data': data['data'],
-            'prediction_order': data['prediction_order'],
+            'data': data['data']
         }
 
-    def get_info_as_json(self, number: int = 1, language: str = 'DE', verbose: bool = True) -> object:
+        if 'prediction_order' in data:
+            return_data.update({
+                'prediction_order': data['prediction_order']
+            })
+
+        return json.dumps(return_data, indent=4)
+
+    def get_json_wrapper_raw(self, number: int = 1):
+        """Builds the whole json wrapper (raw).
+
+        Parameters
+        ----------
+        number : int
+
+        Returns
+        -------
+        object
+
+        """
+
+        # check the number of returned data elements
+        if number > len(self.prediction['data']):
+            raise Exception(self.CONST_ERROR_NUMBER_HIGHER_THAN_ARRAY_COUNT % number)
+
+        prediction = self.prediction['data'][:number]
+
+        data = {
+            'data': prediction,
+        }
+
+        return self.get_json_wrapper(data=data)
+
+    def get_info_as_json(self, number: int = 1, language: str = 'DE', output_type: str = 'simple') -> object:
         """Builds the whole json object and returns it.
 
         Parameters
         ----------
         number : int
         language : str
-        verbose: bool
+        output_type: str
 
         Returns
         -------
@@ -372,17 +405,21 @@ class JsonDataReader:
 
         """
 
+        # print the raw data directly
+        if output_type == 'raw':
+            return self.get_json_wrapper_raw(number)
+
         # read classes and categories
         classes = self.build_associative_array(self.data['classes'], 'class')
         categories = self.build_associative_array(self.data['categories'], 'category')
 
         # build classes
         data = self.build_classes_object(number=number, classes=classes, categories=categories, language=language,
-                                         verbose=verbose)
+                                         output_type=output_type)
 
         # add categories
         data['data']['categories'] = self.build_categories_object(data=data, categories=categories, language=language,
-                                                                  verbose=verbose)
+                                                                  output_type=output_type)
 
         # return complete json object
-        return self.get_json_wrapper(data, language)
+        return self.get_json_wrapper(data)
