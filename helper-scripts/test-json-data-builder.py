@@ -26,8 +26,8 @@ parameter_output_type: bool = read_parameter('string', 3, 'simple', ['simple', '
 
 # show data from config file
 json_data_reader = JsonDataBuilder(json_path=config_path_json, prediction=prediction)
-info = json_data_reader.get_info_as_json(number=parameter_number, language=parameter_language,
+info = json_data_reader.get_info_as_data(number=parameter_number, language=parameter_language,
                                          output_type=parameter_output_type)
 
 # print the info json
-print(info)
+print(json.dumps(info, indent=4))

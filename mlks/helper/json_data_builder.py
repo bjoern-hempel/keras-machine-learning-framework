@@ -338,11 +338,12 @@ class JsonDataBuilder:
 
         return categories_object
 
-    def get_json_wrapper(self, data: object) -> object:
-        """Builds the whole json wrapper.
+    def get_data_wrapper(self, data: object, parameter: object) -> object:
+        """Builds the whole data wrapper.
 
         Parameters
         ----------
+        parameter : object
         data : object
 
         Returns
@@ -354,21 +355,23 @@ class JsonDataBuilder:
         return_data = {
             'success': True,
             'version': self.data['version'],
-            'data': data['data']
+            'data': data['data'],
+            'parameter': parameter
         }
 
         if 'prediction_order' in data:
-            return_data.update({
+            return_data['data'].update({
                 'prediction_order': data['prediction_order']
             })
 
-        return json.dumps(return_data, indent=4)
+        return return_data
 
-    def get_json_wrapper_raw(self, number: int = 1):
-        """Builds the whole json wrapper (raw).
+    def get_data_wrapper_raw(self, number: int = 1, parameter: object = {}):
+        """Builds the whole data wrapper (raw).
 
         Parameters
         ----------
+        parameter : object
         number : int
 
         Returns
@@ -387,9 +390,9 @@ class JsonDataBuilder:
             'data': prediction,
         }
 
-        return self.get_json_wrapper(data=data)
+        return self.get_data_wrapper(data=data, parameter=parameter)
 
-    def get_info_as_json(self, number: int = 1, language: str = 'DE', output_type: str = 'simple') -> object:
+    def get_info_as_data(self, number: int = 1, language: str = 'DE', output_type: str = 'simple') -> object:
         """Builds the whole json object and returns it.
 
         Parameters
@@ -405,9 +408,15 @@ class JsonDataBuilder:
 
         """
 
+        parameter = {
+            'number': number,
+            'language': language,
+            'output_type': output_type
+        }
+
         # print the raw data directly
         if output_type == 'raw':
-            return self.get_json_wrapper_raw(number)
+            return self.get_data_wrapper_raw(number=number, parameter=parameter)
 
         # read classes and categories
         classes = self.build_associative_array(self.data['classes'], 'class')
@@ -422,4 +431,4 @@ class JsonDataBuilder:
                                                                   output_type=output_type)
 
         # return complete json object
-        return self.get_json_wrapper(data)
+        return self.get_data_wrapper(data=data, parameter=parameter)
