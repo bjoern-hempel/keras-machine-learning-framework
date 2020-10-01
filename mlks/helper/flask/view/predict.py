@@ -37,6 +37,7 @@ import os
 import re
 import base64
 import magic
+import collections
 
 # load some modules
 from flask_classful import FlaskView, route
@@ -52,7 +53,7 @@ class PredictView(FlaskView):
     }
 
     excluded_methods = ['set_config_json_path', 'set_prediction_data', 'set_parameter', 'get_request',
-                        'set_image_path', 'save_image']
+                        'set_image_path', 'save_image', 'set_hook', 'call_hook']
 
     config_json_path: str = None
 
@@ -65,6 +66,8 @@ class PredictView(FlaskView):
     image_path = None
 
     ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
+
+    hooks = {}
 
     @staticmethod
     def set_image_path(image_path: str):
@@ -84,6 +87,36 @@ class PredictView(FlaskView):
         PredictView.parameter_language = parameter_language
         PredictView.parameter_number = parameter_number
         PredictView.parameter_output_type = parameter_output_type
+
+    @staticmethod
+    def set_hook(name, hook):
+        if 'lambda' not in hook:
+            raise AssertionError('The given hook is invalid (no lambda function given).')
+
+        if not isinstance(hook['lambda'], collections.Callable):
+            raise AssertionError('The given hook is invalid (lambda function is not callable).')
+
+        if 'arguments' not in hook:
+            hook['arguments'] = []
+
+        if not isinstance(hook['arguments'], list):
+            raise AssertionError('The given hook is invalid (parameter argument must be a list).')
+
+        PredictView.hooks[name] = hook
+
+    @staticmethod
+    def call_hook(*args):
+        name = args[0]
+
+        # check namespace
+        if name not in PredictView.hooks:
+            return None
+
+        # merge arguments
+        arguments = list(args[1:]) + PredictView.hooks[name]['arguments']
+
+        # execute lambda function
+        return PredictView.hooks[name]['lambda'](*arguments)
 
     @staticmethod
     def save_image(output_type: str, return_data: object):
@@ -197,6 +230,8 @@ class PredictView(FlaskView):
         language = self.get_request('language', default=self.parameter_language)
         number = self.get_request('number', default=self.parameter_number, type=int)
         output_type = self.get_request('output-type', default=self.parameter_output_type)
+
+        self.call_hook('POST_prediction', 'call hook parameter (dynamic)')
 
         json_data_reader = JsonDataBuilder(json_path=self.config_json_path, prediction=self.prediction_data)
         return_data = json_data_reader.get_info_as_data(number=number, language=language, output_type=output_type)
