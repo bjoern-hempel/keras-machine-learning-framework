@@ -33,6 +33,10 @@
 
 # import classes
 import json
+import os
+import re
+import base64
+import magic
 
 # load some modules
 from flask_classful import FlaskView, route
@@ -47,7 +51,8 @@ class PredictView(FlaskView):
         'text/html': output_html
     }
 
-    excluded_methods = ['set_config_json_path', 'set_prediction_data', 'set_parameter', 'get_request']
+    excluded_methods = ['set_config_json_path', 'set_prediction_data', 'set_parameter', 'get_request',
+                        'set_image_path', 'save_image']
 
     config_json_path: str = None
 
@@ -56,6 +61,14 @@ class PredictView(FlaskView):
     parameter_language: str = 'DE'
     parameter_number: int = 5
     parameter_output_type: str = 'simple'
+
+    image_path = None
+
+    ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png']
+
+    @staticmethod
+    def set_image_path(image_path: str):
+        PredictView.image_path = image_path
 
     @staticmethod
     def set_config_json_path(config_json_path: str):
@@ -72,9 +85,89 @@ class PredictView(FlaskView):
         PredictView.parameter_number = parameter_number
         PredictView.parameter_output_type = parameter_output_type
 
+    @staticmethod
+    def save_image(output_type: str, return_data: object):
+        """Saves the uploaded image to image folder.
+
+        Parameters
+        ----------
+        output_type : str
+        return_data : object
+
+        Returns
+        -------
+        object
+
+        """
+        predict_file_raw = PredictView.get_request('predict-file-raw')
+        predict_file_name = PredictView.get_request('predict-file-name')
+
+        if predict_file_name:
+            predict_file_raw = None if predict_file_raw == '' else predict_file_raw
+            predict_file_name = None if predict_file_name == '' else predict_file_name
+
+            if predict_file_raw is None or predict_file_name is None:
+                return_data.update({
+                    'success': False,
+                    'message': 'No file was uploaded. Please choose a file to predict before uploading it.'
+                })
+                return return_data
+
+            # check file
+            output = re.search('^data:image/([a-z]+);base64,', predict_file_raw, flags=re.IGNORECASE)
+            if output is None:
+                return_data.update({
+                    'success': False,
+                    'message': 'Unknown file format from file "%s".' % predict_file_name
+                })
+                return return_data
+
+            # remove header
+            predict_file_raw = re.sub('^data:image/([a-z]+);base64,', '', predict_file_raw)
+            predict_file_raw = predict_file_raw.replace(' ', '+')
+            predict_file_raw = base64.b64decode(predict_file_raw)
+
+            # save file to upload folder
+            upload_path = os.path.join(PredictView.image_path, predict_file_name)
+            open(upload_path, 'wb').write(predict_file_raw)
+
+            # check mime type of given image
+            mime = magic.Magic(mime=True)
+            mime_type = mime.from_file(upload_path)
+
+            if mime_type not in PredictView.ALLOWED_MIME_TYPES:
+                return_data.update({
+                    'success': False,
+                    'message': 'The mime type "%s" of uploaded file "%s" is not allowed.' % (
+                        mime_type,
+                        predict_file_name
+                    )
+                })
+
+            # add data to return value
+            if output_type != 'raw':
+                return_data['data']['image'] = {
+                    'fullpath': upload_path,
+                    'path': '%s' % predict_file_name,
+                    'url': '/img/%s' % predict_file_name
+                }
+
+            return return_data
 
     @staticmethod
-    def get_request(name, default=None, type=None):
+    def get_request(name: str, default=None, type=None):
+        """Returns the posted value if given. Otherwise return the default.
+
+        Parameters
+        ----------
+        name : str
+        default
+        type
+
+        Returns
+        -------
+
+        """
         if request.json is None:
             return request.form.get(name, default=default, type=type)
 
@@ -103,9 +196,11 @@ class PredictView(FlaskView):
     def post(self):
         language = self.get_request('language', default=self.parameter_language)
         number = self.get_request('number', default=self.parameter_number, type=int)
-        output_type = self.get_request('output_type', default=self.parameter_output_type)
+        output_type = self.get_request('output-type', default=self.parameter_output_type)
 
         json_data_reader = JsonDataBuilder(json_path=self.config_json_path, prediction=self.prediction_data)
         return_data = json_data_reader.get_info_as_data(number=number, language=language, output_type=output_type)
+
+        self.save_image(output_type=output_type, return_data=return_data)
 
         return return_data, 200

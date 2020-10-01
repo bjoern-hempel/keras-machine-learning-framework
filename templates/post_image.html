@@ -9,12 +9,10 @@
         <p>
             Text: {{ text }}
         </p>
-        <p>
-            <img src="/img/1.jpeg" style="width:250px;">
-        </p>
     </div>
     <div style="clear:both;">
         <p>
+            <input type="file" name="image" id="predict-file-source">
             <form id="predict-form" action="/v1.0/predict" method="post" enctype="multipart/form-data" style="float:left;">
                 <select name="number">
                     <option value="1">1</option>
@@ -27,18 +25,23 @@
                     <option value="DE">DE</option>
                     <option value="GB">GB</option>
                 </select>
-                <select name="output_type">
+                <select name="output-type">
                     <option value="simple">Simple</option>
                     <option value="full">Full</option>
                     <option value="raw">Raw</option>
                 </select>
 
+                <input type="hidden" name="predict-file-raw" value="" id="predict-file-raw">
+                <input type="hidden" name="predict-file-name" value="" id="predict-file-name">
                 <input type="submit" value="Predict">
             </form>
         </p>
     </div>
 
     <div style="clear:both;">
+        <p>
+            <img id="image" src="" style="width:250px;display:none;">
+        </p>
         <pre id="server-results"></pre>
     </div>
 

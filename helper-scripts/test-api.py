@@ -27,13 +27,18 @@ parameter_output_type: bool = read_parameter('string', 3, 'simple', ['simple', '
 # create api service
 template_folder = '%s/templates' % root_dir
 static_folder = '%s/static' % root_dir
+image_folder = '%s/img' % static_folder
+
+# create flask app
 app = Flask(__name__, template_folder=template_folder)
+app.config["IMAGE_UPLOADS"] = image_folder
 
 # register and init PredictView
 PredictView.set_config_json_path(config_json_path=config_json_path)
 PredictView.set_prediction_data(prediction_data=prediction)
 PredictView.set_parameter(parameter_language=parameter_language, parameter_number=parameter_number,
                           parameter_output_type=parameter_output_type)
+PredictView.set_image_path(image_folder)
 PredictView.register(app, route_prefix='/v1.0/')
 
 # register and init PublicView
