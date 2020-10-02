@@ -79,8 +79,15 @@ $(document).ready(function() {
             data : formDataJson,
             contentType: 'application/json'
         }).done(function(json) {
+            $('#error-message').css('display', 'none');
             $('#image').attr('src', json['data']['image']['url']).css('display', 'block');
             $('#server-results').html(JSON.stringify(json, null, "\t"));
+        }).fail(function (jqXHR) {
+            let json = jqXHR.responseJSON;
+
+            $('#image').css('display', 'none');
+            $('#server-results').html(JSON.stringify(json, null, "\t"));
+            $('#error-message').css('display', 'block').text(json['message']);
         });
     });
 

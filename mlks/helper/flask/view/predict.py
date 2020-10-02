@@ -52,12 +52,10 @@ class PredictView(FlaskView):
         'text/html': output_html
     }
 
-    excluded_methods = ['set_config_json_path', 'set_prediction_data', 'set_parameter', 'get_request',
+    excluded_methods = ['set_config_json_path', 'set_parameter', 'get_request',
                         'set_image_path', 'save_image', 'set_hook', 'call_hook']
 
     config_json_path: str = None
-
-    prediction_data: object = None
 
     parameter_language: str = 'DE'
     parameter_number: int = 5
@@ -76,10 +74,6 @@ class PredictView(FlaskView):
     @staticmethod
     def set_config_json_path(config_json_path: str):
         PredictView.config_json_path = config_json_path
-
-    @staticmethod
-    def set_prediction_data(prediction_data: object):
-        PredictView.prediction_data = prediction_data
 
     @staticmethod
     def set_parameter(parameter_language: str = 'DE', parameter_number: int = 5,
@@ -119,41 +113,42 @@ class PredictView(FlaskView):
         return PredictView.hooks[name]['lambda'](*arguments)
 
     @staticmethod
-    def save_image(output_type: str, return_data: object):
+    def save_image():
         """Saves the uploaded image to image folder.
-
-        Parameters
-        ----------
-        output_type : str
-        return_data : object
 
         Returns
         -------
         object
 
         """
-        predict_file_raw = PredictView.get_request('predict-file-raw')
-        predict_file_name = PredictView.get_request('predict-file-name')
 
+        # read parameter
+        predict_file_raw = PredictView.get_request('predict-file-raw', None, str)
+        predict_file_name = PredictView.get_request('predict-file-name', None, str)
+
+        # trans
+        predict_file_raw = None if predict_file_raw == '' else predict_file_raw
+        predict_file_name = None if predict_file_name == '' else predict_file_name
+
+        # no image file was given
+        if predict_file_raw is None or predict_file_name is None:
+            return {
+                'success': False,
+                'code': 400,
+                'message': 'No file was uploaded. Please choose a file to predict before uploading it.'
+            }
+
+        # image file was given
         if predict_file_name:
-            predict_file_raw = None if predict_file_raw == '' else predict_file_raw
-            predict_file_name = None if predict_file_name == '' else predict_file_name
-
-            if predict_file_raw is None or predict_file_name is None:
-                return_data.update({
-                    'success': False,
-                    'message': 'No file was uploaded. Please choose a file to predict before uploading it.'
-                })
-                return return_data
 
             # check file
             output = re.search('^data:image/([a-z]+);base64,', predict_file_raw, flags=re.IGNORECASE)
             if output is None:
-                return_data.update({
+                return {
                     'success': False,
+                    'code': 400,
                     'message': 'Unknown file format from file "%s".' % predict_file_name
-                })
-                return return_data
+                }
 
             # remove header
             predict_file_raw = re.sub('^data:image/([a-z]+);base64,', '', predict_file_raw)
@@ -169,23 +164,28 @@ class PredictView(FlaskView):
             mime_type = mime.from_file(upload_path)
 
             if mime_type not in PredictView.ALLOWED_MIME_TYPES:
-                return_data.update({
+                return {
                     'success': False,
+                    'code': 400,
                     'message': 'The mime type "%s" of uploaded file "%s" is not allowed.' % (
                         mime_type,
                         predict_file_name
                     )
-                })
-
-            # add data to return value
-            if output_type != 'raw':
-                return_data['data']['image'] = {
-                    'fullpath': upload_path,
-                    'path': '%s' % predict_file_name,
-                    'url': '/img/%s' % predict_file_name
                 }
 
-            return return_data
+            # add data to return value
+            return {
+                'success': True,
+                'code': 200,
+                'message': None,
+                'data': {
+                    'image': {
+                        'fullpath': upload_path,
+                        'path': '%s' % predict_file_name,
+                        'url': '/img/%s' % predict_file_name
+                    }
+                }
+            }
 
     @staticmethod
     def get_request(name: str, default=None, type=None):
@@ -231,11 +231,20 @@ class PredictView(FlaskView):
         number = self.get_request('number', default=self.parameter_number, type=int)
         output_type = self.get_request('output-type', default=self.parameter_output_type)
 
-        self.call_hook('POST_prediction', 'call hook parameter (dynamic)')
+        image_data = self.save_image()
 
-        json_data_reader = JsonDataBuilder(json_path=self.config_json_path, prediction=self.prediction_data)
+        # error occurred while uploading image
+        if image_data['code'] != 200:
+            return image_data, image_data['code']
+
+        # call prediction from image data
+        prediction_data = self.call_hook('POST_prediction', image_data)
+
+        # convert prediction_data to output (add informations from json)
+        json_data_reader = JsonDataBuilder(json_path=self.config_json_path, prediction=prediction_data)
         return_data = json_data_reader.get_info_as_data(number=number, language=language, output_type=output_type)
 
-        self.save_image(output_type=output_type, return_data=return_data)
+        # add image data
+        return_data['data']['image'] = image_data['data']['image']
 
-        return return_data, 200
+        return return_data, return_data['code']

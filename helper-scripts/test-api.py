@@ -33,20 +33,21 @@ image_folder = '%s/img' % static_folder
 app = Flask(__name__, template_folder=template_folder)
 
 
-def do_post_hook(dynamic, static):
-    print(dynamic)
-    print(static)
+def do_post_hook(return_data):
+    print(return_data)
+
+    # return fake prediction
+    return prediction
 
 
 # register and init PredictView
 PredictView.set_config_json_path(config_json_path=config_json_path)
-PredictView.set_prediction_data(prediction_data=prediction)
 PredictView.set_parameter(parameter_language=parameter_language, parameter_number=parameter_number,
                           parameter_output_type=parameter_output_type)
 PredictView.set_image_path(image_folder)
 PredictView.set_hook('POST_prediction', {
     'lambda': do_post_hook,
-    'arguments': ['set hook parameter (static)']
+    'arguments': []
 })
 PredictView.register(app, route_prefix='/v1.0/')
 

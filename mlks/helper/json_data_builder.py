@@ -354,6 +354,7 @@ class JsonDataBuilder:
 
         return_data = {
             'success': True,
+            'code': 200,
             'version': self.data['version'],
             'data': data['data'],
             'parameter': parameter
@@ -387,10 +388,12 @@ class JsonDataBuilder:
         prediction = self.prediction['data'][:number]
 
         data = {
-            'data': prediction,
+            'data': {
+                'raw': prediction,
+            }
         }
 
-        return self.get_data_wrapper(data=data, parameter=parameter)
+        return data
 
     def get_info_as_data(self, number: int = 1, language: str = 'DE', output_type: str = 'simple') -> object:
         """Builds the whole json object and returns it.
@@ -414,21 +417,21 @@ class JsonDataBuilder:
             'output_type': output_type
         }
 
-        # print the raw data directly
         if output_type == 'raw':
-            return self.get_data_wrapper_raw(number=number, parameter=parameter)
+            # get raw data
+            data = self.get_data_wrapper_raw(number=number, parameter=parameter)
+        else:
+            # read classes and categories
+            classes = self.build_associative_array(self.data['classes'], 'class')
+            categories = self.build_associative_array(self.data['categories'], 'category')
 
-        # read classes and categories
-        classes = self.build_associative_array(self.data['classes'], 'class')
-        categories = self.build_associative_array(self.data['categories'], 'category')
+            # build classes
+            data = self.build_classes_object(number=number, classes=classes, categories=categories, language=language,
+                                             output_type=output_type)
 
-        # build classes
-        data = self.build_classes_object(number=number, classes=classes, categories=categories, language=language,
-                                         output_type=output_type)
-
-        # add categories
-        data['data']['categories'] = self.build_categories_object(data=data, categories=categories, language=language,
-                                                                  output_type=output_type)
+            # add categories
+            data['data']['categories'] = self.build_categories_object(data=data, categories=categories, language=language,
+                                                                      output_type=output_type)
 
         # return complete json object
         return self.get_data_wrapper(data=data, parameter=parameter)
