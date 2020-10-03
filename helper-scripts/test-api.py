@@ -10,7 +10,7 @@ from mlks.helper.flask.view.predict import PredictView
 from mlks.helper.flask.view.static import StaticView
 
 # import fixtures
-from fixtures import prediction
+from fixtures import prediction as fake_prediction
 from mlks_loader import root_dir
 from helper.arguments import read_parameter
 
@@ -33,12 +33,19 @@ image_folder = '%s/img' % static_folder
 app = Flask(__name__, template_folder=template_folder)
 
 
-def do_post_hook(return_data):
-    print(return_data)
+def do_post_hook(return_data, model):
+    image_path = return_data['data']['image']['fullpath']
+
+    # Do something with image path. Prediction? ;)
+    print('Image path: %s' % image_path)
+
+    prediction = fake_prediction
 
     # return fake prediction
     return prediction
 
+
+model = None
 
 # register and init PredictView
 PredictView.set_config_json_path(config_json_path=config_json_path)
@@ -47,7 +54,7 @@ PredictView.set_parameter(parameter_language=parameter_language, parameter_numbe
 PredictView.set_image_path(image_folder)
 PredictView.set_hook('POST_prediction', {
     'lambda': do_post_hook,
-    'arguments': []
+    'arguments': [model]
 })
 PredictView.register(app, route_prefix='/v1.0/')
 
