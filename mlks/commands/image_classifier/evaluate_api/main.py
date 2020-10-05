@@ -38,9 +38,8 @@ import click
 # import ApiHTTPRequestHandler and HTTPServer
 from mlks.http.api_http_request_handler import ApiHTTPRequestHandler
 from http.server import HTTPServer
-
 from mlks.commands.image_classifier.main import ImageClassifier
-from mlks.helper.filesystem import check_if_file_exists
+from mlks.helper.filesystem import check_if_file_exists, get_root_project_path
 
 class EvaluateApi(ImageClassifier):
 
@@ -98,14 +97,14 @@ class EvaluateApi(ImageClassifier):
 
         # get some configs
         model_file: str = self.config.get_data('model_file_best')['model_file']
-        config_json_path: str = 'C:/Users/bjoern/Development/keras-machine-learning-framework-json-editor/data/mushrooms.json'
+        config_json_path: str = self.config.get_data('json_data_file')
 
         # some other configs
         parameter_language: str = 'DE'
         parameter_number: int = 5
         parameter_output_type: bool = 'simple'
 
-        root_dir = 'C:/Users/bjoern/Development/keras-machine-learning-framework'
+        root_dir = get_root_project_path()
         template_folder = '%s/templates' % root_dir
         static_folder = '%s/static' % root_dir
         image_folder = '%s/img' % static_folder
