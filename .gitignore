@@ -9,3 +9,7 @@ __pycache__
 
 # Configs
 /.gaaccess
+
+# Folders
+/static/img
+/_temp

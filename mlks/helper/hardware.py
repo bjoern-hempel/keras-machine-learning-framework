@@ -93,8 +93,9 @@ def get_hardware_dict_2():
     }
 
 
-def set_render_device(render_device):
-    click.echo('Set render hardware to "%s".' % render_device)
+def set_render_device(render_device, verbose: bool = False):
+    if verbose:
+        click.echo('Set render hardware to "%s".' % render_device)
 
     if render_device != 'AUTO':
         hardware_dict = get_hardware_dict_2()
@@ -107,4 +108,5 @@ def set_render_device(render_device):
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = hardware_dict['devices'][render_device]['id']
 
-    click.echo('Done.')
+    if verbose:
+        click.echo('Done.')

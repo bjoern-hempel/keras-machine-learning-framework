@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# import mlks loader
-
 # import some libraries
 from flask import Flask
 
@@ -29,6 +27,9 @@ template_folder = '%s/templates' % root_dir
 static_folder = '%s/static' % root_dir
 image_folder = '%s/img' % static_folder
 
+# fake model
+model = None
+
 # create flask app
 app = Flask(__name__, template_folder=template_folder)
 
@@ -44,8 +45,6 @@ def do_post_hook(return_data, model):
     # return fake prediction
     return prediction
 
-
-model = None
 
 # register and init PredictView
 PredictView.set_config_json_path(config_json_path=config_json_path)

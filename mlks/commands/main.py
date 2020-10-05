@@ -52,8 +52,11 @@ class Command:
         if not self.is_config_correct(self.config, question, negative, check_empty_folder):
             sys.exit()
 
+        # Some configs
+        verbose = self.config.get('verbose')
+
         # set render device
-        set_render_device(self.config.get('render_device'))
+        set_render_device(self.config.get('render_device'), verbose=verbose)
 
         # disable warnings
         disable_warnings()
@@ -170,7 +173,7 @@ class Command:
         return len([name for name in os.listdir(folder)])
 
     @staticmethod
-    def show_config(config, register_logger=True, check_empty_folder=True):
+    def show_config(config, register_logger=True, check_empty_folder=True, verbose: bool = False, yes: bool = False):
         """Prints out all configuration settings of given config class."""
 
         # build data config
@@ -216,9 +219,15 @@ class Command:
             sys.stderr = logger
             pp = pprint.PrettyPrinter(indent=4, stream=logger)
 
+        # skip print config
+        if yes and not verbose:
+            return pp
+
+        # Print config
         if len(config.configs) > 0:
             click.echo('')
 
+        # Print config
         for namespace in config.configs:
             click.echo(namespace)
             click.echo(Command.repeat_to_length('-', len(namespace)))
@@ -236,8 +245,12 @@ class Command:
                           check_empty_folder=False):
         """Shows all configuration classes and asks if this is correct."""
 
+        # Some configs
+        verbose = self.config.get('verbose')
+        yes = self.config.get('yes')
+
         # prints out the given configuration
-        self.pp = self.show_config(configs, True, check_empty_folder)
+        self.pp = self.show_config(config=configs, register_logger=True, check_empty_folder=check_empty_folder, verbose=verbose, yes=yes)
 
         # skip demand
         if self.config.get('yes'):

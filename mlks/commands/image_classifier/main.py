@@ -328,26 +328,27 @@ class ImageClassifier(Command):
         # initialize the parent class
         super().__init__(config, question, negative, check_empty_folder)
 
-    def evaluate_file(self, model, evaluation_file, do_not_save_data=True):
-        verbose = self.config.get('verbose')
-        #verbose = True
+    def evaluate_file(self, model, evaluation_file, do_not_save_data=True, return_api_data=False):
 
+        # Some config
+        verbose = self.config.get('verbose')
         classes = self.config.get_environment('classes')
 
-        # load image
-        self.start_timer('load image file')
+        # Load image
+        message = 'Load image file'
+        self.start_timer(message)
         image = self.load_image(evaluation_file)
-        self.finish_timer('load image file')
+        self.finish_timer(message)
 
-        # predict image
-        self.start_timer('predict image file')
+        # Predict image
+        message_predict_image = 'Predict image: "%s"' % evaluation_file
+        self.start_timer(message_predict_image)
 
-        # data file
+        # Get data file
         data_file = '%s/%s' % (os.path.dirname(self.config.get_data('config_file')), 'data.pkl')
 
-        # skip training if we already do have an evaluation file
+        # Skip training if we already do have an evaluation file
         if not os.path.exists(data_file) or do_not_save_data:
-            print('Evaluate file: "%s"' % evaluation_file)
             predicted_array = model.predict(image)
 
             # save evaluation file
@@ -365,13 +366,33 @@ class ImageClassifier(Command):
             reverse=True
         )
         predicted_array_sorted_top_5 = predicted_array_sorted[0:5]
-        self.finish_timer('predict image file')
+        self.finish_timer(message_predict_image)
+
+        return_data = {
+            'classes' : {},
+            'data': []
+        }
+
+        counter = 0
+        for index in predicted_array_sorted:
+            class_name = classes[index]
+            return_data['classes'][class_name] = counter
+            return_data['data'].append({
+                'name': class_name,
+                'prediction': round(predicted_array[0][index].item(), 8)
+            })
+            counter += 1
+
+        # return return_data
+        if return_api_data:
+            return return_data
 
         # print some informations
         prediction_overview = ''
         prediction_overview += 'classes\n'
         prediction_overview += '-------\n'
         prediction_overview_array = []
+
         counter = 0
         for index in predicted_array_sorted:
             counter += 1
@@ -450,7 +471,7 @@ class ImageClassifier(Command):
         transfer_learning_model = self.config.gettl('transfer_learning_model')
 
         if self.config.get('verbose'):
-            click.echo('load image: %s' % transfer_learning_model)
+            click.echo('load image: %s' % path)
 
         image = load_img(
             path,

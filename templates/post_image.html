@@ -5,29 +5,25 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <div style="clear:both;">
-        <p id="error-message" style="display: none; color: red;">
-
-        </p>
-    </div>
-    <div style="clear:both;">
+    <div class="area always">
+        <p class="error" id="error-message"></p>
         <p>
             <input type="file" name="image" id="predict-file-source">
             <form id="predict-form" action="/v1.0/predict" method="post" enctype="multipart/form-data" style="float:left;">
                 <select name="number">
                     <option value="1">1</option>
-                    <option value="3">3</option>
+                    <option value="3" selected>3</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="54">ALL</option>
                 </select>
                 <select name="language">
-                    <option value="DE">DE</option>
+                    <option value="DE" selected>DE</option>
                     <option value="GB">GB</option>
                 </select>
                 <select name="output-type">
                     <option value="simple">Simple</option>
-                    <option value="full">Full</option>
+                    <option value="full" selected>Full</option>
                     <option value="raw">Raw</option>
                 </select>
 
@@ -36,13 +32,27 @@
                 <input type="submit" value="Predict">
             </form>
         </p>
+        <div class="clear"></div>
     </div>
 
-    <div style="clear:both;">
-        <p>
-            <img id="image" src="" style="width:250px;display:none;">
-        </p>
-        <pre id="server-results"></pre>
+    <div class="none" id="content">
+        <div class="area success content">
+            <h1 class="content-name">Name</h1>
+            <p><small class="content-category-path"></small></p>
+            <p class="content-image"><img src=""></p>
+            <p class="content-accuracy"><small><b class="accuracy-label">Accuracy</b>:</small> <span class="accuracy-value">0%</span></p>
+            <p class="content-edibility"><small><b class="edibility-label">Edibility</b>:</small> <span class="edibility-value"></span></p>
+            <p class="content-description"></p>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+
+    </div>
+
+    <div class="area success error">
+        <pre id="json"></pre>
     </div>
 
     <script src="/js/main.js"></script>

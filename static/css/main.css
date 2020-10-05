@@ -1,0 +1,99 @@
+body {
+    background-color: transparent;
+}
+
+div.area {
+    clear: both;
+    border: 1px solid grey;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+div.clear {
+    clear: both;
+}
+
+div form {
+    padding: 0;
+    margin: 0;
+}
+
+div p, div h1 {
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+div p.content-image img {
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 250px;
+}
+
+a {
+    text-decoration: none;
+    color: #1577c6;
+}
+a:visited {
+    color: #1577c6;
+}
+
+.edibility-value > .ok {
+    color: rgb(0, 127, 0);
+}
+.edibility-value > .ok::after {
+    content: ' \263B';
+}
+
+.edibility-value > .warn {
+    color: rgb(127, 95, 0);
+}
+.edibility-value > .warn::after {
+    content: ' \26A0 ';
+}
+
+.edibility-value > .stop {
+    color: rgb(127, 0, 0);
+}
+.edibility-value > .stop::after {
+    content: ' \2620 ';
+}
+
+.error {
+    display: none;
+}
+
+.success {
+    display: none;
+}
+
+.always {
+    display: block;
+}
+
+.none {
+    display: none;
+}
+
+#error-message {
+    font-size: x-small;
+    border: 1px solid rgb(127, 0, 0);
+    background: rgba(255, 127, 127, 0.1);
+    display: none;
+    color: rgb(127, 0, 0);
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+pre {
+    font-size: x-small;
+    white-space: pre-wrap;
+}
+
+pre.json-error {
+    color: rgb(127, 0, 0);
+}
+
+pre.json-success {
+    color: rgb(0, 127, 0);
+}

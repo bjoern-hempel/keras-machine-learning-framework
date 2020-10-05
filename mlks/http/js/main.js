@@ -246,14 +246,14 @@ window.fileChange = function (e) {
             let h = image.height;
 
             if (w > h) {
-                if (w > window.max_size) {
-                    h *= window.max_size / w;
-                    w = window.max_size;
+                if (w > window.maxSize) {
+                    h *= window.maxSize / w;
+                    w = window.maxSize;
                 }
             } else {
-                if (h > window.max_size) {
-                    w *= window.max_size / h;
-                    h = window.max_size;
+                if (h > window.maxSize) {
+                    w *= window.maxSize / h;
+                    h = window.maxSize;
                 }
             }
 

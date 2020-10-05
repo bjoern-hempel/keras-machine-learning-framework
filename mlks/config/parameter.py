@@ -3,7 +3,7 @@
 # A configuration file for parameters and arguments.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   11.09.2020
+# Date:   03.10.2020
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
@@ -87,6 +87,14 @@ option_http = click.option(
     expose_value=False,
     is_flag=True,
     help='Execute the given command as http service.',
+    callback=option_callback,
+    default=False
+)
+option_api = click.option(
+    '--api',
+    expose_value=False,
+    is_flag=True,
+    help='Execute the given command as api service.',
     callback=option_callback,
     default=False
 )
@@ -552,6 +560,7 @@ option_set_general = [
     option_yes,
     option_service,
     option_http,
+    option_api,
     option_render_device,
     option_plaidml_keras_backend
 ]
@@ -622,6 +631,7 @@ set_config_translator({
     'yes': general_config_writer,
     'service': general_config_writer,
     'http': general_config_writer,
+    'api': general_config_writer,
     'render_device': general_config_writer,
     'plaidml_keras_backend': general_config_writer,
 

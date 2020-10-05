@@ -3,14 +3,14 @@
 # A Python module that trains and evaluate an image classifier.
 #
 # Author: Björn Hempel <bjoern@hempel.li>
-# Date:   15.09.2019
+# Date:   03.10.2020
 # Web:    https://github.com/bjoern-hempel/machine-learning-keras-suite
 #
 # LICENSE
 #
 # MIT License
 #
-# Copyright (c) 2019 Björn Hempel <bjoern@hempel.li>
+# Copyright (c) 2020 Björn Hempel <bjoern@hempel.li>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -72,6 +72,7 @@ from mlks.commands.image_classifier.graph.main import Graph as CliImageClassifie
 from mlks.commands.image_classifier.evaluate.main import Evaluate as CliImageClassifierEvaluate
 from mlks.commands.image_classifier.evaluate_service.main import EvaluateService as CliImageClassifierEvaluateService
 from mlks.commands.image_classifier.evaluate_http.main import EvaluateHttp as CliImageClassifierEvaluateHttp
+from mlks.commands.image_classifier.evaluate_api.main import EvaluateApi as CliImageClassifierEvaluateApi
 
 from mlks.commands.demo.mnist.main import Mnist as CliDemoMnist
 from mlks.commands.demo.simple_perceptron.main import SimplePerceptron as CliDemoSimplePerceptron
@@ -160,6 +161,9 @@ def cli_evaluate(config):
         prepare_class.do()
     elif config.get('http'):
         prepare_class = CliImageClassifierEvaluateHttp(config)
+        prepare_class.do()
+    elif config.get('api'):
+        prepare_class = CliImageClassifierEvaluateApi(config)
         prepare_class.do()
     else:
         prepare_class = CliImageClassifierEvaluate(config)
